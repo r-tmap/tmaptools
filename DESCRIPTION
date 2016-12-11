@@ -1,0 +1,37 @@
+Package: tmaptools
+Type: Package
+Title: Tools for thematic maps
+Version: 1.0
+Author: Who wrote it
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Date: 2016-10-29
+Depends:
+    R (>= 3.0),
+    methods
+Imports:
+    sp,
+    raster (>= 2.5-2),
+    rgdal,
+    rgeos,
+    classInt,
+    KernSmooth,
+    osmar,
+    RColorBrewer,
+    spdep,
+    stats,
+    XML
+Suggests:
+    tmap,
+    rmarkdown,
+    knitr,
+    OpenStreetMap,
+    png
+URL: https://github.com/mtennekes/tmaptools
+BugReports: https://github.com/mtennekes/tmaptools/issues
+VignetteBuilder: knitr
+RoxygenNote: 5.0.1
