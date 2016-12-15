@@ -9,8 +9,8 @@ get_proj4(x, as.CRS = FALSE)
 \arguments{
 \item{x}{a \code{PROJ.4} character string, a shortcut, or a \code{\link[sp:CRS]{CRS}} object. The following shortcuts are available:
 \describe{
-       \item{\code{"longlat"}}{Not really a projection, but a plot of the longitude-latitude coordinates (WGS84 datum).} 
-       \item{\code{"wintri"}}{Winkel Tripel (1921). Popular projection that is useful in world maps. It is the standard of world maps made by the National Geographic Society. Type: compromise} 
+       \item{\code{"longlat"}}{Not really a projection, but a plot of the longitude-latitude coordinates (WGS84 datum).}
+       \item{\code{"wintri"}}{Winkel Tripel (1921). Popular projection that is useful in world maps. It is the standard of world maps made by the National Geographic Society. Type: compromise}
        \item{\code{"robin"}}{Robinson (1963). Another popular projection for world maps. Type: compromise}
        \item{\code{"eck4"}}{Eckert IV (1906). Projection useful for world maps. Area sizes are preserved, which makes it particularly useful for truthful choropleths. Type: equal-area}
        \item{\code{"hd"}}{Hobo-Dyer (2002). Another projection useful for world maps in which area sizes are preserved. Type: equal-area}

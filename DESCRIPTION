@@ -15,6 +15,7 @@ Depends:
     methods
 Imports:
     sp,
+    grid,
     raster (>= 2.5-2),
     rgdal,
     rgeos,

@@ -29,7 +29,7 @@ map_coloring <- function(x, algorithm="greedy", ncols=NA, minimize=FALSE, palett
 
 		if (palette[1] %in% rownames(brewer.pal.info)) {
 			if (is.na(ncols)) ncols <- brewer.pal.info[palette, "maxcolors"]
-			palette2 <- revPal(get_brewer_pal(palette, ncols, contrast))
+			palette2 <- revPal(get_brewer_pal(palette, ncols, contrast, plot = FALSE))
 		} else {
 			if (is.na(ncols)) ncols <- length(palette)
 			palette2 <- rep(palette, length.out=ncols)

@@ -1,12 +1,12 @@
 #' Get a PROJ.4 character string
-#' 
+#'
 #' Get full PROJ.4 string from an existing PROJ.4 string, a shortcut, or a \code{\link[sp:CRS]{CRS}} object.
-#' 
+#'
 #' @param as.CRS should a CRS object be returned instead of a PROJ.4 character string? Default is \code{FALSE}.
 #' @param x a \code{PROJ.4} character string, a shortcut, or a \code{\link[sp:CRS]{CRS}} object. The following shortcuts are available:
 #' \describe{
-#'    	\item{\code{"longlat"}}{Not really a projection, but a plot of the longitude-latitude coordinates (WGS84 datum).} 
-#'    	\item{\code{"wintri"}}{Winkel Tripel (1921). Popular projection that is useful in world maps. It is the standard of world maps made by the National Geographic Society. Type: compromise} 
+#'    	\item{\code{"longlat"}}{Not really a projection, but a plot of the longitude-latitude coordinates (WGS84 datum).}
+#'    	\item{\code{"wintri"}}{Winkel Tripel (1921). Popular projection that is useful in world maps. It is the standard of world maps made by the National Geographic Society. Type: compromise}
 #'    	\item{\code{"robin"}}{Robinson (1963). Another popular projection for world maps. Type: compromise}
 #'    	\item{\code{"eck4"}}{Eckert IV (1906). Projection useful for world maps. Area sizes are preserved, which makes it particularly useful for truthful choropleths. Type: equal-area}
 #'    	\item{\code{"hd"}}{Hobo-Dyer (2002). Another projection useful for world maps in which area sizes are preserved. Type: equal-area}
@@ -19,7 +19,7 @@
 #'    	\item{\code{"eqc45"}}{Equirectangular (120). Projection in which distances along meridians are conserved. The latitude of 45 is the standard parallel. Also known as Gall isographic. Type: equidistant}
 #'    	\item{\code{"rd"}}{Rijksdriehoekstelsel. Triangulation coordinate system used in the Netherlands.}
 #'    	\item{EPSG code}{A valid code from the EPSG database}}
-#'    	
+#'
 #'	@return validated PROJ.4 character string, or, if \code{as.CRS=TRUE} a \code{\link[sp:CRS]{CRS}} object.
 #'	@importFrom rgdal CRSargs make_EPSG checkCRSArgs
 #'	@import sp
@@ -32,7 +32,7 @@ get_proj4 <- function(x, as.CRS=FALSE) {
 		if (as.CRS) {
 			return(CRS(as.character(NA), doCheckCRSArgs=FALSE))
 		} else {
-			return(NA)	
+			return(NA)
 		}
 	} else if (inherits(x, "CRS")) {
 		if (as.CRS) {
@@ -58,9 +58,13 @@ get_proj4 <- function(x, as.CRS=FALSE) {
 			y <- x
 			check_args <- TRUE
 		}
-	}	
+	}
 	z <- CRS(y, doCheckCRSArgs = check_args)
 	if (as.CRS) z else CRSargs(z)
+}
+
+is_num_string <- function(x) {
+    suppressWarnings(!is.na(as.numeric(x)))
 }
 
 .CRS_longlat <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0", doCheckCRSArgs = FALSE)
