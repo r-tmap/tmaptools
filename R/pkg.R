@@ -16,7 +16,6 @@
 #' \code{\link{calc_densities}}\tab To calculate density values \cr
 #' \code{\link{get_projection}}\tab To get the map projection \cr
 #' \code{\link{set_projection}}\tab To set the map projection \cr
-#' \code{\link{split}}\tab To split a shape object \cr
 #' \code{\link{sbind}}\tab To bind shape objects \cr
 #' \code{\link{crop_shape}}\tab To crop shape objects \cr
 #' \code{\link{map_coloring}}\tab To color polygons with different colors for adjacent polygons \cr
@@ -42,8 +41,8 @@
 #' --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
 #' }
 #'
-#' @name tmap-package
-#' @aliases tmap
+#' @name tmaptools-package
+#' @aliases tmaptools
 #' @docType package
 #' @author Martijn Tennekes \email{mtennekes@@gmail.com}
 #' @keywords GIS, thematic maps, spatial data
