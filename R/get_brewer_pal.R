@@ -1,13 +1,3 @@
-default_contrast_seq <- function(k) {
-	c1 <- max((9-k) * (.15/6), 0)
-	c2 <- min(.7 + (k-3) * (.3/6), 1)
-	c(c1,c2)
-}
-
-default_contrast_div <- function(k) {
-	c(0, min(.6 + (k-3) * (.4/8), 1))
-}
-
 #' Get and plot a (modified) Color Brewer palette
 #'
 #' Get and plot a (modified) a palette from Color Brewer. In addition to the base function \code{\link[RColorBrewer:brewer.pal]{brewer.pal}}, a palette can be created for any number of classes. The contrast of the palette can be adjusted for sequential and diverging palettes. For categorical palettes, intermediate colors can be generated.

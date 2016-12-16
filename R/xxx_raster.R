@@ -151,3 +151,32 @@ get_raster_levels <- function(shp, layerIDs) {
 	names(lvls) <- shpnames
 	lvls
 }
+
+get_data_frame_levels <- function(data) {
+	lapply(data, function(x) {
+		if (is.factor(x)) {
+			levels(x)
+		} else if (is.numeric(x)) {
+			NULL
+		} else {
+			if (is.logical(x)) factor(x, levels=c(FALSE, TRUE)) else sort(unique(x))
+		}
+	})
+}
+
+preprocess_raster_data <- function(data, sel) {
+	if (is.na(sel)[1] || !any(sel %in% names(data))) sel <- names(data)[1]
+	sel <- intersect(sel, names(data))
+	
+	data <- data[, sel, drop=FALSE]
+	
+	notNumCat <- sapply(data, function(x){
+		!is.numeric(x) && !is.factor(x)
+	})
+	if (any(notNumCat)) {
+		data[, notNumCat] <- lapply(data[, notNumCat, drop=FALSE], function(x) {
+			if (is.logical(x)) factor(x, levels=c(FALSE, TRUE)) else factor(x)
+		})
+	}
+	data
+}

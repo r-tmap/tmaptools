@@ -53,3 +53,19 @@ is_projected <- function(x) {
 maybe_longlat <- function(bb) {
     (bb[1,1] >= -180.1 && bb[1,2] <= 180.1 && bb[2,1] >= -90.1 && bb[2,2] <= 90.1)
 }
+
+calc_asp_ratio <- function(xlim, ylim, longlat) {
+    if (is.na(longlat)) longlat <- TRUE
+    if (diff(xlim)==0 || diff(ylim)==0) {
+        1
+    } else unname((diff(xlim)/diff(ylim)) * ifelse(longlat, cos((mean(ylim) * pi)/180), 1))
+}
+
+.CRS_longlat <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0", doCheckCRSArgs = FALSE)
+.CRS_merc <- CRS("+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs", doCheckCRSArgs = FALSE)
+
+get_proj4_version <- function() {
+    PROJ4_version <- rgdal::getPROJ4VersionInfo()
+    vid <- gregexpr("PJ_VERSION: ", PROJ4_version, fixed = TRUE)[[1]][1] + 12
+    as.integer(substr(PROJ4_version, vid, nchar(PROJ4_version)-1))
+}

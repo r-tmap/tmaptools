@@ -16,18 +16,18 @@ weighted.modal <- function(x, w, na.rm=FALSE) {
 	isf <- is.factor(x)
 	isn <- is.numeric(x)
 	if (!isf) x <- as.factor(x)
-	
+
 	addNA <- !na.rm && any(is.na(x))
-	
+
 	mx <- max(tapply(w, x, sum), na.rm=TRUE)
 	wmx <- which.max(tapply(w, x, sum))
 	cat <- names(wmx)
-	
+
 	if (addNA) {
 		nas <- sum(w[is.na(x)])
 		if (nas>mx) cat <- NA
 	}
-	
+
 	if (isf) {
 		factor(cat, levels=levels(x))
 	} else if (isn) {
@@ -36,9 +36,9 @@ weighted.modal <- function(x, w, na.rm=FALSE) {
 }
 
 #' Aggregate map
-#' 
-#' Aggregate spatial polygons, spatial lines or raster objects. For spatial polygons and lines, the units will be merged with the \code{by} variable. For rasters, the \code{fact} parameter determined how many rasters cells are aggregated both horizontally and vertically. Per data variable, an aggregation formula can be specified, by default mean for numeric and modal for categorical varaibles. 
-#' 
+#'
+#' Aggregate spatial polygons, spatial lines or raster objects. For spatial polygons and lines, the units will be merged with the \code{by} variable. For rasters, the \code{fact} parameter determined how many rasters cells are aggregated both horizontally and vertically. Per data variable, an aggregation formula can be specified, by default mean for numeric and modal for categorical varaibles.
+#'
 #' @param shp shape object, which is one of
 #' \enumerate{
 #'  \item{\code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}}
@@ -60,7 +60,7 @@ aggregate_map <- function(shp, by=NULL, fact=NULL, agg.fun=c(num="mean", cat="mo
 	# process aggregation functions
 	is_raster <- (inherits(shp, c("Raster", "SpatialPixels", "SpatialGrid")))
 	shpnms <- names(shp)
-	
+
 	if (!is.null(agg.fun)) {
 		if (is.list(agg.fun)) {
 			nms <- names(agg.fun)
@@ -76,19 +76,19 @@ aggregate_map <- function(shp, by=NULL, fact=NULL, agg.fun=c(num="mean", cat="mo
 		if (is_raster) stop("for raster shapes, agg.fun should be defined")
 		aggmethod <- "none"
 	}
-	
-	
+
+
 	if (is_raster) {
 		if (missing(fact)) stop("fact is missing")
 		if (!missing(weights)) stop("weights are not used for raster shapes")
-		
+
 		# keep original class (to reconvert afterwards)
 		cls <- class(shp)
-		
+
 		# determine levels and set to raster brick
 		lvls <- get_raster_levels(shp)
 		if (!inherits(shp, "RasterBrick")) shp <- brick(shp)
-		
+
 		# subset layers
 		if (aggmethod == "list") {
 			ids <- match(nms, shpnms)
@@ -108,17 +108,17 @@ aggregate_map <- function(shp, by=NULL, fact=NULL, agg.fun=c(num="mean", cat="mo
 			}
 			fun
 		}
-		
+
 		# which layers are factors?
 		isf <- !sapply(lvls, is.null)
-		
+
 		# aggregate raster
 		if (aggmethod=="numcat") {
 			shp_num <- raster::subset(shp, subset=which(!isf), drop=FALSE)
 			shp_cat <- raster::subset(shp, subset=which(isf), drop=FALSE)
 			shp_num2 <- raster::aggregate(shp_num, fact=fact, fun=get_function(agg.fun["num"]), na.rm=na.rm, ...)
 			shp_cat2 <- raster::aggregate(shp_cat, fact=fact, fun=get_function(agg.fun["cat"]), na.rm=na.rm, ...)
-			
+
 			# restore order
 			o <- order(c(which(!isf), which(isf)))
 			rlayers <- c(lapply(1:nlayers(shp_num), function(i) raster(shp_num2, layer=i)),
@@ -129,14 +129,14 @@ aggregate_map <- function(shp, by=NULL, fact=NULL, agg.fun=c(num="mean", cat="mo
 				raster::aggregate(raster(shp, i), fact=fact, fun=get_function(fun), na.rm=na.rm, ...)
 			}, names(agg.fun), agg.fun, 1L:length(agg.fun), SIMPLIFY = FALSE, USE.NAMES = FALSE)
 			shp2 <- do.call("brick", rlayers)
-		} else { 
+		} else {
 			# so aggmethod=="one"
 			shp2 <- raster::aggregate(shp, fact=fact, fun=get_function(agg.fun), na.rm=na.rm, ...)
 		}
-		
+
 		# reset the factor levels as the may have gone lost
 		if (any(isf)) shp2 <- set_raster_levels(shp2, lvls)
-		
+
 		# reset original class and variable names
 		if (cls!="RasterBrick") {
 			shp2 <- as(shp2, cls)
@@ -151,38 +151,38 @@ aggregate_map <- function(shp, by=NULL, fact=NULL, agg.fun=c(num="mean", cat="mo
 		if (!(by %in% names(shp))) stop(by, " is not an existing variable name")
 
 		IDs_orig <- shp[[by]]
-		
+
 		IDs_char <- if (storage.mode(IDs_orig) != "character")
 			as.character(IDs_orig)
 		else IDs_orig
-		
+
 		IDs_fact <- if (is.factor(IDs_orig))
 			IDs_orig
 		else factor(IDs_orig, levels=unique(IDs_orig))
-			
+
 		lvls <- levels(IDs_fact)
-				
-		
+
+
 		data <- attr(shp, "data")
 
 		data[[by]] <- NULL
-		
+
 		shp2 <- if (rgeos::version_GEOS0() < "3.3.0") {
 			rgeos::gUnionCascaded(spgeom = shp, id = IDs_char)
 		} else rgeos::gUnaryUnion(spgeom = shp, id = IDs_char)
-		
+
 		# restore order
 		shp2 <- shp2[match(lvls, get_IDs(shp2)), ]
-		
+
 		IDs2_char <- get_IDs(shp2)
 		IDs2_orig <- if (is.factor(IDs_orig)) factor(IDs2_char, levels=lvls) else IDs2_char
-		
+
 		if (aggmethod=="none") {
 			data2 <- data.frame(IDs2_orig, stringsAsFactors = FALSE)
 			names(data2) <- by
 		} else {
 			#IDs2_fact <- factor(IDs2_char, levels=IDs2_char)
-			
+
 			if (missing(weights)) {
 				w <- NULL
 			} else {
@@ -194,7 +194,7 @@ aggregate_map <- function(shp, by=NULL, fact=NULL, agg.fun=c(num="mean", cat="mo
 				if (weights=="AREA") {
 					w <- approx_areas(shp)
 				} else {
-					w <- shp[[weights[1]]]	
+					w <- shp[[weights[1]]]
 					if (!is.numeric(w)) stop("weights variable is not numeric")
 				}
 				if (any(is.na(w))) stop("weights variable contains missing values")
@@ -209,14 +209,14 @@ aggregate_map <- function(shp, by=NULL, fact=NULL, agg.fun=c(num="mean", cat="mo
 				if (!is.null(w) && is.character(fun)) {
 					# assign locally defined functions
 					if (fun=="mean") {
-						fun <- weighted.mean
+						fun <- stats::weighted.mean
 					} else  if (fun=="modal") {
 						fun <- weighted.modal
 					}
 				}
 				fun
 			}
-			
+
 			if (aggmethod=="numcat") {
 				isnum <- sapply(data, is.numeric)
 				agg.fun <- lapply(1:ncol(data), function(i) {
@@ -224,7 +224,7 @@ aggregate_map <- function(shp, by=NULL, fact=NULL, agg.fun=c(num="mean", cat="mo
 				})
 				names(agg.fun) <- names(data)
 			}
-			
+
 			vars <- mapply(function(var, fun) {
 				dv <- data[[var]]
 				v <- if (is.null(w)) {
@@ -236,15 +236,15 @@ aggregate_map <- function(shp, by=NULL, fact=NULL, agg.fun=c(num="mean", cat="mo
 				}
 				if (is.factor(dv)) factor(v, levels=1L:nlevels(dv), labels=levels(dv)) else v
 			}, names(agg.fun), agg.fun, SIMPLIFY = FALSE, USE.NAMES = FALSE)
-			
+
 			lst2 <- c(list(IDs2_orig), vars, list(FALSE))
 			names(lst2) <- c(by, names(agg.fun), "stringsAsFactors")
-			
+
 			data2 <- do.call(data.frame, lst2)
 		}
-		
+
 		shp2 <- append_data(shp2, data=data2, fixed.order=TRUE)
-		
+
 	}
 	shp2
 }

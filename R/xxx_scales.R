@@ -66,7 +66,6 @@ fancy_breaks <- function(vec, intervals=FALSE, interval.closure="left", fun=NULL
 }
 
 
-
 num2breaks <- function(x, n, style, breaks, approx=FALSE, interval.closure="left") {
     # create intervals and assign colors
     if (style=="fixed") {
@@ -157,4 +156,71 @@ map2divscaleID <- function(breaks, n=101, contrast=1) {
                                    length.out=nneg)
     if (is.div && cat0) ids[nneg] <- h
     round(ids)
+}
+
+
+
+# Map breaks to index numbers of a sequential colour scale
+#
+# Determines index numbers of a potential sequential colour scale given a vector of breaks.
+#
+# @param breaks vector of breaks
+# @param n number of classes, i.e. the length of a sequential colour palette.
+# @param contrast value between 0 and 1 that determines how much of the \code{(1, n)} range is used. Value \code{contrast=1} means that the most extreme break value, i.e. \code{max(abs(breaks))} is maped to n. There is no contrast at all for \code{contrast=0}, i.e. all index numbers will correspond to the first class (which has index number \code{1}.
+# @param breaks.specified logical that determines whether breaks have been specified by the user. If so a warning is shown if breaks are diverging.
+# @return vector of index numbers
+map2seqscaleID <- function(breaks, n=101, contrast=1, breaks.specified=TRUE, impute=TRUE) {
+	if (are_breaks_diverging(breaks) && breaks.specified) warning("Breaks contains positive and negative values. Better is to use diverging scale instead, or set auto.palette.mapping to FALSE.", call. = FALSE)
+	m <- (n*2)-1
+	mh <- ((m-1)/2)+1
+	ids <- map2divscaleID(breaks, n=m, contrast=contrast)
+
+	ids <- if (any(breaks>0)) {
+		ids - mh + 1
+	} else {
+		(mh+1) - ids
+	}
+
+	# checks:
+	if (any(ids>n)) {
+		if (impute) {
+			ids[ids>n] <- n
+		} else {
+			warning("Some index numbers exceed n and are replaced by NA", call. = FALSE)
+			ids[ids>n] <- NA
+		}
+
+	} else if (any(ids<1)) {
+		if (impute) {
+			ids[ids<1] <- 1
+		} else {
+			warning("Some index numbers exceed 0 and are replaced by NA", call. = FALSE)
+			ids[ids<1] <- NA
+		}
+	}
+	round(ids)
+}
+
+
+
+# function to determine whether a diverging of sequential palette is used given the values and the breaks
+use_diverging_palette <- function(v, brks) {
+	x <- na.omit(v)
+	divx <- any(x<0) && any(x>0)
+
+	if (divx || is.null(brks)) {
+		return(divx)
+	} else {
+		are_breaks_diverging(brks)
+	}
+}
+
+default_contrast_seq <- function(k) {
+    c1 <- max((9-k) * (.15/6), 0)
+    c2 <- min(.7 + (k-3) * (.3/6), 1)
+    c(c1,c2)
+}
+
+default_contrast_div <- function(k) {
+    c(0, min(.6 + (k-3) * (.4/8), 1))
 }
