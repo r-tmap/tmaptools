@@ -45,8 +45,8 @@ approx_areas <- function(shp, unit="km", coords.unit=NA, unit.size=NA, total.are
         if (is.na(unit.size)) {
             unit.size <- to_m[unit] / to_m[coords.unit]
             if (is.na(unit.size)) {
-                if (!(coord.unit %in% names(to_m))) {
-                    stop("Unknown coord.unit: please specify unit.size.")
+                if (!(coords.unit %in% names(to_m))) {
+                    stop("Unknown coords.unit: please specify unit.size.")
                 } else {
                     stop("Unknown unit specification: please specify unit.size.")
                 }
