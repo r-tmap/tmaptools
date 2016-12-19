@@ -19,6 +19,7 @@ Imports:
     rgeos,
     classInt,
     KernSmooth,
+    geosphere,
     osmar,
     RColorBrewer,
     spdep,

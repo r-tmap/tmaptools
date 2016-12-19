@@ -24,12 +24,14 @@ get_brewer_pal <- function(palette, n=5, contrast=NA, stretch=TRUE, plot=TRUE) {
 			p <- rep(brewerpal, length.out=n)
 		}
 	} else if (brewer.pal.info[palette, "category"]=="seq") {
+	    if ("stretch" %in% call) warning("stretch not used in sequential color palettes")
 		if (is.na(contrast[1])) contrast <- default_contrast_seq(n)
 		if (length(contrast)==1) contrast <- c(0, contrast)
 		brewerpal <- brewer.pal(nmax, name=palette)
 		contrastIDs <- round(seq(contrast[1]*100, contrast[2]*100, length.out=n))+1
 		p <- colorRampPalette(brewerpal)(101)[contrastIDs]
 	} else {
+	    if ("stretch" %in% call) warning("stretch not used in diverging color palettes")
 		if (is.na(contrast[1])) contrast <- default_contrast_div(n)
 		if (length(contrast)==1) contrast <- c(0, contrast)
 		brewerpal <- brewer.pal(nmax, name=palette)
