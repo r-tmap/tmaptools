@@ -12,7 +12,7 @@ get_projection(shp, as.CRS = FALSE)
 }
 \arguments{
 \item{shp}{shape object of class \code{\link[sp:Spatial]{Spatial}} or
-\code{\link[raster:Raster-class]{Raster}} (see details).}
+\code{\link[raster:Raster-class]{Raster}} (see details). For \code{get_projection} \code{sf} (simple features) are also supported.}
 
 \item{projection}{new projection. Either a \code{\link[sp:CRS]{CRS}} object or a character value. If it is a character, it can either be a \code{PROJ.4} character string or a shortcut. See \code{\link{get_proj4}} for a list of shortcut values. This argument is only used to transform the \code{shp}. Use \code{current.projection} to specify the current projection of \code{shp}.}
 

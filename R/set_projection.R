@@ -11,7 +11,7 @@
 #' For raster objects, the projection method is based on the type of data. For numeric layers, the bilinear method is used, and for categorical layers the nearest neighbor. See \code{\link[raster:projectRaster]{projectRaster}} for details.
 #'
 #' @param shp shape object of class \code{\link[sp:Spatial]{Spatial}} or
-#'   \code{\link[raster:Raster-class]{Raster}} (see details).
+#'   \code{\link[raster:Raster-class]{Raster}} (see details). For \code{get_projection} \code{sf} (simple features) are also supported.
 #' @param projection new projection. Either a \code{\link[sp:CRS]{CRS}} object or a character value. If it is a character, it can either be a \code{PROJ.4} character string or a shortcut. See \code{\link{get_proj4}} for a list of shortcut values. This argument is only used to transform the \code{shp}. Use \code{current.projection} to specify the current projection of \code{shp}.
 #' @param current.projection the current projection of \code{shp}. See \code{projection} for possible formats. Only use this if the current projection is missing or wrong.
 #' @param overwrite.current.projection logical that determines whether the current projection is overwritten if it already has a projection that is different.
@@ -151,11 +151,20 @@ get_projection <- function(shp, as.CRS=FALSE) {
 			attr(shp, "proj4string")
 		} else if (inherits(shp, "Raster")) {
 			attr(shp, "crs")
+		} else if (inherits(shp, "sf")) {
+		    CRS(get_sf_proj(shp) )
 		} else {
 			stop("shp is neither a Spatial nor a Raster object")
 		}
 	} else {
-		proj4string(shp)
+	    if (inherits(shp, "sf")) {
+	        get_sf_proj(shp)
+	    } else proj4string(shp)
 	}
 }
+
+get_sf_proj <- function(shp) {
+    attr(shp[[attr(shp, "sf_column")]], "crs")$proj4string
+}
+
 
