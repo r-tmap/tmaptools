@@ -1,5 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 examples
+output
 LICENSE
 README
+.Rprofile
