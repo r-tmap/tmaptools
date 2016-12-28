@@ -2,8 +2,7 @@ tmaptools: tools for thematic maps in R
 ===
 
 [![Build Status](https://travis-ci.org/mtennekes/tmaptools.png?branch=master)](https://travis-ci.org/mtennekes/tmaptools)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mtennekes/tmaptools?branch=master&svg=true)](https://ci.appveyor.com/project/mtennekes/tmaptools)
-<!---[![Coverage Status](https://img.shields.io/codecov/c/github/mtennekes/tmaptools/master.svg)](https://codecov.io/github/mtennekes/tmaptools?branch=master)--->
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mtennekes/tmaptools?branch=master&svg=true)](https://ci.appveyor.com/project/mtennekes/tmaptools)<!---[![Coverage Status](https://img.shields.io/codecov/c/github/mtennekes/tmaptools/master.svg)](https://codecov.io/github/mtennekes/tmaptools?branch=master)--->
 [![License](https://img.shields.io/badge/License-GPL%20v3-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-3.0.html) 
 [![CRAN](http://www.r-pkg.org/badges/version/tmap)](https://cran.r-project.org/package=tmaptools) 
 [![Downloads](http://cranlogs.r-pkg.org/badges/tmaptools?color=brightgreen)](http://www.r-pkg.org/pkg/tmaptools)
