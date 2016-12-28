@@ -46,6 +46,7 @@ weighted.modal <- function(x, w, na.rm=FALSE) {
 #'  \item{\code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}}}
 #'  \item{\code{\link[sp:SpatialPixelsDataFrame]{SpatialPixels(DataFrame)}}}
 #'  \item{\code{\link[raster:Raster-class]{RasterLayer, RasterStack, or RasterBrick}}}
+#'  \item{\code{sf} object if they can be coerced to a \code{Spatial} object}
 #' }
 #' @param by variable by which polygons or lines are merged. Does not apply to raster objects.
 #' @param fact number that specifies how many cells in both horizontal and vertical direction are merged. Only applied to raster objects.
@@ -54,8 +55,12 @@ weighted.modal <- function(x, w, na.rm=FALSE) {
 #' @param na.rm passed on to the aggregation function(s) \code{agg.fun}.
 #' @param ... other arguments passed on to the aggregation function(s) \code{agg.fun}.
 #' @importFrom stats weighted.mean
+#' @example ./examples/aggregate_map.R
+#' @export
 aggregate_map <- function(shp, by=NULL, fact=NULL, agg.fun=c(num="mean", cat="modal"), weights=NULL, na.rm=FALSE, ...) {
 	weighted.mean <- NULL
+
+	if (inherits(shp, "sf")) shp <- as(shp, "sf")
 
 	# process aggregation functions
 	is_raster <- (inherits(shp, c("Raster", "SpatialPixels", "SpatialGrid")))

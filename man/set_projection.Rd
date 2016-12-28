@@ -8,19 +8,21 @@
 set_projection(shp, projection = NA, current.projection = NA,
   overwrite.current.projection = FALSE)
 
-get_projection(shp, as.CRS = FALSE)
+get_projection(shp, as.CRS = FALSE, guess.longlat = FALSE)
 }
 \arguments{
 \item{shp}{shape object of class \code{\link[sp:Spatial]{Spatial}} or
 \code{\link[raster:Raster-class]{Raster}} (see details). For \code{get_projection} \code{sf} (simple features) are also supported.}
 
-\item{projection}{new projection. Either a \code{\link[sp:CRS]{CRS}} object or a character value. If it is a character, it can either be a \code{PROJ.4} character string or a shortcut. See \code{\link{get_proj4}} for a list of shortcut values. This argument is only used to transform the \code{shp}. Use \code{current.projection} to specify the current projection of \code{shp}.}
+\item{projection}{new projection. See \code{\link{get_proj4}} for options. This argument is only used to transform the \code{shp}. Use \code{current.projection} to specify the current projection of \code{shp}.}
 
-\item{current.projection}{the current projection of \code{shp}. See \code{projection} for possible formats. Only use this if the current projection is missing or wrong.}
+\item{current.projection}{the current projection of \code{shp}. See \code{\link{get_proj4}} for possible options. Only use this if the current projection is missing or wrong.}
 
 \item{overwrite.current.projection}{logical that determines whether the current projection is overwritten if it already has a projection that is different.}
 
 \item{as.CRS}{should a CRS object be returned instead of a PROJ.4 character string? Default is \code{FALSE}.}
+
+\item{guess.longlat}{if \code{TRUE}, it checks if the coordinates are within -180/180 and -90/90, and if so, it returns the WGS84 longlat projection (which is \code{get_proj4("longlat")}).}
 }
 \value{
 \code{set_projection} returns a (transformed) shape object with updated projection information. \code{get_projection} returns the \code{PROJ.4} character string of \code{shp}.

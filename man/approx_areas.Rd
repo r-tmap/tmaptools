@@ -4,28 +4,30 @@
 \alias{approx_areas}
 \title{Approximate area sizes of the shapes}
 \usage{
-approx_areas(shp, unit = "km", coords.unit = NA, unit.size = NA,
+approx_areas(shp, unit = "metric", coords.unit = NA, unit.size = NA,
   total.area = NA)
 }
 \arguments{
-\item{shp}{shape object, i.e., a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}}
+\item{shp}{shape object, i.e., a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}. Also \code{sf} objects are allowed.}
 
 \item{unit}{one of
 \describe{
     \item{\code{"abs"}:}{Absolute numbers based on polygon coordinates.}
     \item{\code{"prop"}:}{Proportional numbers. In other words, the sum of the area sizes equals one.}
     \item{\code{"norm"}:}{Normalized numbers. All area sizes are normalized to the largest area, of which the area size equals one.}
-    \item{other:}{Predefined For instance, "km", "m", "miles", or "us-ft". These units are the output units. See \code{coords.unit} for the units that are used by which the coordinates are defined. For this method, \code{total.area} or \code{unit.size} is required. In this case, the area sizes are returned in squared units, e.g., in squared kilometers.}}
-    The default method is \code{"km"}.}
+    \item{\code{"metric"} (default):}{Output area sizes will be either \code{"km"} (kilometer) or \code{"m"} (meter) depending on the map scale}
+    \item{\code{"imperial"}:}{Output area sizes will be either \code{"mi"} (miles) or \code{"ft"} (feet) depending on the map scale}
+    \item{other:}{Predefined values are "km", "m", "mi", and "ft". Other values can be specified as well. In that case, \code{unit.size} is required).}}
+These units are the output units. See \code{coords.unit} for the coordinate units used by the shape \code{shp}.}
 
-\item{coords.unit}{unit by which the coordinates are defined. Only applicable for projected shapes. By default, the value is taken from the crs projection string.}
+\item{coords.unit}{unit by which the coordinates are defined. By default, the value is taken from the crs projection string defined in \code{shp}. Not needed for non-projected shapes, since their areas are determined in another way (see details).}
 
-\item{unit.size}{size of the target unit (specified by \code{unit}) in terms of the coordinate units (specified by \code{coords.unit}). For instance, if \code{unit="km"} and \code{coords.unit="m"}, then \code{unit.size} shoudl be 1000. Only needs to be specified if units are used other than "km", "m", "miles", or "us-ft".}
+\item{unit.size}{size of the target unit (specified by \code{unit}) in terms of the coordinate units (specified by \code{coords.unit}). Only needed when \code{unit} or \code{coords.unit} are unknown (i.e. not listed above) and cannot be determined. For instance, if unit is set to \code{"hm"} (hectameter), and \code{corods.unit} is \code{"m"}, then \code{unit.size} should be 100, meaning 1 hectameter equals 100 meters.}
 
-\item{total.area}{total area size of \code{shp} in number of target units (defined by \code{unit}). Useful if the total area of the \code{shp} differs from a reference total area value.}
+\item{total.area}{total area size of \code{shp} in number of target units (defined by \code{unit}). Useful if the total area of the \code{shp} differs from a reference total area value. For \code{"metric"} and \code{"imperial"} units, please provide the total area in squared kilometers respectively miles.}
 }
 \value{
-Numeric vector of area sizes.
+Numeric vector of area sizes. An attribute called unit is added to specify the used units, which is especially useful when units were set to metric or imperial.
 }
 \description{
 Approximate the area sizes of the polygons either in 1) absolute numbers based on the polygon coordinates, 2) proportional numbers, 3) normalized numbers and 4) squared units (e.g. kilometers).
@@ -36,7 +38,7 @@ Note that this method is an approximation, since it depends on the used projecti
 For projected shapes, \code{\link[rgeos:gArea]{gArea}} is used, and for unprojected shapes, \code{\link[geosphere:areaPolygon]{areaPolygon}}.
 }
 \examples{
-if (require(tmap) && require(dplyr)) {
+if (require(tmap)) {
 data(NLD_muni)
 
 NLD_muni$area <- approx_areas(NLD_muni, total.area = 33893)
@@ -50,7 +52,8 @@ summary_areas <- function(x) {
     list(min_area=min(x),
          max_area=max(x),
          mean_area=mean(x),
-         sum_area=sum(x))
+         sum_area=sum(x),
+         units=paste0(attr(x, "unit")))
 }
 
 # area of the polygons
@@ -63,7 +66,7 @@ approx_areas(NLD_muni, total.area=33893) \%>\% summary_areas()
 approx_areas(NLD_muni, unit = "prop") \%>\% summary_areas()
 
 # area in squared miles
-approx_areas(NLD_muni, unit = "miles") \%>\% summary_areas()
+approx_areas(NLD_muni, unit = "mi") \%>\% summary_areas()
 
 # area of the polygons when unprojected
 approx_areas(NLD_muni \%>\% set_projection(projection="longlat")) \%>\% summary_areas()

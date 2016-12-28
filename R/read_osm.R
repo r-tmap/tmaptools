@@ -2,13 +2,13 @@
 #'
 #' Read Open Street Map data. Either OSM tiles are read and returned as a spatial raster, or vectorized OSM data are queried and returned as spatial polygons, lines, and/or points.
 #'
-#' @param x shape, bounding box, or \code{\link[osmar:osmar]{osmar}} object. If a shape (from class \code{\link[sp:Spatial]{Spatial}} or \code{\link[raster:Raster-class]{Raster}}) is specified, the bounding box of it is taken. See also \code{...} (other arguments). If a bounding box is specified, it should be in longitude latitude coordinates.
+#' @param x object that can be coerced to a bounding box with \code{\link{bb}} (e.g. an existing bounding box or a shape), or an \code{\link[osmar:osmar]{osmar}} object. In the first case, other arguments can be passed on to \code{\link{bb}} (see \code{...}). If an existing bounding box is specified in projected coordinates, plesae specify \code{current.projection}.
 #' @param raster logical that determines whether a raster or vector shapes are returned. In the latter case, specify the vector selections (see argument \code{...}). By default, \code{raster=TRUE} if no vector selections are made, and \code{raster=FALSE} otherwise.
 #' @param zoom passed on to \code{\link[OpenStreetMap:openmap]{openmap}}. Only applicable when \code{raster=TRUE}.
 #' @param type passed on to \code{\link[OpenStreetMap:openmap]{openmap}} Only applicable when \code{raster=TRUE}.
 #' @param minNumTiles passed on to \code{\link[OpenStreetMap:openmap]{openmap}} Only applicable when \code{raster=TRUE}.
 #' @param mergeTiles passed on to \code{\link[OpenStreetMap:openmap]{openmap}} Only applicable when \code{raster=TRUE}.
-#' @param ... arguments passed on to \code{\link{bb}} in case \code{x} is a shape, or arguments that specify polygons, lines, and/or points queries, created with \code{osm_poly}, \code{osm_line}, and \code{osm_point} respectively.
+#' @param ... arguments passed on to \code{\link{bb}}, or arguments that specify polygons, lines, and/or points queries, created with \code{osm_poly}, \code{osm_line}, and \code{osm_point} respectively.
 #' @name read_osm
 #' @rdname read_osm
 #' @import sp
@@ -27,7 +27,7 @@ read_osm <- function(x, raster=NA, zoom=NULL, type=NULL, minNumTiles=NULL, merge
 	args_bb <- args[intersect(names(args), c("ext", "cx", "cy", "width", "height", "xlim", "ylim", "relative"))]
 	args_other <- args[setdiff(names(args), names(args_bb))]
 	if (is.na(raster)) raster <- (length(args_other)==0)
-	if (inherits(x, c("Spatial", "Raster"))) x <- do.call("bb", c(list(x=x, projection = .CRS_longlat), args_bb))
+	if (!(inherits(x,  "osmar"))) x <- do.call("bb", c(list(x=x, projection = .CRS_longlat), args_bb))
 
 	if (raster) {
 		if (!requireNamespace("OpenStreetMap", quietly = TRUE)) {

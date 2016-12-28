@@ -3,11 +3,11 @@ Type: Package
 Title: Tools for thematic maps
 Version: 1.0
 Authors@R: person("Martijn", "Tennekes", email="mtennekes@gmail.com", role=c("aut", "cre"))
-Description: Tools for thamtic maps. This package functions to read and process spatial data.
+Description: This package offers a set of handy tool functions for reading and processing spatial data. The aim of these functions is to supply the workflow to create thematic maps, e.g. read shape files, set map projections, append data, calculate areas and distances, and query OpenStreetMap. The visualization of thematic maps can be done with the tmap package.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Date: 2016-12-16
+Date: 2016-12-28
 Depends:
     R (>= 3.0),
     methods
@@ -20,6 +20,7 @@ Imports:
     classInt,
     KernSmooth,
     geosphere,
+    magrittr,
     osmar,
     RColorBrewer,
     spdep,
@@ -27,11 +28,8 @@ Imports:
     XML
 Suggests:
     tmap,
-    rmarkdown,
-    knitr,
     OpenStreetMap,
     png
 URL: https://github.com/mtennekes/tmaptools
 BugReports: https://github.com/mtennekes/tmaptools/issues
-VignetteBuilder: knitr
 RoxygenNote: 5.0.1

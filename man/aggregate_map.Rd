@@ -15,6 +15,7 @@ aggregate_map(shp, by = NULL, fact = NULL, agg.fun = c(num = "mean", cat =
  \item{\code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}}}
  \item{\code{\link[sp:SpatialPixelsDataFrame]{SpatialPixels(DataFrame)}}}
  \item{\code{\link[raster:Raster-class]{RasterLayer, RasterStack, or RasterBrick}}}
+ \item{\code{sf} object if they can be coerced to a \code{Spatial} object}
 }}
 
 \item{by}{variable by which polygons or lines are merged. Does not apply to raster objects.}
@@ -31,5 +32,46 @@ aggregate_map(shp, by = NULL, fact = NULL, agg.fun = c(num = "mean", cat =
 }
 \description{
 Aggregate spatial polygons, spatial lines or raster objects. For spatial polygons and lines, the units will be merged with the \code{by} variable. For rasters, the \code{fact} parameter determined how many rasters cells are aggregated both horizontally and vertically. Per data variable, an aggregation formula can be specified, by default mean for numeric and modal for categorical varaibles.
+}
+\examples{
+if (require(tmap)) {
+    \dontrun{
+    data(land)
+
+    # original map
+    qtm(land, raster="cover_cls")
+
+    # map decreased by factor 4 for each dimension
+    land4 <- aggregate_map(land, fact=4)
+    qtm(land4, raster="cover_cls")
+
+    # map decreased by factor 8, where the variable trees is
+    # aggregated with mean, min, and max
+    land_trees <- aggregate_map(land, fact=8,
+        agg.fun=list(trees="mean", trees="min", trees="max"))
+
+    tm_shape(land_trees) +
+    	tm_raster(c("trees.1", "trees.2", "trees.3"), title="Trees (\%)") +
+    	tm_facets(free.scales=FALSE) +
+    	tm_layout(panel.labels = c("mean", "min", "max"))
+
+    data(NLD_muni, NLD_prov)
+
+    # aggregate Dutch municipalities to provinces
+    NLD_prov2 <- aggregate_map(NLD_muni, by="province",
+        agg.fun = list(population="sum", origin_native="mean", origin_west="mean",
+    				   origin_non_west="mean", name="modal"), weights = "population")
+
+    # see original provinces data
+    NLD_prov@data[, c("name", "population", "origin_native", "origin_west", "origin_non_west")]
+
+    # see aggregates data (the last column corresponds to the most populated municipalities)
+    NLD_prov2@data
+
+    # largest municipalities in area per province
+    aggregate_map(NLD_muni, by="province",
+                  agg.fun = list(name="modal"), weights = "AREA")@data
+    }
+}
 }
 

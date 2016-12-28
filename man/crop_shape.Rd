@@ -16,25 +16,25 @@ crop_shape(x, y, polygon = FALSE, ...)
 \item{...}{arguments passed on to \code{\link[raster:crop]{crop}}}
 }
 \description{
-Crop a shape object (from class \code{\link[sp:Spatial]{Spatial-class}} or \code{\link[raster:Raster-class]{Raster}}).
+Crop a shape object (from class \code{\link[sp:Spatial]{Spatial-class}}, \code{\link[raster:Raster-class]{Raster}}, or \code{sf}).
 }
 \details{
-This function is a wrapper around \code{\link[raster:crop]{crop}} from the raster package. It does two things in addition: \code{\link[sp:SpatialGrid]{SpatialGrid}} objects are allowed, and if \code{y} is a shape object with a different projection, it is temporarily reprojected in order to obtain a bounding box by which \code{x} is cropped.
+This function crops a shape file, \code{x}, either by the bounding box of another shape \code{y}, or by the \code{y} itself if it is a SpatialPolygons object.
 }
 \examples{
 if (require(tmap)) {
-data(Europe, land, metro)
+    data(Europe, land, metro)
 
-land_europe <- crop_shape(land, Europe)
+    land_europe <- crop_shape(land, Europe)
 
-qtm(land_europe, raster="trees", style="natural")
+    qtm(land_europe, raster="trees", style="natural")
 
-metro_europe <- crop_shape(metro, Europe, polygon = TRUE)
+    metro_europe <- crop_shape(metro, Europe, polygon = TRUE)
 
-qtm(Europe) +
-tm_shape(metro_europe) +
-	tm_bubbles("pop2010", col="red", title.size="European cities") +
-	tm_legend(frame=TRUE)
+    qtm(Europe) +
+    tm_shape(metro_europe) +
+    	tm_bubbles("pop2010", col="red", title.size="European cities") +
+    	tm_legend(frame=TRUE)
 }
 }
 \seealso{

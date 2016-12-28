@@ -24,7 +24,7 @@ Create a double line or offset line. The double line can be useful for visualizi
 \examples{
 if (require(tmap)) {
 ### Demo to visualise the route of the Amstel Gold Race, a professional cycling race
-\dontrun{
+    \dontrun{
 	tmpdir <- tempdir()
 	tmpfile <- tempfile()
 	download.file("http://www.gpstracks.nl/routes-fiets/f-limburg-amstel-gold-race-2014.zip",
@@ -52,7 +52,7 @@ if (require(tmap)) {
 	tm_view(basemaps = "Esri.WorldTopoMap")
 
 	# TIP: also run the plot in viewing mode, enabled with tmap_mode("view")
-}
+    }
 }
 }
 

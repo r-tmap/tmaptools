@@ -4,19 +4,21 @@
 \alias{calc_densities}
 \title{Calculate densities}
 \usage{
-calc_densities(shp, var, unit = "km", unit.size = 1000, total.area = NA,
-  suffix = "", drop = TRUE)
+calc_densities(shp, var, unit = "metric", coords.unit = NA,
+  unit.size = NA, total.area = NA, suffix = "", drop = TRUE)
 }
 \arguments{
 \item{shp}{a shape object, i.e., a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}}
 
 \item{var}{name(s) of a qualtity variable name contained in the \code{shp} data}
 
-\item{unit}{the preferred unit, for instance, "km", "m", or "miles". Density values are calculated in \code{var/unit^2}.}
+\item{unit}{the preferred unit, see \code{\link{approx_areas}}. Density values are calculated in \code{var/unit^2}.}
 
-\item{unit.size}{size of the unit in terms of coordinate units. The coordinate system of many projections is approximately in meters while thematic maps typically range many kilometers, so by default \code{unit="km"} and \code{unit.size=1000} (meaning 1 kilometer equals 1000 coordinate units).}
+\item{coords.unit}{unit by which the coordinates are defined, see \code{\link{approx_areas}}.}
 
-\item{total.area}{total area size of \code{shp} in number of squared units (by default kilometers). Useful if the total area of the \code{shp} differs from a reference total area value.}
+\item{unit.size}{size of the target unit (specified by \code{unit}) in terms of the coordinate units (specified by \code{coords.unit}), see \code{\link{approx_areas}}.}
+
+\item{total.area}{total area size of \code{shp} in number of target units (defined by \code{unit}), \code{\link{approx_areas}}.}
 
 \item{suffix}{character that is appended to the variable names. The resulting names are used as column names of the returned data.frame.}
 
@@ -30,17 +32,17 @@ Transpose quantitative variables to densitiy variables, which are often needed f
 }
 \examples{
 if (require(tmap)) {
-data(NLD_muni)
+    data(NLD_muni)
 
-NLD_muni_pop_per_km2 <- calc_densities(NLD_muni,
-    var = c("pop_men", "pop_women"), suffix = "_km2")
-NLD_muni <- append_data(NLD_muni, NLD_muni_pop_per_km2, fixed=TRUE)
+    NLD_muni_pop_per_km2 <- calc_densities(NLD_muni,
+        var = c("pop_men", "pop_women"), suffix = "_km2")
+    NLD_muni <- append_data(NLD_muni, NLD_muni_pop_per_km2, fixed=TRUE)
 
-tm_shape(NLD_muni) +
-	tm_polygons(c("pop_men_km2", "pop_women_km2"),
-        title=expression("Population per " * km^2), style="quantile") +
-tm_facets(free.scales = FALSE) +
-tm_layout(panel.show = TRUE, panel.labels=c("Men", "Women"))
+    tm_shape(NLD_muni) +
+    	tm_polygons(c("pop_men_km2", "pop_women_km2"),
+            title=expression("Population per " * km^2), style="quantile") +
+    tm_facets(free.scales = FALSE) +
+    tm_layout(panel.show = TRUE, panel.labels=c("Men", "Women"))
 }
 }
 \keyword{densities}

@@ -51,7 +51,7 @@ points_to_raster <- function(shp, nrow=NA, ncol=NA, N=250000, by=NULL, to.Raster
 	names(lvls) <- lvls
 	levels(var) <- lvls
 
-	shps <- split(shp, f=var)
+	shps <- split_shape(shp, f=var)
 
 	res <- as.data.frame(lapply(shps, function(s) {
 		if ("data" %in% names(attributes(s))) {
@@ -79,6 +79,7 @@ points_to_raster <- function(shp, nrow=NA, ncol=NA, N=250000, by=NULL, to.Raster
 #' Convert spatial polygons to a raster. The value of each raster cell will be the polygon ID number. Alternatively, if \code{copy.data}, the polygon data is appended to each raster cell.
 #'
 #' @param shp shape object. Either a \code{\link[sp:SpatialPointsDataFrame]{SpatialPoints(DataFrame)}} or a \code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}}.
+#' @param r \code{\link[raster:raster]{Raster}} object. If not specified, it will be created from the bounding box of \code{shp} and the arguments \code{N}, \code{nrow}, and \code{ncol}.
 #' @param nrow number of raster rows. If \code{NA}, it is automatically determined by \code{N} and the aspect ratio of \code{shp}.
 #' @param ncol number of raster columns. If \code{NA}, it is automatically determined by \code{N} and the aspect ratio of \code{shp}.
 #' @param N preferred number of raster cells.
@@ -91,24 +92,25 @@ points_to_raster <- function(shp, nrow=NA, ncol=NA, N=250000, by=NULL, to.Raster
 #' @importFrom raster raster extent rasterize getValues
 #' @example  ./examples/poly_to_raster.R
 #' @seealso \code{\link{points_to_raster}}
-poly_to_raster <- function(shp, nrow=NA, ncol=NA, N=250000, use.cover=FALSE, copy.data=FALSE,  to.Raster=!copy.data, ...) {
+poly_to_raster <- function(shp, r=NULL, nrow=NA, ncol=NA, N=250000, use.cover=FALSE, copy.data=FALSE,  to.Raster=!copy.data, ...) {
 	if (!inherits(shp, "SpatialPolygons")) stop("shp should be a SpatialPolygons(DataFrame)")
 
-	# get shp metadata
-	bbx <- bb(shp)
-	np <- length(shp)
-	asp <- get_asp_ratio(shp)
-	hasData <- "data" %in% names(attributes(shp))
+    np <- length(shp)
+    hasData <- "data" %in% names(attributes(shp))
 
-	# determine grid size
-	if (is.na(nrow) || is.na(ncol)) {
-		nrow <- round(sqrt(N/asp))
-		ncol <- round(N / nrow)
-	}
-	N <- nrow * ncol
-
-	# create empty raster
-	r <- raster(extent(bbx), nrows=nrow, ncols=ncol)
+    if (missing(r)) {
+        # get shp metadata
+        bbx <- bb(shp)
+        asp <- get_asp_ratio(shp)
+        # determine grid size
+        if (is.na(nrow) || is.na(ncol)) {
+            nrow <- round(sqrt(N/asp))
+            ncol <- round(N / nrow)
+        }
+        N <- nrow * ncol
+        # create empty raster
+        r <- raster(extent(bbx), nrows=nrow, ncols=ncol)
+    }
 
 	# add ID data variable
 	if (!hasData) {

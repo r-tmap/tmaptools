@@ -4,11 +4,13 @@
 \alias{poly_to_raster}
 \title{Convert spatial polygons to a raster}
 \usage{
-poly_to_raster(shp, nrow = NA, ncol = NA, N = 250000, use.cover = FALSE,
-  copy.data = FALSE, to.Raster = !copy.data, ...)
+poly_to_raster(shp, r = NULL, nrow = NA, ncol = NA, N = 250000,
+  use.cover = FALSE, copy.data = FALSE, to.Raster = !copy.data, ...)
 }
 \arguments{
 \item{shp}{shape object. Either a \code{\link[sp:SpatialPointsDataFrame]{SpatialPoints(DataFrame)}} or a \code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}}.}
+
+\item{r}{\code{\link[raster:raster]{Raster}} object. If not specified, it will be created from the bounding box of \code{shp} and the arguments \code{N}, \code{nrow}, and \code{ncol}.}
 
 \item{nrow}{number of raster rows. If \code{NA}, it is automatically determined by \code{N} and the aspect ratio of \code{shp}.}
 
@@ -32,7 +34,7 @@ Convert spatial polygons to a raster. The value of each raster cell will be the 
 }
 \examples{
 if (require(tmap)) {
-\dontrun{
+    \dontrun{
 	data(NLD_muni)
 
 	# choropleth of 65+ population percentages
@@ -41,7 +43,7 @@ if (require(tmap)) {
 	# rasterized version
 	NLD_rst <- poly_to_raster(NLD_muni, copy.data = TRUE)
 	qtm(NLD_rst, raster="pop_65plus", format="NLD")
-}
+    }
 }
 }
 \seealso{

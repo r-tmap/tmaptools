@@ -31,7 +31,7 @@ This function is a wrapper around \code{\link[raster:rasterize]{rasterize}}.
 }
 \examples{
 if (require(tmap)) {
-\dontrun{
+    \dontrun{
 	data(NLD_muni, NLD_prov)
 
 	# sample points (each point represents 1000 people)
@@ -50,7 +50,7 @@ if (require(tmap)) {
 	tm_shape(NLD_prov) +
 		tm_borders() +
 	tm_format_NLD() + tm_style_grey()
-}
+    }
 }
 }
 \seealso{

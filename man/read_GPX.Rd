@@ -21,7 +21,7 @@ Read a GPX file. By default, it reads all possible GPX layers, and only returns 
 \examples{
 if (require(tmap)) {
 ### Demo to visualise the route of the Amstel Gold Race, a professional cycling race
-\dontrun{
+    \dontrun{
 	tmpdir <- tempdir()
 	tmpfile <- tempfile()
 	download.file("http://www.gpstracks.nl/routes-fiets/f-limburg-amstel-gold-race-2014.zip",
@@ -47,7 +47,7 @@ if (require(tmap)) {
 		tm_text("name", size = .75, bg.color="white", bg.alpha=.25, auto.placement = .25) +
 	tm_legend(position=c("right", "top"), frame=TRUE, bg.color = "gold") +
 	tm_view(basemaps = "Esri.WorldTopoMap")
-}
+    }
 }
 }
 

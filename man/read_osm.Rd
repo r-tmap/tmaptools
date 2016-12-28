@@ -17,7 +17,7 @@ osm_line(query)
 osm_point(query)
 }
 \arguments{
-\item{x}{shape, bounding box, or \code{\link[osmar:osmar]{osmar}} object. If a shape (from class \code{\link[sp:Spatial]{Spatial}} or \code{\link[raster:Raster-class]{Raster}}) is specified, the bounding box of it is taken. See also \code{...} (other arguments). If a bounding box is specified, it should be in longitude latitude coordinates.}
+\item{x}{object that can be coerced to a bounding box with \code{\link{bb}} (e.g. an existing bounding box or a shape), or an \code{\link[osmar:osmar]{osmar}} object. In the first case, other arguments can be passed on to \code{\link{bb}} (see \code{...}). If an existing bounding box is specified in projected coordinates, plesae specify \code{current.projection}.}
 
 \item{raster}{logical that determines whether a raster or vector shapes are returned. In the latter case, specify the vector selections (see argument \code{...}). By default, \code{raster=TRUE} if no vector selections are made, and \code{raster=FALSE} otherwise.}
 
@@ -29,7 +29,7 @@ osm_point(query)
 
 \item{mergeTiles}{passed on to \code{\link[OpenStreetMap:openmap]{openmap}} Only applicable when \code{raster=TRUE}.}
 
-\item{...}{arguments passed on to \code{\link{bb}} in case \code{x} is a shape, or arguments that specify polygons, lines, and/or points queries, created with \code{osm_poly}, \code{osm_line}, and \code{osm_point} respectively.}
+\item{...}{arguments passed on to \code{\link{bb}}, or arguments that specify polygons, lines, and/or points queries, created with \code{osm_poly}, \code{osm_line}, and \code{osm_point} respectively.}
 
 \item{query}{query to select polygons, lines, or points. Currently, two formats are supported: 1) key, 2) key=value. See \url{http://wiki.openstreetmap.org/wiki/Map_Features} for Open Street Map keys and values.}
 }
@@ -41,57 +41,57 @@ Read Open Street Map data. Either OSM tiles are read and returned as a spatial r
 }
 \examples{
 if (require(tmap)) {
-\dontrun{
-#### Choropleth with OSM background
+    \dontrun{
+    #### Choropleth with OSM background
 
-# load Netherlands shape
-data(NLD_muni)
+    # load Netherlands shape
+    data(NLD_muni)
 
-# read OSM raster data
-osm_NLD <- read_osm(NLD_muni, ext=1.1)
+    # read OSM raster data
+    osm_NLD <- read_osm(NLD_muni, ext=1.1)
 
-# plot with regular tmap functions
-tm_shape(osm_NLD) +
-	tm_raster() +
-tm_shape(NLD_muni) +
-	tm_polygons("population", convert2density=TRUE, style="kmeans", alpha=.7, palette="Purples")
+    # plot with regular tmap functions
+    tm_shape(osm_NLD) +
+    	tm_raster() +
+    tm_shape(NLD_muni) +
+    	tm_polygons("population", convert2density=TRUE, style="kmeans", alpha=.7, palette="Purples")
 
-#### A close look at the building of Statistics Netherlands in Heerlen
+    #### A close look at the building of Statistics Netherlands in Heerlen
 
-# create a bounding box around the CBS (Statistics Netherlands) building
-CBS_bb <- bb("CBS Weg 11, Heerlen", width=.003, height=.002)
+    # create a bounding box around the CBS (Statistics Netherlands) building
+    CBS_bb <- bb("CBS Weg 11, Heerlen", width=.003, height=.002)
 
-# read Microsoft Bing satellite and OpenCycleMap OSM layers
-CBS_osm1 <- read_osm(CBS_bb, type="bing")
-CBS_osm2 <- read_osm(CBS_bb, type="opencyclemap")
+    # read Microsoft Bing satellite and OpenCycleMap OSM layers
+    CBS_osm1 <- read_osm(CBS_bb, type="bing")
+    CBS_osm2 <- read_osm(CBS_bb, type="opencyclemap")
 
-# plot OSM raster data
-qtm(CBS_osm1)
-qtm(CBS_osm2)
+    # plot OSM raster data
+    qtm(CBS_osm1)
+    qtm(CBS_osm2)
 
-# read vectorized OSM data
-CBS_osm3 <- read_osm(CBS_bb,
-					 roads=osm_line("highway"),
-					 parking=osm_poly("amenity=parking"),
-					 building=osm_poly("building"),
-					 park=osm_poly("leisure=park"),
-					 railway_area=osm_poly("landuse=railway"),
-					 railway=osm_line("railway"),
-					 forest=osm_poly("landuse=forest"),
-					 grass=osm_poly("landuse=grass"),
-					 bicycle=osm_line("highway=cycleway"))
+    # read vectorized OSM data
+    CBS_osm3 <- read_osm(CBS_bb,
+        roads=osm_line("highway"),
+        parking=osm_poly("amenity=parking"),
+        building=osm_poly("building"),
+        park=osm_poly("leisure=park"),
+        railway_area=osm_poly("landuse=railway"),
+        railway=osm_line("railway"),
+        forest=osm_poly("landuse=forest"),
+        grass=osm_poly("landuse=grass"),
+        bicycle=osm_line("highway=cycleway"))
 
-# plot vectorized OSM data
-tm_shape(CBS_osm3$grass, bbox=CBS_bb) + tm_polygons("darkolivegreen3") +
-	tm_shape(CBS_osm3$forest) + tm_fill("forestgreen") +
-	tm_shape(CBS_osm3$railway_area) + tm_fill(col="grey70") +
-	tm_shape(CBS_osm3$parking) + tm_polygons("gold") +
-	tm_shape(CBS_osm3$building) + tm_polygons("grey50") +
-	tm_shape(CBS_osm3$roads, bbox=CBS_bb) + tm_lines(col="gold", lwd=3) +
-	tm_shape(CBS_osm3$bicycle) + tm_lines(col="blue", lwd=3) +
-	tm_shape(CBS_osm3$railway) + tm_lines(col="grey20", lwd=3, lty="dashed") +
-	tm_layout(bg.color="grey90")
-}
+    # plot vectorized OSM data
+    tm_shape(CBS_osm3$grass, bbox=CBS_bb) + tm_polygons("darkolivegreen3") +
+        tm_shape(CBS_osm3$forest) + tm_fill("forestgreen") +
+        tm_shape(CBS_osm3$railway_area) + tm_fill(col="grey70") +
+        tm_shape(CBS_osm3$parking) + tm_polygons("gold") +
+        tm_shape(CBS_osm3$building) + tm_polygons("grey50") +
+        tm_shape(CBS_osm3$roads, bbox=CBS_bb) + tm_lines(col="gold", lwd=3) +
+        tm_shape(CBS_osm3$bicycle) + tm_lines(col="blue", lwd=3) +
+        tm_shape(CBS_osm3$railway) + tm_lines(col="grey20", lwd=3, lty="dashed") +
+        tm_layout(bg.color="grey90")
+    }
 }
 }
 

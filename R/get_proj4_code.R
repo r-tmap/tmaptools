@@ -2,9 +2,13 @@
 #'
 #' Get full PROJ.4 string from an existing PROJ.4 string, a shortcut, or a \code{\link[sp:CRS]{CRS}} object.
 #'
-#' @param as.CRS should a CRS object be returned instead of a PROJ.4 character string? Default is \code{FALSE}.
-#' @param x a \code{PROJ.4} character string, a shortcut, or a \code{\link[sp:CRS]{CRS}} object. The following shortcuts are available:
-#' \describe{
+#' @param x a projection. One of:
+#' \enumerate{
+#'    \item{a \code{PROJ.4} character string}
+#'    \item{a \code{\link[sp:CRS]{CRS}} object}
+#'    \item{an EPSG code}
+#'    \item{one the follwing shortcuts codes:
+#'      \describe{
 #'    	\item{\code{"longlat"}}{Not really a projection, but a plot of the longitude-latitude coordinates (WGS84 datum).}
 #'    	\item{\code{"wintri"}}{Winkel Tripel (1921). Popular projection that is useful in world maps. It is the standard of world maps made by the National Geographic Society. Type: compromise}
 #'    	\item{\code{"robin"}}{Robinson (1963). Another popular projection for world maps. Type: compromise}
@@ -17,9 +21,13 @@
 #'    	\item{\code{"eqc0"}}{Equirectangular (120). Projection in which distances along meridians are conserved. The equator is the standard parallel. Also known as Plate Carr\'ee. Type: equidistant}
 #'    	\item{\code{"eqc30"}}{Equirectangular (120). Projection in which distances along meridians are conserved. The latitude of 30 is the standard parallel. Type: equidistant}
 #'    	\item{\code{"eqc45"}}{Equirectangular (120). Projection in which distances along meridians are conserved. The latitude of 45 is the standard parallel. Also known as Gall isographic. Type: equidistant}
+#'    	\item{\code{"laea_Eur"}}{European Lambert Azimuthal Equal Area Projection. Similar to EPSG code 3035.}
+#'    	\item{\code{"laea_NA"}}{North American Lambert Azimuthal Equal Area Projection. Known as SR-ORG:7314.}
 #'    	\item{\code{"rd"}}{Rijksdriehoekstelsel. Triangulation coordinate system used in the Netherlands.}
 #'    	\item{EPSG code}{A valid code from the EPSG database}}
-#'
+#'    }
+#' }
+#' @param as.CRS should a CRS object be returned instead of a PROJ.4 character string? Default is \code{FALSE}.
 #'	@return validated PROJ.4 character string, or, if \code{as.CRS=TRUE} a \code{\link[sp:CRS]{CRS}} object.
 #'	@importFrom rgdal CRSargs make_EPSG checkCRSArgs
 #'	@import sp
@@ -52,6 +60,7 @@ get_proj4 <- function(x, as.CRS=FALSE) {
 			y <- ycheck[[2]]
 			check_args <- FALSE
 		} else if (substr(x, 1, 3)=="utm") {
+		    if (!(nchar(x) %in% c(5,6))) stop("\"utm\" shortcut code should be utmXX or utmXXs where XX refers to the utm zone")
 			y <- paste("+proj=utm +zone=", substr(x, 4, 5), ifelse(substr(x, 6, 6)=="s", " +south", ""), " +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0", sep="")
 			check_args <- TRUE
 		} else {
@@ -70,7 +79,7 @@ is_num_string <- function(x) {
 .proj_sc <- c(longlat="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0",
 			  latlong="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0",
 			  WGS84="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0",
-			  NAD83="+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs",
+			  NAD83="+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs +towgs84=0,0,0",
 			  NAD27="+proj=longlat +ellps=clrk66 +datum=NAD27 +no_defs +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat",
 			  wintri="+proj=wintri +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0",
 			  robin="+proj=robin +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0",
@@ -82,4 +91,6 @@ is_num_string <- function(x) {
 			  eqc0="+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0",
 			  eqc30="+proj=eqc +lat_ts=30 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0",
 			  eqc45="+proj=eqc +lat_ts=45 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0",
+			  laea_Eur="+init=epsg:3035 +proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs",
+			  laea_NA="+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs +towgs84=0,0,0",
 			  rd="+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,-0.398957388243134,0.343987817378283,-1.87740163998045,4.0725 +units=m +no_defs")

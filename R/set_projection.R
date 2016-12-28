@@ -12,10 +12,11 @@
 #'
 #' @param shp shape object of class \code{\link[sp:Spatial]{Spatial}} or
 #'   \code{\link[raster:Raster-class]{Raster}} (see details). For \code{get_projection} \code{sf} (simple features) are also supported.
-#' @param projection new projection. Either a \code{\link[sp:CRS]{CRS}} object or a character value. If it is a character, it can either be a \code{PROJ.4} character string or a shortcut. See \code{\link{get_proj4}} for a list of shortcut values. This argument is only used to transform the \code{shp}. Use \code{current.projection} to specify the current projection of \code{shp}.
-#' @param current.projection the current projection of \code{shp}. See \code{projection} for possible formats. Only use this if the current projection is missing or wrong.
+#' @param projection new projection. See \code{\link{get_proj4}} for options. This argument is only used to transform the \code{shp}. Use \code{current.projection} to specify the current projection of \code{shp}.
+#' @param current.projection the current projection of \code{shp}. See \code{\link{get_proj4}} for possible options. Only use this if the current projection is missing or wrong.
 #' @param overwrite.current.projection logical that determines whether the current projection is overwritten if it already has a projection that is different.
 #' @param as.CRS should a CRS object be returned instead of a PROJ.4 character string? Default is \code{FALSE}.
+#' @param guess.longlat if \code{TRUE}, it checks if the coordinates are within -180/180 and -90/90, and if so, it returns the WGS84 longlat projection (which is \code{get_proj4("longlat")}).
 #' @name set_projection
 #' @rdname set_projection
 #' @import sp
@@ -143,11 +144,10 @@ set_projection <- function(shp, projection=NA, current.projection=NA, overwrite.
 
 #' @name get_projection
 #' @rdname set_projection
-#' @import sp
 #' @export
-get_projection <- function(shp, as.CRS=FALSE) {
+get_projection <- function(shp, as.CRS=FALSE, guess.longlat=FALSE) {
 	if (as.CRS) {
-		if (inherits(shp, "Spatial")) {
+		res <- if (inherits(shp, "Spatial")) {
 			attr(shp, "proj4string")
 		} else if (inherits(shp, "Raster")) {
 			attr(shp, "crs")
@@ -156,10 +156,26 @@ get_projection <- function(shp, as.CRS=FALSE) {
 		} else {
 			stop("shp is neither a Spatial nor a Raster object")
 		}
+
+		# check for missing values
+		if (is.na(res) && guess.longlat) {
+		    if (!is_projected(shp)) {
+	            .CRS_longlat
+		    } else
+		        CRS("")
+		} else res
 	} else {
-	    if (inherits(shp, "sf")) {
+	    res <- if (inherits(shp, "sf")) {
 	        get_sf_proj(shp)
 	    } else proj4string(shp)
+
+	    # check for missing values
+	    if (is.na(res) && guess.longlat) {
+	        if (!is_projected(shp)) {
+	            attr(.CRS_longlat, "projargs")
+	        } else
+	            NA
+	    } else res
 	}
 }
 
