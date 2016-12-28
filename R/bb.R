@@ -136,7 +136,7 @@ bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=N
 	    attr(sp_poly, "proj4string") <- current.projection
 
 	    # STEP 1: try to cut the bounding box, such that it is feasible (i.e. corresponding to lon between -180 and 180 and lat between -90 and 90)
-	    earth_end <- suppressMessages(bb_earth(projection=current.projection))
+	    earth_end <- suppressWarnings(bb_earth(projection=current.projection))
 
 	    if (is.null(earth_end)) {
 	        sp_poly2 <- sp_poly

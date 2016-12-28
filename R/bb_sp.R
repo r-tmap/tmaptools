@@ -59,7 +59,9 @@ bb_earth <- function(projection=NULL, stepsize=1, earth.datum="WGS84", bbx=c(-18
             world_bb_sp
         } else {
             tryCatch({
-                spTransform(world_bb_sp, projection)
+                suppressMessages({
+                    spTransform(world_bb_sp, projection)
+                })
             }, error=function(e){
                 NULL
             }, warning=function(w){
@@ -69,7 +71,7 @@ bb_earth <- function(projection=NULL, stepsize=1, earth.datum="WGS84", bbx=c(-18
         if (!is.null(res)) break
     }
 
-    if (is.null(res)) warning("Unable to determine bounding box of the earth in projection \"", projection, "\"")
+    if (is.null(res)) warning("Unable to determine bounding box of the earth in projection \"", projection, "\"", call. = FALSE)
     res
 
 }
