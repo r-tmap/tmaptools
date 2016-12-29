@@ -12,12 +12,10 @@ install:
 
 # Adapt as necessary starting from here
 
-before_build:
-  - bash -c "echo '^travis-tool/.sh/.cmd$' >> .Rbuildignore"
-
 build_script:
   - travis-tool.sh install_deps
   - travis-tool.sh install_github mtennekes/tmap
+  - travis-tool.sh install_github mtennekes/tmaptools
 
 test_script:
   - travis-tool.sh run_tests
