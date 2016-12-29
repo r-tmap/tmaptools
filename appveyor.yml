@@ -14,8 +14,6 @@ install:
 
 build_script:
   - travis-tool.sh install_deps
-  - travis-tool.sh install_github mtennekes/tmap
-  - travis-tool.sh install_github mtennekes/tmaptools
 
 test_script:
   - travis-tool.sh run_tests
