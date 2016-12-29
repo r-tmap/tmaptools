@@ -38,8 +38,8 @@ r_packages:
   - rmarkdown
 
 r_github_packages:
-  - mtennekes/tmap/pkg
+  - mtennekes/tmap
   - jimhester/covr
 
 after_success:
-  - R -e 'covr::codecov(path=".")'
+  - R -e 'covr::codecov()'
