@@ -23,6 +23,7 @@ Imports:
     magrittr,
     osmar,
     RColorBrewer,
+    rmapshaper,
     spdep,
     stats,
     XML

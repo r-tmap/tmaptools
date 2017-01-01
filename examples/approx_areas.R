@@ -23,10 +23,10 @@ approx_areas(NLD_muni) %>% summary_areas()
 approx_areas(NLD_muni, total.area=33893) %>% summary_areas()
 
 # proportional area of the polygons
-approx_areas(NLD_muni, unit = "prop") %>% summary_areas()
+approx_areas(NLD_muni, target = "prop") %>% summary_areas()
 
 # area in squared miles
-approx_areas(NLD_muni, unit = "mi") %>% summary_areas()
+approx_areas(NLD_muni, target = "mi") %>% summary_areas()
 
 # area of the polygons when unprojected
 approx_areas(NLD_muni %>% set_projection(projection="longlat")) %>% summary_areas()

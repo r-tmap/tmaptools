@@ -4,19 +4,19 @@
 \alias{calc_densities}
 \title{Calculate densities}
 \usage{
-calc_densities(shp, var, unit = "metric", coords.unit = NA,
-  unit.size = NA, total.area = NA, suffix = "", drop = TRUE)
+calc_densities(shp, var, target = "metric", orig = NA, to = NA,
+  total.area = NA, suffix = "", drop = TRUE)
 }
 \arguments{
 \item{shp}{a shape object, i.e., a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}}
 
 \item{var}{name(s) of a qualtity variable name contained in the \code{shp} data}
 
-\item{unit}{the preferred unit, see \code{\link{approx_areas}}. Density values are calculated in \code{var/unit^2}.}
+\item{target}{the target unit, see \code{\link{approx_areas}}. Density values are calculated in \code{var/target^2}.}
 
-\item{coords.unit}{unit by which the coordinates are defined, see \code{\link{approx_areas}}.}
+\item{orig}{original units, i.e. by which the coordinates are defined, see \code{\link{approx_areas}}.}
 
-\item{unit.size}{size of the target unit (specified by \code{unit}) in terms of the coordinate units (specified by \code{coords.unit}), see \code{\link{approx_areas}}.}
+\item{to}{multiplier used as follows: \code{orig * to = target}. See \code{\link{approx_areas}}.}
 
 \item{total.area}{total area size of \code{shp} in number of target units (defined by \code{unit}), \code{\link{approx_areas}}.}
 

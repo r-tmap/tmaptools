@@ -22,12 +22,15 @@ This page provides a brief overview of all package functions.
 \code{\link{get_IDs}}\tab To get ID values of a shape object \cr
 \code{\link{append_data}}\tab To append a data frame to a shape object \cr
 \code{\link{approx_areas}}\tab To approximate area sizes of polygons \cr
+\code{\link{approx_distances}}\tab To approximate distances \cr
+\code{\link{projection_units}}\tab Get or translate units of a projection \cr
 \code{\link{calc_densities}}\tab To calculate density values \cr
 \code{\link{get_projection}}\tab To get the map projection \cr
 \code{\link{set_projection}}\tab To set the map projection \cr
 \code{\link{is_projected}}\tab Checks if the map is projected \cr
 \code{\link{sbind}}\tab To bind shape objects \cr
 \code{\link{crop_shape}}\tab To crop shape objects \cr
+\code{\link{simplify_shape}}\tab To simplify a shape \cr
 \code{\link{map_coloring}}\tab To color polygons with different colors for adjacent polygons \cr
 \code{\link{get_brewer_pal}}\tab Get and plot a (modified) Color Brewer palette \cr
 --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
@@ -38,6 +41,7 @@ This page provides a brief overview of all package functions.
 
 \tabular{ll}{
 \code{\link{smooth_map}}\tab To create a smooth map using a kernel density estimator \cr
+\code{\link{aggregate_map}}\tab To aggregate the units of a map \cr
 \code{\link{smooth_raster_cover}}\tab To create a smooth cover from a raster object \cr
 \code{\link{sample_dots}}\tab To sample dots from polygons \cr
 \code{\link{points_to_raster}}\tab To bin spatial points to a raster \cr

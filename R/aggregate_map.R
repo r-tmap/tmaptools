@@ -173,29 +173,31 @@ aggregate_map <- function(shp, by=NULL, fact=NULL, agg.data = TRUE, agg.fun=c(nu
 
 		data[[by]] <- NULL
 
-		shp2 <- if (rgeos::version_GEOS0() < "3.3.0") {
+		shp2 <- if (inherits(shp, "SpatialLines")) {
+		    rgeos::gLineMerge(spgeom = shp, byid=TRUE, id = IDs_char)
+		} else if (rgeos::version_GEOS0() < "3.3.0") {
 			rgeos::gUnionCascaded(spgeom = shp, id = IDs_char)
 		} else rgeos::gUnaryUnion(spgeom = shp, id = IDs_char)
 
 		# restore order
 		ids2 <- get_IDs(shp2)
-		
+
 		# get selection of levels that are present
 		lsel <- lvls %in% ids2
-		
-		
+
+
 		shp2 <- shp2[match(lvls[lsel], ids2), ]
 
 		if (agg.data) {
 		  IDs2_char <- get_IDs(shp2)
 		  IDs2_orig <- if (is.factor(IDs_orig)) factor(IDs2_char, levels=lvls) else IDs2_char
-		  
+
 		  if (aggmethod=="none") {
 		    data2 <- data.frame(IDs2_orig, stringsAsFactors = FALSE)
 		    names(data2) <- by
 		  } else {
 		    #IDs2_fact <- factor(IDs2_char, levels=IDs2_char)
-		    
+
 		    if (missing(weights)) {
 		      w <- NULL
 		    } else {
@@ -214,8 +216,8 @@ aggregate_map <- function(shp, by=NULL, fact=NULL, agg.data = TRUE, agg.fun=c(nu
 		      # normalize weights
 		      w <- w / sum(w)
 		    }
-		    
-		    
+
+
 		    # retrieve build-in functions
 		    get_function <- function(fun) {
 		      if (!is.function(fun) && !is.character(fun)) stop("invalid function found in agg.fun")
@@ -229,15 +231,20 @@ aggregate_map <- function(shp, by=NULL, fact=NULL, agg.data = TRUE, agg.fun=c(nu
 		      }
 		      fun
 		    }
-		    
+
 		    if (aggmethod=="numcat") {
 		      isnum <- sapply(data, is.numeric)
 		      agg.fun <- lapply(1:ncol(data), function(i) {
 		        agg.fun[ifelse(isnum[i], "num", "cat")]
 		      })
 		      names(agg.fun) <- names(data)
+		    } else if (aggmethod=="one") {
+		        agg.fun <- lapply(1:ncol(data), function(i) {
+		            agg.fun
+		        })
+		        names(agg.fun) <- names(data)
 		    }
-		    
+
 		    vars <- mapply(function(var, fun) {
 		      dv <- data[[var]]
 		      v <- if (is.null(w)) {
@@ -249,10 +256,10 @@ aggregate_map <- function(shp, by=NULL, fact=NULL, agg.data = TRUE, agg.fun=c(nu
 		      }
 		      if (is.factor(dv)) factor(v, levels=1L:nlevels(dv), labels=levels(dv)) else v
 		    }, names(agg.fun), agg.fun, SIMPLIFY = FALSE, USE.NAMES = FALSE)
-		    
+
 		    lst2 <- c(list(IDs2_orig), vars, list(FALSE))
 		    names(lst2) <- c(by, names(agg.fun), "stringsAsFactors")
-		    
+
 		    data2 <- do.call(data.frame, lst2)
 		  }
 		  shp2 <- append_data(shp2, data=data2, fixed.order=TRUE)

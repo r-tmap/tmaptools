@@ -7,73 +7,77 @@
 #' For projected shapes, \code{\link[rgeos:gArea]{gArea}} is used, and for unprojected shapes, \code{\link[geosphere:areaPolygon]{areaPolygon}}.
 #'
 #' @param shp shape object, i.e., a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}. Also \code{sf} objects are allowed.
-#' @param unit one of
+#' @param target target unit, one of
 #' \describe{
 #' 	\item{\code{"abs"}:}{Absolute numbers based on polygon coordinates.}
 #' 	\item{\code{"prop"}:}{Proportional numbers. In other words, the sum of the area sizes equals one.}
 #' 	\item{\code{"norm"}:}{Normalized numbers. All area sizes are normalized to the largest area, of which the area size equals one.}
 #' 	\item{\code{"metric"} (default):}{Output area sizes will be either \code{"km"} (kilometer) or \code{"m"} (meter) depending on the map scale}
 #' 	\item{\code{"imperial"}:}{Output area sizes will be either \code{"mi"} (miles) or \code{"ft"} (feet) depending on the map scale}
-#' 	\item{other:}{Predefined values are "km", "m", "mi", and "ft". Other values can be specified as well. In that case, \code{unit.size} is required).}}
-#' These units are the output units. See \code{coords.unit} for the coordinate units used by the shape \code{shp}.
-#' @param coords.unit unit by which the coordinates are defined. By default, the value is taken from the crs projection string defined in \code{shp}. Not needed for non-projected shapes, since their areas are determined in another way (see details).
-#' @param unit.size size of the target unit (specified by \code{unit}) in terms of the coordinate units (specified by \code{coords.unit}). Only needed when \code{unit} or \code{coords.unit} are unknown (i.e. not listed above) and cannot be determined. For instance, if unit is set to \code{"hm"} (hectameter), and \code{corods.unit} is \code{"m"}, then \code{unit.size} should be 100, meaning 1 hectameter equals 100 meters.
-#' @param total.area total area size of \code{shp} in number of target units (defined by \code{unit}). Useful if the total area of the \code{shp} differs from a reference total area value. For \code{"metric"} and \code{"imperial"} units, please provide the total area in squared kilometers respectively miles.
-#' @return Numeric vector of area sizes. An attribute called unit is added to specify the used units, which is especially useful when units were set to metric or imperial.
+#' 	\item{other:}{Predefined values are "km", "m", "mi", and "ft". Other values can be specified as well, in which case \code{to} is required).}}
+#' These units are the output units. See \code{orig} for the coordinate units used by the shape \code{shp}.
+#' @param orig original unit, i.e. by which the coordinates are defined. By default, the value is taken from the crs projection string defined in \code{shp}. Not needed for non-projected shapes, since their areas are determined in another way (see details).
+#' @param to multiplier used as follows: \code{orig * to = target}. Only needed when \code{orig} or \code{target} is unknown. For instance, if \code{target} is set to \code{"hm"} (hectameter), and \code{orig} is \code{"m"}, then \code{to} should be 100, meaning 1 hectameter equals 100 meters.
+#' @param total.area total area size of \code{shp} in number of target units (defined by \code{target}). Useful if the total area of the \code{shp} differs from a reference total area value. For \code{"metric"} and \code{"imperial"} units, please provide the total area in squared kilometers respectively miles.
+#' @param show.warnings should warnings be shown?
+#' @return Numeric vector of area sizes. An attribute called unit is added to specify the used target units, which is especially useful when units were set to metric or imperial.
 #' @example ./examples/approx_areas.R
+#' @seealso \code{\link{projection_units}} and \code{\link{approx_distances}}
 #' @importFrom rgeos gArea
 #' @importFrom geosphere areaPolygon
 #' @export
-approx_areas <- function(shp, unit="metric", coords.unit=NA, unit.size=NA, total.area=NA) {
-    is_proj <- is_projected(shp)
+approx_areas <- function(shp, target="metric", orig=NA, to=NA, total.area=NA, show.warnings=TRUE) {
 
+    is_metric <- target=="metric"
+    is_imperial <- target=="imperial"
 
-    # determine area sizes and corresponding units (coords.units)
-    if (is_proj) {
+    if (is_metric) target <- "km"
+    if (is_imperial) target <- "mi"
+
+    if (!(target %in% c("abs", "prop", "norm"))) {
+        res <- projection_units(get_projection(shp), target=target, orig=orig, to=to)
+
+        projected <- res$projected
+        newtarget <- res$target
+        orig <- res$orig
+        to <- res$to
+    } else {
+        projected <- is_projected(shp)
+        newtarget <- target
+    }
+
+    # determine area sizes and corresponding units
+    if (projected) {
         x <- rgeos::gArea(shp, byid = TRUE)
-        p <- get_projection(shp)
-        if (is.na(coords.unit)) coords.unit <- get_shape_units(projection=p)$unit
     } else {
         x <- geosphere::areaPolygon(shp)
-        coords.unit <- "m"
+        orig <- "m"
+        to <- to_m["m"] / to_m[newtarget]
     }
 
-    if (!(unit %in% c("abs", "prop", "norm"))) {
-        # determine unit.size
-        if (is.na(unit.size)) {
-            unit.size <- convert_shape_units(coords.unit, unit)$to
-            if (is.na(unit.size)) {
-                if (!(coords.unit %in% names(to_m))) {
-                    stop("Unknown coords.unit: please specify unit.size.")
-                } else {
-                    stop("Unknown unit specification: please specify unit.size.")
-                }
-            }
-        }
+    if (!(target %in% c("abs", "prop", "norm")) && is.na(to)) {
+        if (show.warnings) warning("Target unit or original unit unknown. Please specify valid the arguments target and orig, or the argument to")
+        target <- "abs"
     }
 
-	if (is.na(total.area)) total.area <- sum(x)/(unit.size^2)
-    denom <- switch(unit, norm=max(x), prop=sum(x), abs=1, sum(x)/total.area)
+	if (is.na(total.area)) total.area <- sum(x) * (to^2)
+    denom <- switch(target, norm=max(x), prop=sum(x), abs=1, sum(x)/total.area)
     x2 <- x / denom
 
     # revert back to meters or feet is needed
-    if (unit=="metric") {
+    if (is_metric) {
         if (max(x2) < 1) {
             x2 <- x2 * 1e6
-            unit <- "m"
-        } else {
-            unit <- "km"
+            newtarget <- "m"
         }
-    } else if (unit=="imperial") {
+    } else if (is_imperial) {
         if (max(x2) < 1) {
             x2 <- x2 * 27878400
-            unit <- "ft"
-        } else {
-            unit <- "mi"
+            newtarget <- "ft"
         }
     }
 
-    if (!(unit %in% c("abs", "prop", "norm"))) unit <- paste("sq", unit)
-    attr(x2, "unit") <- unit
+    if (!(target %in% c("abs", "prop", "norm"))) newtarget <- paste("sq", newtarget)
+    attr(x2, "unit") <- newtarget
     x2
 }

@@ -4,8 +4,9 @@
 \alias{aggregate_map}
 \title{Aggregate map}
 \usage{
-aggregate_map(shp, by = NULL, fact = NULL, agg.fun = c(num = "mean", cat =
-  "modal"), weights = NULL, na.rm = FALSE, ...)
+aggregate_map(shp, by = NULL, fact = NULL, agg.data = TRUE,
+  agg.fun = c(num = "mean", cat = "modal"), weights = NULL, na.rm = FALSE,
+  ...)
 }
 \arguments{
 \item{shp}{shape object, which is one of
@@ -22,7 +23,9 @@ aggregate_map(shp, by = NULL, fact = NULL, agg.fun = c(num = "mean", cat =
 
 \item{fact}{number that specifies how many cells in both horizontal and vertical direction are merged. Only applied to raster objects.}
 
-\item{agg.fun}{aggregation function(s). Either 1) one function (name) by which all variables are aggregated, or a vector of two function names called \code{"num"} and \code{"cat"} that determin the functions by which numeric respectively categorical variables are aggregated, 3) a list where per variable the (names of the) function(s) are provided. The list names should correspond to the variable names. These predefined functions can be used: \code{"mean"}, \code{"modal"}, \code{"first"}, and \code{"last"}.}
+\item{agg.data}{should the shape data be aggregated? If so, see \code{agg.fun} and \code{weights} for the aggregation function.}
+
+\item{agg.fun}{aggregation function(s). Either 1) one function (name) by which all variables are aggregated, or a vector of two function names called \code{"num"} and \code{"cat"} that determine the functions by which numeric respectively categorical variables are aggregated, 3) a list where per variable the (names of the) function(s) are provided. The list names should correspond to the variable names. These predefined functions can be used: \code{"mean"}, \code{"modal"}, \code{"first"}, and \code{"last"}.}
 
 \item{weights}{weights applied to the aggregation function. If provided, it is passed on as second argument. Works with aggregation functions \code{"mean"} and \code{"modal"}. Use \code{"AREA"} for weighting to the polygon area sizes.}
 

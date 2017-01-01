@@ -4,7 +4,8 @@
 \alias{approx_distances}
 \title{Approximate distances}
 \usage{
-approx_distances(x, y = NULL, projection = NULL)
+approx_distances(x, y = NULL, projection = NULL, target = "metric",
+  orig = NA, to = NA, show.warnings = TRUE)
 }
 \arguments{
 \item{x}{object that can be coerced to a bounding box with \code{\link{bb}}, or a pair of coordintes (vector of two). In the former case, the distance across the horizontal and vertical centerlines of the bounding box are approximated. In the latter case, \code{y} is also required; the distance between points \code{x} amd \code{y} is approximated.}
@@ -12,6 +13,14 @@ approx_distances(x, y = NULL, projection = NULL)
 \item{y}{a pair of coordintes, vector of two. Only required when \code{x} is also a pair of coordintes.}
 
 \item{projection}{projection code, needed in case \code{x} is a bounding box or when \code{x} and \code{y} are pairs of coordinates. See \code{\link{get_proj4}}}
+
+\item{target}{target unit, one of:  \code{"m"}, \code{"km"}, \code{"mi"}, and \code{"ft"}.}
+
+\item{orig}{original unit, i.e. by which \code{x} is defined. Only needed if this information is missing from \code{x} and \code{x} is projected. Options:  \code{"m"}, \code{"km"}, \code{"mi"}, and \code{"ft"}.}
+
+\item{to}{multiplier used as follows: \code{orig * to = target}. Only needed when \code{orig} or \code{target} is unknown. For instance, if \code{target} is set to \code{"hm"} (hectameter), and \code{orig} is \code{"m"}, then \code{to} should be 100, meaning 1 hectameter equals 100 meters.}
+
+\item{show.warnings}{should warnings be shown?}
 }
 \value{
 list of two: the horizontal and vertical distances in meters
@@ -32,11 +41,14 @@ if (require(tmap)) {
     approx_distances(p_maastricht, p_groningen)
 
     # Check distances in several projections
-    sapply(c("wintri", "utm31", "laea_Eur", "rd"), function(projection) {
+    sapply(c("wintri", "utm31", "laea_Eur", "rd", "longlat"), function(projection) {
         p_maastricht <- geocode_OSM("Maastricht", projection = projection)$coords
         p_groningen <- geocode_OSM("Groningen", projection = projection)$coords
         approx_distances(p_maastricht, p_groningen, projection = projection)
     })
 }
+}
+\seealso{
+\code{\link{projection_units}} and \code{\link{approx_areas}}
 }
 
