@@ -120,16 +120,29 @@ aggregate_map <- function(shp, by=NULL, fact=NULL, agg.data = TRUE, agg.fun=c(nu
 
 		# aggregate raster
 		if (aggmethod=="numcat") {
-			shp_num <- raster::subset(shp, subset=which(!isf), drop=FALSE)
-			shp_cat <- raster::subset(shp, subset=which(isf), drop=FALSE)
-			shp_num2 <- raster::aggregate(shp_num, fact=fact, fun=get_function(agg.fun["num"]), na.rm=na.rm, ...)
-			shp_cat2 <- raster::aggregate(shp_cat, fact=fact, fun=get_function(agg.fun["cat"]), na.rm=na.rm, ...)
+			
+			if (any(isf)) {
+				shp_cat <- raster::subset(shp, subset=which(isf), drop=FALSE)
+				shp_cat2 <- raster::aggregate(shp_cat, fact=fact, fun=get_function(agg.fun["cat"]), na.rm=na.rm, ...)
+			}
+			
+			if (any(!isf)) {
+				shp_num <- raster::subset(shp, subset=which(!isf), drop=FALSE)
+				shp_num2 <- raster::aggregate(shp_num, fact=fact, fun=get_function(agg.fun["num"]), na.rm=na.rm, ...)
+			}
+			
+			if (all(isf)) {
+				shp2 <- shp_cat2
+			} else if (all(!isf)) {
+				shp2 <- shp_num2
+			} else {
+				# restore order
+				o <- order(c(which(!isf), which(isf)))
+				rlayers <- c(lapply(1:nlayers(shp_num), function(i) raster(shp_num2, layer=i)),
+							 lapply(1:nlayers(shp_cat), function(i) raster(shp_cat2, layer=i)))[o]
+				shp2 <- do.call("brick", rlayers)
+			}
 
-			# restore order
-			o <- order(c(which(!isf), which(isf)))
-			rlayers <- c(lapply(1:nlayers(shp_num), function(i) raster(shp_num2, layer=i)),
-						 lapply(1:nlayers(shp_cat), function(i) raster(shp_cat2, layer=i)))[o]
-			shp2 <- do.call("brick", rlayers)
 		} else if (aggmethod=="list") {
 			rlayers <- mapply(function(var, fun, i) {
 				raster::aggregate(raster(shp, i), fact=fact, fun=get_function(fun), na.rm=na.rm, ...)

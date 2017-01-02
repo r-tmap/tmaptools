@@ -9,6 +9,7 @@
 #' @param ... other arguments passed on to the underlying function \code{\link[rmapshaper:ms_simplify]{ms_simplify}} (except for the arguments \code{input}, \code{keep}, \code{keep_shapes} and \code{explode})
 #' @example ./examples/simplify_shape.R
 #' @importFrom rmapshaper ms_simplify
+#' @importFrom rgeos gIsValid gBuffer
 #' @export
 simplify_shape <- function(shp, fact = 0.1, keep.units=FALSE, keep.subunits=FALSE, ...) {
     if (inherits(shp, "sf")) shp <- as(shp, "Spatial")
@@ -34,5 +35,7 @@ simplify_shape <- function(shp, fact = 0.1, keep.units=FALSE, keep.subunits=FALS
         if (inherits(x, "SpatialLinesDataFrame")) x <- as(x, "SpatialLines")
         if (inherits(x, "SpatialPolygonsDataFrame")) x <- as(x, "SpatialPolygons")
     }
-    x
+    if (suppressWarnings(!rgeos::gIsValid(x))) {
+        suppressWarnings(rgeos::gBuffer(x, byid = TRUE, width = 0))
+    } else x
 }
