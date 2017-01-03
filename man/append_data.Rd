@@ -22,6 +22,7 @@ over_coverage()
  \item{\code{\link[sp:SpatialLinesDataFrame]{SpatialLines(DataFrame)}}}
  \item{\code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}}}
  \item{\code{\link[sp:SpatialPixelsDataFrame]{SpatialPixels(DataFrame)}}}
+ \item{\code{sf} object that can be coerced as one above}
 }}
 
 \item{data}{data.frame}
@@ -43,6 +44,7 @@ Shape object with appended data. Tip: run \code{append_data} without assigning t
 Data, in the format of a data.frame, is appended to a shape object. This is either done by a left join where keys are specified for both shape and data, or by fixed order. Under coverage (shape items that do not correspond to data records), over coverage (data records that do not correspond to shape items respectively) as well as the existence of duplicated key values are automatically checked and reported via console messages. With \code{under_coverage} and \code{over_coverage} the under and over coverage key values from the last \code{append_data} call can be retrieved. Tip: run \code{append_data} without assigning the result to check the coverage.
 }
 \examples{
+\dontrun{
 if (require(tmap)) {
     data(Europe)
 
@@ -67,6 +69,7 @@ if (require(tmap)) {
 
     # plot the result
     qtm(Europe, text="TopLevelDomain")
+}
 }
 }
 

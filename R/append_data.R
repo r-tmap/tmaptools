@@ -9,6 +9,7 @@
 #'  \item{\code{\link[sp:SpatialLinesDataFrame]{SpatialLines(DataFrame)}}}
 #'  \item{\code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}}}
 #'  \item{\code{\link[sp:SpatialPixelsDataFrame]{SpatialPixels(DataFrame)}}}
+#'  \item{\code{sf} object that can be coerced as one above}
 #' }
 #' @param data data.frame
 #' @param key.shp variable name of \code{shp} map data to be matched with \code{key.data}. If not specified, and \code{fixed.order} is \code{FALSE}, the ID's of the polygons/lines/points are taken.
@@ -21,6 +22,9 @@
 #' @rdname append_data
 #' @export
 append_data <- function(shp, data, key.shp = NULL, key.data = NULL, ignore.duplicates=FALSE, ignore.na=FALSE, fixed.order=is.null(key.data) && is.null(key.shp)) {
+    is_sf <- inherits(shp, "sf")
+    if (is_sf) shp <- as(shp, "Spatial")
+
 	spatialDF <- inherits(shp, c("SpatialPolygonsDataFrame", "SpatialPointsDataFrame", "SpatialLinesDataFrame", "SpatialGridDataFrame", "SpatialPixelsDataFrame"))
 
 	callAD <- deparse(match.call())
@@ -163,6 +167,8 @@ append_data <- function(shp, data, key.shp = NULL, key.data = NULL, ignore.dupli
 	} else {
 		stop("shp is not a shape file")
 	}
+	if (is_sf) shp <- as(shp, "sf")
+
 	invisible(shp)
 }
 

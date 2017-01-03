@@ -1,6 +1,8 @@
 #' Simplify shape
 #'
-#' Simplify a shape which is a \code{\link[sp:SpatialPolygons]{SpatialPolygons}} or a \code{\link[sp:SpatialLines]{SpatialLines}} object.
+#' Simplify a shape consisting of polygons or lines. The number of coordinates are reduced.
+#'
+#' This function is a wrapper of \code{\link[rmapshaper:ms_simplify]{ms_simplify}}. In addition, the data is preserved. Also \code{sf} objects are supported.
 #'
 #' @param shp a \code{\link[sp:SpatialPolygons]{SpatialPolygons(DataFrame)}} or a \code{\link[sp:SpatialLines]{SpatialLines(DataFrame)}}, or a \code{sf} object that can be coerced to one of them.
 #' @param fact simplification factor, number between 0 and 1 (default is 0.1)
@@ -10,9 +12,12 @@
 #' @example ./examples/simplify_shape.R
 #' @importFrom rmapshaper ms_simplify
 #' @importFrom rgeos gIsValid gBuffer
+#' @return shape in the smae class as \code{shp}
 #' @export
 simplify_shape <- function(shp, fact = 0.1, keep.units=FALSE, keep.subunits=FALSE, ...) {
-    if (inherits(shp, "sf")) shp <- as(shp, "Spatial")
+    is_sf <- inherits(shp, "sf")
+
+    if (is_sf) shp <- as(shp, "Spatial")
     if (!inherits(shp, c("SpatialLines", "SpatialPolygons"))) stop("shp is not a SpatialPolygons or SpatialLines object")
 
     hasData <- "data" %in% names(attributes(shp))
@@ -35,7 +40,8 @@ simplify_shape <- function(shp, fact = 0.1, keep.units=FALSE, keep.subunits=FALS
         if (inherits(x, "SpatialLinesDataFrame")) x <- as(x, "SpatialLines")
         if (inherits(x, "SpatialPolygonsDataFrame")) x <- as(x, "SpatialPolygons")
     }
-    if (suppressWarnings(!rgeos::gIsValid(x))) {
+    x2 <- if (suppressWarnings(!rgeos::gIsValid(x))) {
         suppressWarnings(rgeos::gBuffer(x, byid = TRUE, width = 0))
     } else x
+    if (is_sf) as(x2, "sf") else x2
 }

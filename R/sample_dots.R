@@ -4,7 +4,7 @@
 #'
 #' The sampling algoritm is the following: TO DO
 #'
-#' @param shp A shape object, more specifically, a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygonsDataFrame}}.
+#' @param shp A shape object, more specifically, a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygonsDataFrame}} or an \code{sf} object that can be coerced as such.
 #' @param vars Names of one or more variables that are contained in \code{shp}. If \code{vars} is not provided, the dots are sampled uniformly. If \code{vars} consists of one variable name, the dots are sampled according to the distribution of the corresponding variable. If \code{vars} consist of more than one variable names, then the dots are sampled according to the distributions of those variables. A categorical variable is added that contains the distrubtion classes (see \code{var.name}).
 #' @param convert2density Should the variables be converted to density values? Density values are used for the sampling algorithm, so use \code{TRUE} when the values are absolute counts.
 #' @param nrow Number of grid rows
@@ -26,6 +26,9 @@
 #' @importFrom raster raster extent rasterize couldBeLonLat crop
 sample_dots <- function(shp, vars=NULL, convert2density=FALSE, nrow=NA, ncol=NA, N=250000, npop=NA, n=10000, w=NA, shp.id=NULL, var.name="class", var.labels=vars, unit="km", unit.size=1000, randomize=TRUE, output = c("points", "grid"), ...) {
 	args <- list(...)
+
+	is_sf <- inherits(shp, "sf")
+	if (is_sf) shp <- as(shp, "Spatial")
 
 	bbx <- shp@bbox
 	asp <- get_asp_ratio(shp)
@@ -180,10 +183,12 @@ sample_dots <- function(shp, vars=NULL, convert2density=FALSE, nrow=NA, ncol=NA,
   	}
 
   	# shuffle points to prevent overplotting bias
-  	if (randomize) {
+  	p3 <- if (randomize) {
   		p2[sample.int(n), ]
   	} else p2
 	}
+
+	if (is_sf) as(p3, "sf") else p3
 }
 
 #	For each row in matrix m, a value is sampled based on the values of that row.

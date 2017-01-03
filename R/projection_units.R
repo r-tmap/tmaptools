@@ -1,6 +1,6 @@
 #' Get or translate units of a projection
 #'
-#' Get the units from a projection (CRS) or a shape and determine the multiplier to transpose it in another units.
+#' Get the units from a projection (CRS) or a shape and determine the multiplier to transpose it in other units.
 #'
 #' @importFrom geosphere distGeo
 #' @import sp

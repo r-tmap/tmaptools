@@ -12,6 +12,7 @@
 The pipe operator from magrittr, \code{\%>\%}, can also be used in functions from \code{tmaptools}.
 }
 \examples{
+\dontrun{
 if (require(tmap)) {
     data(land, World)
 
@@ -23,6 +24,7 @@ if (require(tmap)) {
         tm_raster("cover_cls")
 
     tmap_mode(current.mode)
+}
 }
 }
 

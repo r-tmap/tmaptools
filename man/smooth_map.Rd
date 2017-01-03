@@ -12,7 +12,7 @@ smooth_map(shp, var = NULL, nrow = NA, ncol = NA, N = 250000,
   to.Raster = FALSE)
 }
 \arguments{
-\item{shp}{shape object of class \code{\link[sp:Spatial]{Spatial}} or \code{\link[raster:Raster-class]{Raster}}. Spatial points, polygons, and grids are supported. Spatial lines are not.}
+\item{shp}{shape object of class \code{\link[sp:Spatial]{Spatial}}, \code{\link[raster:Raster-class]{Raster}}, or \code{sf}. Spatial points, polygons, and grids are supported. Spatial lines are not.}
 
 \item{var}{variable name. Not needed for \code{\link[sp:SpatialPoints]{SpatialPoints}}. If missing, the first variable name is taken.}
 
@@ -54,8 +54,8 @@ smooth_map(shp, var = NULL, nrow = NA, ncol = NA, N = 250000,
 List with the following items:
 \describe{
 \item{\code{"raster"}}{A smooth raster, which is either a \code{\link[sp:SpatialGridDataFrame]{SpatialGridDataFrame}} or a \code{\link[raster:Raster-class]{RasterLayer}} (see \code{to.Raster})}
-\item{\code{"iso"}}{Contour lines, which is a \code{\link[sp:SpatialLinesDataFrame]{SpatialLinesDataFrame}}}
-\item{\code{"polygons"}}{Kernel density polygons, which is a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygonsDataFrame}}}
+\item{\code{"iso"}}{Contour lines, which is a \code{\link[sp:SpatialLinesDataFrame]{SpatialLinesDataFrame}} (or an \code{sf} object if \code{shp} is an \code{sf})}
+\item{\code{"polygons"}}{Kernel density polygons, which is a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygonsDataFrame}} (or an \code{sf} object if \code{shp} is an \code{sf})}
 \item{\code{"bbox"}}{Bounding box of the used raster}
 \item{\code{"ncol"}}{Number of rows in the raster}
 \item{\code{"nrow"}}{Number of columns in the raster}
@@ -68,6 +68,7 @@ Create a smooth map from a shape object. A 2D kernel density estimator is applie
 For the estimation of the 2D kernal density, code is borrowed from \code{\link[KernSmooth:bkde2D]{bkde2D}}. This implemention is slightly different: \code{\link[KernSmooth:bkde2D]{bkde2D}} takes point coordinates and applies linear binning, whereas in this function, the data is already binned, with values 1 if the values of \code{var} are not missing and 0 if values of \code{var} are missing.
 }
 \examples{
+\dontrun{
 if (require(tmap)) {
     # set mode to plotting mode
     current.mode <- tmap_mode("plot")
@@ -87,7 +88,6 @@ if (require(tmap)) {
     	tm_legend(width=.13, position=c("right", "top"), bg.color="gray80", frame = TRUE)
 
 
-    \dontrun{
     ####################################
     ## Smooth polygons
     ####################################
@@ -168,10 +168,11 @@ if (require(tmap)) {
     qtm(land, raster="trees")
     qtm(land_smooth$raster)
     qtm(land_smooth$polygons, format="World", style="grey")
-    }
 
     # reset current mode
     tmap_mode(current.mode)
 }
+}
+
 }
 

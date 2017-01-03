@@ -8,7 +8,7 @@ calc_densities(shp, var, target = "metric", orig = NA, to = NA,
   total.area = NA, suffix = "", drop = TRUE)
 }
 \arguments{
-\item{shp}{a shape object, i.e., a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}}
+\item{shp}{a shape object, i.e., a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}, or a \code{sf} object that can be coerced as such.}
 
 \item{var}{name(s) of a qualtity variable name contained in the \code{shp} data}
 
@@ -31,6 +31,7 @@ Vector or data.frame (depending on whether \code{length(var)==1} with density va
 Transpose quantitative variables to densitiy variables, which are often needed for choroplets. For example, the colors of a population density map should correspond population density counts rather than absolute population numbers.
 }
 \examples{
+\dontrun{
 if (require(tmap)) {
     data(NLD_muni)
 
@@ -43,6 +44,7 @@ if (require(tmap)) {
             title=expression("Population per " * km^2), style="quantile") +
     tm_facets(free.scales = FALSE) +
     tm_layout(panel.show = TRUE, panel.labels=c("Men", "Women"))
+}
 }
 }
 \keyword{densities}

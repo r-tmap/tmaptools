@@ -46,22 +46,32 @@ weighted.modal <- function(x, w, na.rm=FALSE) {
 #'  \item{\code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}}}
 #'  \item{\code{\link[sp:SpatialPixelsDataFrame]{SpatialPixels(DataFrame)}}}
 #'  \item{\code{\link[raster:Raster-class]{RasterLayer, RasterStack, or RasterBrick}}}
-#'  \item{\code{sf} object if they can be coerced to a \code{Spatial} object}
+#'  \item{\code{sf} object if it can be coerced to a \code{Spatial} object}
 #' }
 #' @param by variable by which polygons or lines are merged. Does not apply to raster objects.
 #' @param fact number that specifies how many cells in both horizontal and vertical direction are merged. Only applied to raster objects.
-#' @param agg.data should the shape data be aggregated? If so, see \code{agg.fun} and \code{weights} for the aggregation function.
-#' @param agg.fun aggregation function(s). Either 1) one function (name) by which all variables are aggregated, or a vector of two function names called \code{"num"} and \code{"cat"} that determine the functions by which numeric respectively categorical variables are aggregated, 3) a list where per variable the (names of the) function(s) are provided. The list names should correspond to the variable names. These predefined functions can be used: \code{"mean"}, \code{"modal"}, \code{"first"}, and \code{"last"}.
-#' @param weights weights applied to the aggregation function. If provided, it is passed on as second argument. Works with aggregation functions \code{"mean"} and \code{"modal"}. Use \code{"AREA"} for weighting to the polygon area sizes.
+#' @param agg.fun aggregation function(s). One of the following formats:
+#' \enumerate{
+#' \item{One function (name) by which all variables are aggregated.}
+#' \item{A vector of two function names called \code{"num"} and \code{"cat"} that determine the functions by which numeric respectively categorical variables are aggregated. For instance \code{c(num="mean", cat="modal")}, which calculates the mean and mode for numeric respectively categorical variables.}
+#' \item{A list where per variable the (names of the) function(s) are provided. The list names should correspond to the variable names.}
+#' }
+#' These predefined functions can be used: \code{"mean"}, \code{"modal"}, \code{"first"}, and \code{"last"}.
+#' @param weights name of a numeric variable in \code{shp}. The values serve as weights for the aggregation function. If provided, these values are passed on as second argument. Works with aggregation functions \code{"mean"} and \code{"modal"}. Use \code{"AREA"} for polygon area sizes.
 #' @param na.rm passed on to the aggregation function(s) \code{agg.fun}.
 #' @param ... other arguments passed on to the aggregation function(s) \code{agg.fun}.
 #' @importFrom stats weighted.mean
+#' @return A shape object, in the same format as \code{shp}
 #' @example ./examples/aggregate_map.R
 #' @export
-aggregate_map <- function(shp, by=NULL, fact=NULL, agg.data = TRUE, agg.fun=c(num="mean", cat="modal"), weights=NULL, na.rm=FALSE, ...) {
+aggregate_map <- function(shp, by=NULL, fact=NULL, agg.fun=NULL, weights=NULL, na.rm=FALSE, ...) {
 	weighted.mean <- NULL
 
-	if (inherits(shp, "sf")) shp <- as(shp, "sf")
+	agg.data <- !missing(agg.fun)
+
+	is_f <- inherits(shp, "sf")
+
+	if (is_f) shp <- as(shp, "Spatial")
 
 	# process aggregation functions
 	is_raster <- (inherits(shp, c("Raster", "SpatialPixels", "SpatialGrid")))
@@ -120,17 +130,17 @@ aggregate_map <- function(shp, by=NULL, fact=NULL, agg.data = TRUE, agg.fun=c(nu
 
 		# aggregate raster
 		if (aggmethod=="numcat") {
-			
+
 			if (any(isf)) {
 				shp_cat <- raster::subset(shp, subset=which(isf), drop=FALSE)
 				shp_cat2 <- raster::aggregate(shp_cat, fact=fact, fun=get_function(agg.fun["cat"]), na.rm=na.rm, ...)
 			}
-			
+
 			if (any(!isf)) {
 				shp_num <- raster::subset(shp, subset=which(!isf), drop=FALSE)
 				shp_num2 <- raster::aggregate(shp_num, fact=fact, fun=get_function(agg.fun["num"]), na.rm=na.rm, ...)
 			}
-			
+
 			if (all(isf)) {
 				shp2 <- shp_cat2
 			} else if (all(!isf)) {
@@ -241,6 +251,8 @@ aggregate_map <- function(shp, by=NULL, fact=NULL, agg.data = TRUE, agg.fun=c(nu
 		        } else  if (fun=="modal") {
 		          fun <- weighted.modal
 		        }
+		      } else if (identical(fun, mean)) {
+		          fun <- stats::weighted.mean
 		      }
 		      fun
 		    }
@@ -265,6 +277,9 @@ aggregate_map <- function(shp, by=NULL, fact=NULL, agg.data = TRUE, agg.fun=c(nu
 		      } else {
 		        dvs <- split(as.integer(dv), IDs_fact)
 		        ws <- split(w, IDs_fact)
+		        ws <- lapply(ws, function(wss) {
+		            wss <- wss / sum(wss)
+		        })
 		        unlist(mapply(dvs, ws, FUN = get_function(fun), MoreArgs = c(list(na.rm=na.rm), list(...)), SIMPLIFY = FALSE, USE.NAMES = FALSE))[lsel]
 		      }
 		      if (is.factor(dv)) factor(v, levels=1L:nlevels(dv), labels=levels(dv)) else v
@@ -277,6 +292,6 @@ aggregate_map <- function(shp, by=NULL, fact=NULL, agg.data = TRUE, agg.fun=c(nu
 		  }
 		  shp2 <- append_data(shp2, data=data2, fixed.order=TRUE)
 		}
+		if (is_f) as(shp2, "sf") else shp2
 	}
-	shp2
 }

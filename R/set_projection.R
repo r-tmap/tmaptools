@@ -10,8 +10,8 @@
 #'
 #' For raster objects, the projection method is based on the type of data. For numeric layers, the bilinear method is used, and for categorical layers the nearest neighbor. See \code{\link[raster:projectRaster]{projectRaster}} for details.
 #'
-#' @param shp shape object of class \code{\link[sp:Spatial]{Spatial}} or
-#'   \code{\link[raster:Raster-class]{Raster}} (see details). For \code{get_projection} \code{sf} (simple features) are also supported.
+#' @param shp shape object of class \code{\link[sp:Spatial]{Spatial}},
+#'   \code{\link[raster:Raster-class]{Raster}}, or \code{sf} (see details).
 #' @param projection new projection. See \code{\link{get_proj4}} for options. This argument is only used to transform the \code{shp}. Use \code{current.projection} to specify the current projection of \code{shp}.
 #' @param current.projection the current projection of \code{shp}. See \code{\link{get_proj4}} for possible options. Only use this if the current projection is missing or wrong.
 #' @param overwrite.current.projection logical that determines whether the current projection is overwritten if it already has a projection that is different.
@@ -26,6 +26,9 @@
 #' @export
 set_projection <- function(shp, projection=NA, current.projection=NA, overwrite.current.projection=FALSE) {
 	shp.name <- deparse(substitute(shp))
+
+	is_sf <- inherits(shp, "sf")
+	if (is_sf) shp <- as(shp, "Spatial")
 
 	shp.CRS <- get_projection(shp, as.CRS = TRUE)
 	current.CRS <- get_proj4(current.projection, as.CRS=TRUE)
@@ -138,7 +141,7 @@ set_projection <- function(shp, projection=NA, current.projection=NA, overwrite.
 		}
 	}
 
-	shp
+	if (is_sf) as(shp, "sf") else shp
 }
 
 

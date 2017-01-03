@@ -4,7 +4,7 @@
 #'
 #' This function is a wrapper around \code{\link[raster:rasterize]{rasterize}}.
 #'
-#' @param shp shape object. Either a \code{\link[sp:SpatialPointsDataFrame]{SpatialPoints(DataFrame)}} or a \code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}}.
+#' @param shp shape object. a \code{\link[sp:SpatialPointsDataFrame]{SpatialPoints(DataFrame)}}, a \code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}}, or an \code{sf} object that can be coerced as such.
 #' @param nrow number of raster rows. If \code{NA}, it is automatically determined by \code{N} and the aspect ratio of \code{shp}.
 #' @param ncol number of raster columns. If \code{NA}, it is automatically determined by \code{N} and the aspect ratio of \code{shp}.
 #' @param N preferred number of raster cells.
@@ -16,6 +16,8 @@
 #' @example  ./examples/points_to_raster.R
 #' @seealso \code{\link{poly_to_raster}}
 points_to_raster <- function(shp, nrow=NA, ncol=NA, N=250000, by=NULL, to.Raster=FALSE) {
+    if (inherits(shp, "sf")) shp <- as(shp, "Spatial")
+
 	if (!inherits(shp, "SpatialPoints")) stop("shp should be a SpatialPoints/Pixels(DataFrame)")
 
 	# get shp metadata
@@ -78,7 +80,7 @@ points_to_raster <- function(shp, nrow=NA, ncol=NA, N=250000, by=NULL, to.Raster
 #'
 #' Convert spatial polygons to a raster. The value of each raster cell will be the polygon ID number. Alternatively, if \code{copy.data}, the polygon data is appended to each raster cell.
 #'
-#' @param shp shape object. Either a \code{\link[sp:SpatialPointsDataFrame]{SpatialPoints(DataFrame)}} or a \code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}}.
+#' @param shp shape object. A \code{\link[sp:SpatialPointsDataFrame]{SpatialPoints(DataFrame)}}, a \code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}}, or an \code{sf} object that can be coerced as such.
 #' @param r \code{\link[raster:raster]{Raster}} object. If not specified, it will be created from the bounding box of \code{shp} and the arguments \code{N}, \code{nrow}, and \code{ncol}.
 #' @param nrow number of raster rows. If \code{NA}, it is automatically determined by \code{N} and the aspect ratio of \code{shp}.
 #' @param ncol number of raster columns. If \code{NA}, it is automatically determined by \code{N} and the aspect ratio of \code{shp}.
@@ -93,6 +95,8 @@ points_to_raster <- function(shp, nrow=NA, ncol=NA, N=250000, by=NULL, to.Raster
 #' @example  ./examples/poly_to_raster.R
 #' @seealso \code{\link{points_to_raster}}
 poly_to_raster <- function(shp, r=NULL, nrow=NA, ncol=NA, N=250000, use.cover=FALSE, copy.data=FALSE,  to.Raster=!copy.data, ...) {
+    if (inherits(shp, "sf")) shp <- as(shp, "Spatial")
+
 	if (!inherits(shp, "SpatialPolygons")) stop("shp should be a SpatialPolygons(DataFrame)")
 
     np <- length(shp)

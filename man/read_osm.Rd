@@ -40,8 +40,8 @@ The output of \code{read_osm} is a \code{\link[sp:SpatialGridDataFrame]{SpatialG
 Read Open Street Map data. Either OSM tiles are read and returned as a spatial raster, or vectorized OSM data are queried and returned as spatial polygons, lines, and/or points.
 }
 \examples{
+\dontrun{
 if (require(tmap)) {
-    \dontrun{
     #### Choropleth with OSM background
 
     # load Netherlands shape
@@ -91,7 +91,7 @@ if (require(tmap)) {
         tm_shape(CBS_osm3$bicycle) + tm_lines(col="blue", lwd=3) +
         tm_shape(CBS_osm3$railway) + tm_lines(col="grey20", lwd=3, lty="dashed") +
         tm_layout(bg.color="grey90")
-    }
+}
 }
 }
 

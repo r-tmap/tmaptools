@@ -7,7 +7,7 @@
 crop_shape(x, y, polygon = FALSE, ...)
 }
 \arguments{
-\item{x}{shape object, i.e. an object from class \code{\link[sp:Spatial]{Spatial-class}} or \code{\link[raster:Raster-class]{Raster}}}
+\item{x}{shape object, i.e. an object from class \code{\link[sp:Spatial]{Spatial-class}}, \code{\link[raster:Raster-class]{Raster}}, or \code{sf}.}
 
 \item{y}{bounding box (2 by 2 matrix), an \code{\link[raster:extent]{extent}}, or a shape object from which the bounding box is extracted (unless \code{polygon} is \code{TRUE} and \code{x} is a \code{SpatialPolygons} object).}
 
@@ -15,13 +15,14 @@ crop_shape(x, y, polygon = FALSE, ...)
 
 \item{...}{arguments passed on to \code{\link[raster:crop]{crop}}}
 }
-\description{
-Crop a shape object (from class \code{\link[sp:Spatial]{Spatial-class}}, \code{\link[raster:Raster-class]{Raster}}, or \code{sf}).
+\value{
+cropped shape, in the same class as \code{x}
 }
-\details{
-This function crops a shape file, \code{x}, either by the bounding box of another shape \code{y}, or by the \code{y} itself if it is a SpatialPolygons object.
+\description{
+Crop a shape object (from class \code{\link[sp:Spatial]{Spatial-class}}, \code{\link[raster:Raster-class]{Raster}}, or \code{sf}). A shape file \code{x} is cropped, either by the bounding box of another shape \code{y}, or by \code{y} itself if it is a SpatialPolygons object and \code{polygon=TRUE}.
 }
 \examples{
+\dontrun{
 if (require(tmap)) {
     data(Europe, land, metro)
 
@@ -35,6 +36,7 @@ if (require(tmap)) {
     tm_shape(metro_europe) +
     	tm_bubbles("pop2010", col="red", title.size="European cities") +
     	tm_legend(frame=TRUE)
+}
 }
 }
 \seealso{

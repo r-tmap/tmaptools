@@ -1,9 +1,9 @@
+\dontrun{
 if (require(tmap)) {
     geocode_OSM("India")
     geocode_OSM("CBS Weg 1, Heerlen")
     geocode_OSM("CBS Weg 1, Heerlen", projection = "rd")
 
-    \dontrun{
     data(metro)
 
     # sample 5 cities from the metro dataset
@@ -25,5 +25,5 @@ if (require(tmap)) {
 
     # restore current mode
     tmap_mode(current.mode)
-    }
+}
 }

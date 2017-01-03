@@ -11,8 +11,8 @@ set_projection(shp, projection = NA, current.projection = NA,
 get_projection(shp, as.CRS = FALSE, guess.longlat = FALSE)
 }
 \arguments{
-\item{shp}{shape object of class \code{\link[sp:Spatial]{Spatial}} or
-\code{\link[raster:Raster-class]{Raster}} (see details). For \code{get_projection} \code{sf} (simple features) are also supported.}
+\item{shp}{shape object of class \code{\link[sp:Spatial]{Spatial}},
+\code{\link[raster:Raster-class]{Raster}}, or \code{sf} (see details).}
 
 \item{projection}{new projection. See \code{\link{get_proj4}} for options. This argument is only used to transform the \code{shp}. Use \code{current.projection} to specify the current projection of \code{shp}.}
 

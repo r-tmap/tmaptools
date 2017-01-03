@@ -1,3 +1,4 @@
+\dontrun{
 if (require(tmap)) {
     data(World)
 
@@ -9,4 +10,5 @@ if (require(tmap)) {
     get_asp_ratio(tm)
 
     get_asp_ratio("Germany") #note: bb("Germany") uses geocode_OSM("Germany")
+}
 }

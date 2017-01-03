@@ -10,7 +10,7 @@ sample_dots(shp, vars = NULL, convert2density = FALSE, nrow = NA,
   unit.size = 1000, randomize = TRUE, output = c("points", "grid"), ...)
 }
 \arguments{
-\item{shp}{A shape object, more specifically, a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygonsDataFrame}}.}
+\item{shp}{A shape object, more specifically, a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygonsDataFrame}} or an \code{sf} object that can be coerced as such.}
 
 \item{vars}{Names of one or more variables that are contained in \code{shp}. If \code{vars} is not provided, the dots are sampled uniformly. If \code{vars} consists of one variable name, the dots are sampled according to the distribution of the corresponding variable. If \code{vars} consist of more than one variable names, then the dots are sampled according to the distributions of those variables. A categorical variable is added that contains the distrubtion classes (see \code{var.name}).}
 
@@ -51,14 +51,14 @@ Sample dots from spatial polygons according to a spatial distribution of a popul
 The sampling algoritm is the following: TO DO
 }
 \examples{
+\dontrun{
 if (require(tmap)) {
-    \dontrun{
     data(World)
     World_dots <- sample_dots(World, vars="pop_est_dens", nrow=200, ncol=400, w=1e6)
 
     tm_shape(World_dots) + tm_dots(size = .02, jitter=.1) +
     	tm_layout("One dot represents one million people", title.position = c("right", "bottom"))
-    }
+}
 }
 }
 

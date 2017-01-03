@@ -8,7 +8,7 @@ approx_areas(shp, target = "metric", orig = NA, to = NA,
   total.area = NA, show.warnings = TRUE)
 }
 \arguments{
-\item{shp}{shape object, i.e., a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}. Also \code{sf} objects are allowed.}
+\item{shp}{shape object, i.e., a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}, or an \code{sf} object that can be coerced as such.}
 
 \item{target}{target unit, one of
 \describe{
@@ -32,46 +32,48 @@ These units are the output units. See \code{orig} for the coordinate units used 
 Numeric vector of area sizes. An attribute called unit is added to specify the used target units, which is especially useful when units were set to metric or imperial.
 }
 \description{
-Approximate the area sizes of the polygons either in 1) absolute numbers based on the polygon coordinates, 2) proportional numbers, 3) normalized numbers and 4) squared units (e.g. kilometers).
+Approximate the area sizes of the polygons in real-world area units (such as sq km or sq mi), absolute numbers based on the polygon coordinates, proportional numbers, or normalized numbers.
 }
 \details{
-Note that this method is an approximation, since it depends on the used projection and the level of detail of the SpatialPolygons object. Projections with equal-area property are highly recommended.
+Note that this method is an approximation, since it depends on the used projection and the level of detail of the shape object. Projections with equal-area property are highly recommended. See \url{https://en.wikipedia.org/wiki/List_of_map_projections} for equal area world map projections.
 
 For projected shapes, \code{\link[rgeos:gArea]{gArea}} is used, and for unprojected shapes, \code{\link[geosphere:areaPolygon]{areaPolygon}}.
 }
 \examples{
+\dontrun{
 if (require(tmap)) {
-data(NLD_muni)
+    data(NLD_muni)
 
-NLD_muni$area <- approx_areas(NLD_muni, total.area = 33893)
+    NLD_muni$area <- approx_areas(NLD_muni, total.area = 33893)
 
-tm_shape(NLD_muni) +
-	tm_bubbles(size="area", title.size=expression("Area in " * km^2))
+    tm_shape(NLD_muni) +
+        tm_bubbles(size="area", title.size=expression("Area in " * km^2))
 
 
-# function that returns min, max, mean and sum of area values
-summary_areas <- function(x) {
-    list(min_area=min(x),
-         max_area=max(x),
-         mean_area=mean(x),
-         sum_area=sum(x),
-         units=paste0(attr(x, "unit")))
+    # function that returns min, max, mean and sum of area values
+    summary_areas <- function(x) {
+        list(min_area=min(x),
+             max_area=max(x),
+             mean_area=mean(x),
+             sum_area=sum(x),
+             units=paste0(attr(x, "unit")))
+    }
+
+    # area of the polygons
+    approx_areas(NLD_muni) \%>\% summary_areas()
+
+    # area of the polygons, adjusted corrected for a specified total area size
+    approx_areas(NLD_muni, total.area=33893) \%>\% summary_areas()
+
+    # proportional area of the polygons
+    approx_areas(NLD_muni, target = "prop") \%>\% summary_areas()
+
+    # area in squared miles
+    approx_areas(NLD_muni, target = "mi") \%>\% summary_areas()
+
+    # area of the polygons when unprojected
+    approx_areas(NLD_muni \%>\% set_projection(projection="longlat")) \%>\% summary_areas()
 }
-
-# area of the polygons
-approx_areas(NLD_muni) \%>\% summary_areas()
-
-# area of the polygons, adjusted corrected for a specified total area size
-approx_areas(NLD_muni, total.area=33893) \%>\% summary_areas()
-
-# proportional area of the polygons
-approx_areas(NLD_muni, target = "prop") \%>\% summary_areas()
-
-# area in squared miles
-approx_areas(NLD_muni, target = "mi") \%>\% summary_areas()
-
-# area of the polygons when unprojected
-approx_areas(NLD_muni \%>\% set_projection(projection="longlat")) \%>\% summary_areas()
 }
 }
 \seealso{

@@ -25,7 +25,7 @@ vector of color values. It is silently returned when \code{plot=TRUE}.
 Get and plot a (modified) palette from Color Brewer. In addition to the base function \code{\link[RColorBrewer:brewer.pal]{brewer.pal}}, a palette can be created for any number of classes. The contrast of the palette can be adjusted for sequential and diverging palettes. For categorical palettes, intermediate colors can be generated.
 }
 \details{
-The default contrast of the palette depends on the number of colors, \code{n}. The deafult contrast is maximal, so \code{(0, 1)}, when \code{n = 9} for sequential palettes and \code{n = 11} for diverging palettes. The default contrast values for smaller values of \code{n} can be extracted with some R magic: \code{sapply(1:9, tmaptools:::default_contrast_seq)} for sequential palettes and \code{sapply(1:11, tmaptools:::default_contrast_div)} for diverging palettes.
+The default contrast of the palette depends on the number of colors, \code{n}, in the following way. The deafult contrast is maximal, so \code{(0, 1)}, when \code{n = 9} for sequential palettes and \code{n = 11} for diverging palettes. The default contrast values for smaller values of \code{n} can be extracted with some R magic: \code{sapply(1:9, tmaptools:::default_contrast_seq)} for sequential palettes and \code{sapply(1:11, tmaptools:::default_contrast_div)} for diverging palettes.
 }
 \examples{
 get_brewer_pal("Blues")

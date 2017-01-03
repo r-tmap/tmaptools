@@ -1,3 +1,4 @@
+\dontrun{
 if (require(tmap)) {
     # set mode to plotting mode
     current.mode <- tmap_mode("plot")
@@ -17,7 +18,6 @@ if (require(tmap)) {
     	tm_legend(width=.13, position=c("right", "top"), bg.color="gray80", frame = TRUE)
 
 
-    \dontrun{
     ####################################
     ## Smooth polygons
     ####################################
@@ -98,8 +98,9 @@ if (require(tmap)) {
     qtm(land, raster="trees")
     qtm(land_smooth$raster)
     qtm(land_smooth$polygons, format="World", style="grey")
-    }
 
     # reset current mode
     tmap_mode(current.mode)
 }
+}
+

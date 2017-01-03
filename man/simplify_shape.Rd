@@ -18,12 +18,18 @@ simplify_shape(shp, fact = 0.1, keep.units = FALSE, keep.subunits = FALSE,
 
 \item{...}{other arguments passed on to the underlying function \code{\link[rmapshaper:ms_simplify]{ms_simplify}} (except for the arguments \code{input}, \code{keep}, \code{keep_shapes} and \code{explode})}
 }
+\value{
+shape in the smae class as \code{shp}
+}
 \description{
-Simplify a shape which is a \code{\link[sp:SpatialPolygons]{SpatialPolygons}} or a \code{\link[sp:SpatialLines]{SpatialLines}} object.
+Simplify a shape consisting of polygons or lines. The number of coordinates are reduced.
+}
+\details{
+This function is a wrapper of \code{\link[rmapshaper:ms_simplify]{ms_simplify}}. In addition, the data is preserved. Also \code{sf} objects are supported.
 }
 \examples{
+\dontrun{
 if (require(tmap)) {
-    \dontrun{
     data(Europe)
 
     # show different simplification factors
@@ -41,7 +47,7 @@ if (require(tmap)) {
     tm7 <- qtm(Europe \%>\% simplify_map(keep.units = FALSE),
         title="Ignore small units and subunits")
     tmap_arrange(tm5, tm6, tm7)
-    }
+}
 }
 }
 

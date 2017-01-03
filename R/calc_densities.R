@@ -2,7 +2,7 @@
 #'
 #' Transpose quantitative variables to densitiy variables, which are often needed for choroplets. For example, the colors of a population density map should correspond population density counts rather than absolute population numbers.
 #'
-#' @param shp a shape object, i.e., a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}
+#' @param shp a shape object, i.e., a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}, or a \code{sf} object that can be coerced as such.
 #' @param var name(s) of a qualtity variable name contained in the \code{shp} data
 #' @param target the target unit, see \code{\link{approx_areas}}. Density values are calculated in \code{var/target^2}.
 #' @param orig original units, i.e. by which the coordinates are defined, see \code{\link{approx_areas}}.
@@ -16,6 +16,8 @@
 #' @export
 calc_densities <- function(shp, var, target="metric", orig=NA, to=NA, total.area=NA, suffix="", drop=TRUE) {
 	## calculate densities
+    if (inherits(shp, "sf")) shp <- as(shp, "Spatial")
+
 	areas <- approx_areas(shp, target = target, orig = orig, to=to, total.area=total.area)
 
 	## calculate and return densities

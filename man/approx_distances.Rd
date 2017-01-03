@@ -23,12 +23,13 @@ approx_distances(x, y = NULL, projection = NULL, target = "metric",
 \item{show.warnings}{should warnings be shown?}
 }
 \value{
-list of two: the horizontal and vertical distances in meters
+If \code{y} is specifyed, a list of two: unit and dist. Else, a list of three: unit, hdist (horizontal distance) and vdist (vertical distance).
 }
 \description{
 Approximate distances between two points or across the horizontal and vertical centerlines of a bounding box.
 }
 \examples{
+\dontrun{
 if (require(tmap)) {
     data(NLD_prov)
 
@@ -46,6 +47,7 @@ if (require(tmap)) {
         p_groningen <- geocode_OSM("Groningen", projection = projection)$coords
         approx_distances(p_maastricht, p_groningen, projection = projection)
     })
+}
 }
 }
 \seealso{

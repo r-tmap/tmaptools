@@ -1,3 +1,4 @@
+\dontrun{
 if (require(tmap)) {
     data(NLD_prov)
 
@@ -15,4 +16,5 @@ if (require(tmap)) {
         p_groningen <- geocode_OSM("Groningen", projection = projection)$coords
         approx_distances(p_maastricht, p_groningen, projection = projection)
     })
+}
 }

@@ -30,12 +30,12 @@ If \code{as.SPDF} then a \code{\link[sp:SpatialPointsDataFrame]{SpatialPointsDat
 Geocodes a location (based on a search query) to coordinates and a bounding box. Similar to geocode from the ggmap package. It uses OpenStreetMap Nominatim. For processing large amount of queries, please read the usage policy (\url{http://wiki.openstreetmap.org/wiki/Nominatim_usage_policy}).
 }
 \examples{
+\dontrun{
 if (require(tmap)) {
     geocode_OSM("India")
     geocode_OSM("CBS Weg 1, Heerlen")
     geocode_OSM("CBS Weg 1, Heerlen", projection = "rd")
 
-    \dontrun{
     data(metro)
 
     # sample 5 cities from the metro dataset
@@ -57,7 +57,7 @@ if (require(tmap)) {
 
     # restore current mode
     tmap_mode(current.mode)
-    }
+}
 }
 }
 \seealso{

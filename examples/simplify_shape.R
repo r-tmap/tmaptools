@@ -1,5 +1,5 @@
+\dontrun{
 if (require(tmap)) {
-    \dontrun{
     data(Europe)
 
     # show different simplification factors
@@ -17,5 +17,5 @@ if (require(tmap)) {
     tm7 <- qtm(Europe %>% simplify_map(keep.units = FALSE),
         title="Ignore small units and subunits")
     tmap_arrange(tm5, tm6, tm7)
-    }
+}
 }

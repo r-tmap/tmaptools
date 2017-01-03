@@ -1,12 +1,12 @@
+\dontrun{
 if (require(tmap)) {
-    \dontrun{
     data(land)
 
     # original map
     qtm(land, raster="cover_cls")
 
     # map decreased by factor 4 for each dimension
-    land4 <- aggregate_map(land, fact=4)
+    land4 <- aggregate_map(land, fact=4, agg.fun="modal")
     qtm(land4, raster="cover_cls")
 
     # map decreased by factor 8, where the variable trees is

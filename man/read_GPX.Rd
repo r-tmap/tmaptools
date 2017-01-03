@@ -5,12 +5,14 @@
 \title{Read GPX file}
 \usage{
 read_GPX(file, layers = c("waypoints", "tracks", "routes", "track_points",
-  "route_points"))
+  "route_points"), as.sf = FALSE)
 }
 \arguments{
 \item{file}{a GPX filename (including directory)}
 
 \item{layers}{vector of GPX layers. Possible options are \code{"waypoints"}, \code{"tracks"}, \code{"routes"}, \code{"track_points"}, \code{"route_points"}. By dedault, all those layers are read.}
+
+\item{as.sf}{should \code{sf} objects be returned?}
 }
 \value{
 for each defiend layer, a shape is returned (only if the layer has any features). If only one layer is defined, the corresponding shape is returned. If more than one layer is defined, a list of shape objects, one for each layer, is returned.
@@ -19,9 +21,9 @@ for each defiend layer, a shape is returned (only if the layer has any features)
 Read a GPX file. By default, it reads all possible GPX layers, and only returns shapes for layers that have any features.
 }
 \examples{
+\dontrun{
 if (require(tmap)) {
 ### Demo to visualise the route of the Amstel Gold Race, a professional cycling race
-    \dontrun{
 	tmpdir <- tempdir()
 	tmpfile <- tempfile()
 	download.file("http://www.gpstracks.nl/routes-fiets/f-limburg-amstel-gold-race-2014.zip",
@@ -47,7 +49,7 @@ if (require(tmap)) {
 		tm_text("name", size = .75, bg.color="white", bg.alpha=.25, auto.placement = .25) +
 	tm_legend(position=c("right", "top"), frame=TRUE, bg.color = "gold") +
 	tm_view(basemaps = "Esri.WorldTopoMap")
-    }
+}
 }
 }
 

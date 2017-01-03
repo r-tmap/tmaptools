@@ -1,5 +1,5 @@
+\dontrun{
 if (require(tmap)) {
-    \dontrun{
     data(metro)
 
     # sample five cities from metro dataset
@@ -16,5 +16,5 @@ if (require(tmap)) {
 
     # restore current mode
     tmap_mode(current.mode)
-    }
+}
 }

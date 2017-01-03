@@ -1,0 +1,9 @@
+version 1.0
+- first CRAN release after package split of tmap
+- non-plotting functions of tmap 1.6-1 are contained in tmaptools
+- added aggregate_map
+- added simplify_shape
+- added approx_distances, improved approx_areas, added projection_units
+- added get_brewer_pal, to get and modify brewer palettes
+- added bb_sp, to convert a bounding box to a SpatialPolygons object
+- sf (simple features) objects supported

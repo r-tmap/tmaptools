@@ -8,7 +8,7 @@ points_to_raster(shp, nrow = NA, ncol = NA, N = 250000, by = NULL,
   to.Raster = FALSE)
 }
 \arguments{
-\item{shp}{shape object. Either a \code{\link[sp:SpatialPointsDataFrame]{SpatialPoints(DataFrame)}} or a \code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}}.}
+\item{shp}{shape object. a \code{\link[sp:SpatialPointsDataFrame]{SpatialPoints(DataFrame)}}, a \code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}}, or an \code{sf} object that can be coerced as such.}
 
 \item{nrow}{number of raster rows. If \code{NA}, it is automatically determined by \code{N} and the aspect ratio of \code{shp}.}
 
@@ -30,8 +30,8 @@ Bin spatial points to a raster. For each raster cell, the number of points are c
 This function is a wrapper around \code{\link[raster:rasterize]{rasterize}}.
 }
 \examples{
+\dontrun{
 if (require(tmap)) {
-    \dontrun{
 	data(NLD_muni, NLD_prov)
 
 	# sample points (each point represents 1000 people)
@@ -50,7 +50,7 @@ if (require(tmap)) {
 	tm_shape(NLD_prov) +
 		tm_borders() +
 	tm_format_NLD() + tm_style_grey()
-    }
+}
 }
 }
 \seealso{

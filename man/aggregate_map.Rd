@@ -4,9 +4,8 @@
 \alias{aggregate_map}
 \title{Aggregate map}
 \usage{
-aggregate_map(shp, by = NULL, fact = NULL, agg.data = TRUE,
-  agg.fun = c(num = "mean", cat = "modal"), weights = NULL, na.rm = FALSE,
-  ...)
+aggregate_map(shp, by = NULL, fact = NULL, agg.fun = NULL,
+  weights = NULL, na.rm = FALSE, ...)
 }
 \arguments{
 \item{shp}{shape object, which is one of
@@ -16,36 +15,43 @@ aggregate_map(shp, by = NULL, fact = NULL, agg.data = TRUE,
  \item{\code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}}}
  \item{\code{\link[sp:SpatialPixelsDataFrame]{SpatialPixels(DataFrame)}}}
  \item{\code{\link[raster:Raster-class]{RasterLayer, RasterStack, or RasterBrick}}}
- \item{\code{sf} object if they can be coerced to a \code{Spatial} object}
+ \item{\code{sf} object if it can be coerced to a \code{Spatial} object}
 }}
 
 \item{by}{variable by which polygons or lines are merged. Does not apply to raster objects.}
 
 \item{fact}{number that specifies how many cells in both horizontal and vertical direction are merged. Only applied to raster objects.}
 
-\item{agg.data}{should the shape data be aggregated? If so, see \code{agg.fun} and \code{weights} for the aggregation function.}
+\item{agg.fun}{aggregation function(s). One of the following formats:
+\enumerate{
+\item{One function (name) by which all variables are aggregated.}
+\item{A vector of two function names called \code{"num"} and \code{"cat"} that determine the functions by which numeric respectively categorical variables are aggregated. For instance \code{c(num="mean", cat="modal")}, which calculates the mean and mode for numeric respectively categorical variables.}
+\item{A list where per variable the (names of the) function(s) are provided. The list names should correspond to the variable names.}
+}
+These predefined functions can be used: \code{"mean"}, \code{"modal"}, \code{"first"}, and \code{"last"}.}
 
-\item{agg.fun}{aggregation function(s). Either 1) one function (name) by which all variables are aggregated, or a vector of two function names called \code{"num"} and \code{"cat"} that determine the functions by which numeric respectively categorical variables are aggregated, 3) a list where per variable the (names of the) function(s) are provided. The list names should correspond to the variable names. These predefined functions can be used: \code{"mean"}, \code{"modal"}, \code{"first"}, and \code{"last"}.}
-
-\item{weights}{weights applied to the aggregation function. If provided, it is passed on as second argument. Works with aggregation functions \code{"mean"} and \code{"modal"}. Use \code{"AREA"} for weighting to the polygon area sizes.}
+\item{weights}{name of a numeric variable in \code{shp}. The values serve as weights for the aggregation function. If provided, these values are passed on as second argument. Works with aggregation functions \code{"mean"} and \code{"modal"}. Use \code{"AREA"} for polygon area sizes.}
 
 \item{na.rm}{passed on to the aggregation function(s) \code{agg.fun}.}
 
 \item{...}{other arguments passed on to the aggregation function(s) \code{agg.fun}.}
 }
+\value{
+A shape object, in the same format as \code{shp}
+}
 \description{
 Aggregate spatial polygons, spatial lines or raster objects. For spatial polygons and lines, the units will be merged with the \code{by} variable. For rasters, the \code{fact} parameter determined how many rasters cells are aggregated both horizontally and vertically. Per data variable, an aggregation formula can be specified, by default mean for numeric and modal for categorical varaibles.
 }
 \examples{
+\dontrun{
 if (require(tmap)) {
-    \dontrun{
     data(land)
 
     # original map
     qtm(land, raster="cover_cls")
 
     # map decreased by factor 4 for each dimension
-    land4 <- aggregate_map(land, fact=4)
+    land4 <- aggregate_map(land, fact=4, agg.fun="modal")
     qtm(land4, raster="cover_cls")
 
     # map decreased by factor 8, where the variable trees is

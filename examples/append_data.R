@@ -1,3 +1,4 @@
+\dontrun{
 if (require(tmap)) {
     data(Europe)
 
@@ -22,4 +23,5 @@ if (require(tmap)) {
 
     # plot the result
     qtm(Europe, text="TopLevelDomain")
+}
 }

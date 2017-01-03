@@ -1,12 +1,12 @@
 #' Approximate area sizes of the shapes
 #'
-#' Approximate the area sizes of the polygons either in 1) absolute numbers based on the polygon coordinates, 2) proportional numbers, 3) normalized numbers and 4) squared units (e.g. kilometers).
+#' Approximate the area sizes of the polygons in real-world area units (such as sq km or sq mi), absolute numbers based on the polygon coordinates, proportional numbers, or normalized numbers.
 #'
-#' Note that this method is an approximation, since it depends on the used projection and the level of detail of the SpatialPolygons object. Projections with equal-area property are highly recommended.
+#' Note that this method is an approximation, since it depends on the used projection and the level of detail of the shape object. Projections with equal-area property are highly recommended. See \url{https://en.wikipedia.org/wiki/List_of_map_projections} for equal area world map projections.
 #'
 #' For projected shapes, \code{\link[rgeos:gArea]{gArea}} is used, and for unprojected shapes, \code{\link[geosphere:areaPolygon]{areaPolygon}}.
 #'
-#' @param shp shape object, i.e., a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}. Also \code{sf} objects are allowed.
+#' @param shp shape object, i.e., a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}, or an \code{sf} object that can be coerced as such.
 #' @param target target unit, one of
 #' \describe{
 #' 	\item{\code{"abs"}:}{Absolute numbers based on polygon coordinates.}

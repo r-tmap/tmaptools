@@ -5,10 +5,10 @@
 \alias{bb_sp}
 \title{Convert bounding box to a spatial polygon}
 \usage{
-bb_sp(x, projection = NULL, steps = 100, stepsize = NA)
+bb_sp(x, projection = NULL, steps = 100, stepsize = NA, as.sf = FALSE)
 
 bb_earth(projection = NULL, stepsize = 1, earth.datum = "WGS84",
-  bbx = c(-180, 180, -90, 90), buffer = 1e-06)
+  bbx = c(-180, 180, -90, 90), buffer = 1e-06, as.sf = FALSE)
 }
 \arguments{
 \item{x}{object that can be coerced to a bounding box with \code{\link{bb}}}
@@ -18,6 +18,8 @@ bb_earth(projection = NULL, stepsize = 1, earth.datum = "WGS84",
 \item{steps}{number of intermediate points along the shortest edge of the bounding box. The number of intermediate points along the longest edge scales with the aspect ratio. These intermediate points are needed if the bounding box is plotted in another projection.}
 
 \item{stepsize}{stepsize in terms of coordinates (usually meters when the shape is projected and degrees of longlat coordinates are used). If specified, it overrules \code{steps}}
+
+\item{as.sf}{return object as an \code{sf} object}
 
 \item{earth.datum}{Geodetic datum to determine the earth boundary. By default \code{"WGS84"}, other frequently used datums are \code{"NAD83"} and \code{"NAD27"}. Any other \code{PROJ.4} character string can be used. See \code{\link{get_proj4}}.}
 
@@ -32,6 +34,7 @@ bb_earth(projection = NULL, stepsize = 1, earth.datum = "WGS84",
 Convert bounding box to a \code{\link[sp:SpatialPolygons]{SpatialPolygons}}. Useful for plotting (see example). The function \code{bb_earth} returns a spatial polygon of the 'boundaries' of the earth, which can also be done in other projections (if a feasible solution exists).
 }
 \examples{
+\dontrun{
 if (require(tmap)) {
     data(Europe)
 
@@ -40,6 +43,7 @@ if (require(tmap)) {
 
     # restore mode
     tmap_mode(current.mode)
+}
 }
 }
 

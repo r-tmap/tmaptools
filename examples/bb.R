@@ -1,3 +1,4 @@
+\dontrun{
 if (require(tmap)) {
 
     ## load shapes
@@ -18,11 +19,10 @@ if (require(tmap)) {
     bb(NLD_muni, width=2, relative = TRUE)
     bb(NLD_muni, xlim=c(.25, .75), ylim=c(.25, .75), relative = TRUE)
 
-    \dontrun{
     bb("Limburg", projection = "rd")
     bb_italy <- bb("Italy", projection = "eck4")
 
     tm_shape(World, bbox=bb_italy) + tm_polygons()
     # shorter alternative: tm_shape(World, bbox="Italy") + tm_polygons()
-    }
+}
 }

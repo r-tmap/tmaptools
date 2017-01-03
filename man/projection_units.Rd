@@ -24,9 +24,10 @@ projection_units(x = NA, target = "m", orig = NA, to = NA,
 list with the following items, \code{orig}, \code{target}, and \code{to} either according the specified argument, or determined determined. The value is \code{NA} for items that cannot be determined. The final item is \code{projected}, which is determined using \code{\link{is_projected}}
 }
 \description{
-Get the units from a projection (CRS) or a shape and determine the multiplier to transpose it in another units.
+Get the units from a projection (CRS) or a shape and determine the multiplier to transpose it in other units.
 }
 \examples{
+\dontrun{
 if (require(tmap)) {
     data(World, land)
     projection_units(World, target = "miles")
@@ -34,6 +35,7 @@ if (require(tmap)) {
     projection_units(land)
     projection_units(land, latitude = 45)
     projection_units(land, latitude = 89)
+}
 }
 }
 \seealso{

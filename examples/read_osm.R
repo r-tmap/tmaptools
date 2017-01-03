@@ -1,5 +1,5 @@
+\dontrun{
 if (require(tmap)) {
-    \dontrun{
     #### Choropleth with OSM background
 
     # load Netherlands shape
@@ -49,5 +49,5 @@ if (require(tmap)) {
         tm_shape(CBS_osm3$bicycle) + tm_lines(col="blue", lwd=3) +
         tm_shape(CBS_osm3$railway) + tm_lines(col="grey20", lwd=3, lty="dashed") +
         tm_layout(bg.color="grey90")
-    }
+}
 }

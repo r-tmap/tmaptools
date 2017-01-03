@@ -27,8 +27,8 @@ A data frmame with all atributes that are contained in the search result
 Reverse geocodes a location (based on spatial coordinates) to an address. It uses OpenStreetMap Nominatim. For processing large amount of queries, please read the usage policy (\url{http://wiki.openstreetmap.org/wiki/Nominatim_usage_policy}).
 }
 \examples{
+\dontrun{
 if (require(tmap)) {
-    \dontrun{
     data(metro)
 
     # sample five cities from metro dataset
@@ -45,7 +45,7 @@ if (require(tmap)) {
 
     # restore current mode
     tmap_mode(current.mode)
-    }
+}
 }
 }
 \seealso{

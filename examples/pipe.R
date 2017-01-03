@@ -1,3 +1,4 @@
+\dontrun{
 if (require(tmap)) {
     data(land, World)
 
@@ -9,4 +10,5 @@ if (require(tmap)) {
         tm_raster("cover_cls")
 
     tmap_mode(current.mode)
+}
 }

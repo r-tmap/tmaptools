@@ -7,7 +7,7 @@
 #'    \item{a \code{PROJ.4} character string}
 #'    \item{a \code{\link[sp:CRS]{CRS}} object}
 #'    \item{an EPSG code}
-#'    \item{one the follwing shortcuts codes:
+#'    \item{one the following shortcuts codes:
 #'      \describe{
 #'    	\item{\code{"longlat"}}{Not really a projection, but a plot of the longitude-latitude coordinates (WGS84 datum).}
 #'    	\item{\code{"wintri"}}{Winkel Tripel (1921). Popular projection that is useful in world maps. It is the standard of world maps made by the National Geographic Society. Type: compromise}
@@ -24,8 +24,7 @@
 #'    	\item{\code{"laea_Eur"}}{European Lambert Azimuthal Equal Area Projection. Similar to EPSG code 3035.}
 #'    	\item{\code{"laea_NA"}}{North American Lambert Azimuthal Equal Area Projection. Known as SR-ORG:7314.}
 #'    	\item{\code{"rd"}}{Rijksdriehoekstelsel. Triangulation coordinate system used in the Netherlands.}
-#'    	\item{EPSG code}{A valid code from the EPSG database}}
-#'    }
+#'    }}
 #' }
 #' @param as.CRS should a CRS object be returned instead of a PROJ.4 character string? Default is \code{FALSE}.
 #'	@return validated PROJ.4 character string, or, if \code{as.CRS=TRUE} a \code{\link[sp:CRS]{CRS}} object.
