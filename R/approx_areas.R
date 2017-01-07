@@ -60,18 +60,23 @@ approx_areas <- function(shp, target="metric", orig=NA, to=NA, total.area=NA, sh
         target <- "abs"
     }
 
-	if (is.na(total.area)) total.area <- sum(x) * (to^2)
-    denom <- switch(target, norm=max(x), prop=sum(x), abs=1, sum(x)/total.area)
+    if (any(is.na(x)) || any(is.infinite(x))) {
+        naid <- sort(union(which(is.na(x)), which(is.infinite(x))))
+        warning("cannot determine area of polygon(s) ", paste(naid, collapse=","))
+    }
+
+	if (is.na(total.area)) total.area <- sum(x, na.rm = TRUE) * (to^2)
+    denom <- switch(target, norm=max(x), prop=sum(x), abs=1, sum(x, na.rm = TRUE)/total.area)
     x2 <- x / denom
 
     # revert back to meters or feet is needed
     if (is_metric) {
-        if (max(x2) < 1) {
+        if (max(x2, na.rm = TRUE) < 1) {
             x2 <- x2 * 1e6
             newtarget <- "m"
         }
     } else if (is_imperial) {
-        if (max(x2) < 1) {
+        if (max(x2, na.rm = TRUE) < 1) {
             x2 <- x2 * 27878400
             newtarget <- "ft"
         }

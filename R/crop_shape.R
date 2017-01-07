@@ -76,8 +76,8 @@ crop_shape <- function(x, y, polygon = FALSE, ...) {
             x2 <- raster::trim(raster::mask(x, y))
         }
 	} else {
-	  # bounding box crop
-	  x2 <- crop(x, y, ...)
+	  # bounding box crop (suppress warnings, because projections may not be perfectly identical)
+	  x2 <- suppressWarnings(crop(x, y, ...))
 
 	  if (sp2r2sp) {
 	    if (hasData) data <- get_raster_data(x2)
