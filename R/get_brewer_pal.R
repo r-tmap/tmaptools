@@ -2,7 +2,7 @@
 #'
 #' Get and plot a (modified) palette from Color Brewer. In addition to the base function \code{\link[RColorBrewer:brewer.pal]{brewer.pal}}, a palette can be created for any number of classes. The contrast of the palette can be adjusted for sequential and diverging palettes. For categorical palettes, intermediate colors can be generated.
 #'
-#' The default contrast of the palette depends on the number of colors, \code{n}, in the following way. The deafult contrast is maximal, so \code{(0, 1)}, when \code{n = 9} for sequential palettes and \code{n = 11} for diverging palettes. The default contrast values for smaller values of \code{n} can be extracted with some R magic: \code{sapply(1:9, tmaptools:::default_contrast_seq)} for sequential palettes and \code{sapply(1:11, tmaptools:::default_contrast_div)} for diverging palettes.
+#' The default contrast of the palette depends on the number of colors, \code{n}, in the following way. The default contrast is maximal, so \code{(0, 1)}, when \code{n = 9} for sequential palettes and \code{n = 11} for diverging palettes. The default contrast values for smaller values of \code{n} can be extracted with some R magic: \code{sapply(1:9, tmaptools:::default_contrast_seq)} for sequential palettes and \code{sapply(1:11, tmaptools:::default_contrast_div)} for diverging palettes.
 #'
 #' @param palette name of the color brewer palette. Run \code{\link[RColorBrewer:display.brewer.pal]{display.brewer.pal}} for options.
 #' @param n number of colors
@@ -15,6 +15,11 @@
 #' @export
 get_brewer_pal <- function(palette, n=5, contrast=NA, stretch=TRUE, plot=TRUE) {
     call <- names(match.call(expand.dots = TRUE)[-1])
+
+    reverse <- (substr(palette, 1, 1) == "-")
+
+    if (reverse) palette <- substr(palette, 2, nchar(palette))
+
 	nmax <- brewer.pal.info[palette, "maxcolors"]
 	if (brewer.pal.info[palette, "category"]=="qual") {
 	    if ("contrast" %in% call) warning("contrast not used in qualitative color palettes")
@@ -39,6 +44,9 @@ get_brewer_pal <- function(palette, n=5, contrast=NA, stretch=TRUE, plot=TRUE) {
 		contrastIDs <- map2divscaleID(breaks=seq(-10,10, length.out=n+1), contrast=contrast)
 		p <- colorRampPalette(brewerpal)(101)[contrastIDs]
 	}
+
+	if (reverse) p <- rev(p)
+
 	if (plot) {
 	    grid.newpage()
 	    fontsize <- min(1, (.8/n) / convertWidth(stringWidth("#ABCDEF"), unitTo = "npc", valueOnly = TRUE))
