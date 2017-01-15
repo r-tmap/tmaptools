@@ -1,4 +1,3 @@
-\dontrun{
 if (require(tmap)) {
     data(NLD_muni)
 
@@ -31,5 +30,4 @@ if (require(tmap)) {
 
     # area of the polygons when unprojected
     approx_areas(NLD_muni %>% set_projection(projection="longlat")) %>% summary_areas()
-}
 }

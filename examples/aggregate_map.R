@@ -1,13 +1,14 @@
-\dontrun{
 if (require(tmap)) {
     data(land)
 
     # original map
     qtm(land, raster="cover_cls")
 
+    \dontrun{
     # map decreased by factor 4 for each dimension
     land4 <- aggregate_map(land, fact=4, agg.fun="modal")
     qtm(land4, raster="cover_cls")
+    }
 
     # map decreased by factor 8, where the variable trees is
     # aggregated with mean, min, and max
@@ -35,5 +36,4 @@ if (require(tmap)) {
     # largest municipalities in area per province
     aggregate_map(NLD_muni, by="province",
                   agg.fun = list(name="modal"), weights = "AREA")@data
-    }
 }

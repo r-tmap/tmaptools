@@ -22,7 +22,6 @@ cropped shape, in the same class as \code{x}
 Crop a shape object (from class \code{\link[sp:Spatial]{Spatial-class}}, \code{\link[raster:Raster-class]{Raster}}, or \code{sf}). A shape file \code{x} is cropped, either by the bounding box of another shape \code{y}, or by \code{y} itself if it is a SpatialPolygons object and \code{polygon=TRUE}.
 }
 \examples{
-\dontrun{
 if (require(tmap)) {
     data(Europe, land, metro)
 
@@ -36,7 +35,6 @@ if (require(tmap)) {
     tm_shape(metro_europe) +
     	tm_bubbles("pop2010", col="red", title.size="European cities") +
     	tm_legend(frame=TRUE)
-}
 }
 }
 \seealso{

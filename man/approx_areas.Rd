@@ -40,7 +40,6 @@ Note that this method is an approximation, since it depends on the used projecti
 For projected shapes, \code{\link[rgeos:gArea]{gArea}} is used, and for unprojected shapes, \code{\link[geosphere:areaPolygon]{areaPolygon}}.
 }
 \examples{
-\dontrun{
 if (require(tmap)) {
     data(NLD_muni)
 
@@ -73,7 +72,6 @@ if (require(tmap)) {
 
     # area of the polygons when unprojected
     approx_areas(NLD_muni \%>\% set_projection(projection="longlat")) \%>\% summary_areas()
-}
 }
 }
 \seealso{

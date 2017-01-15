@@ -29,17 +29,16 @@ sudo apt-get install libgeos-dev
 
 See source pages for [gdal](http://trac.osgeo.org/gdal), [proj](http://trac.osgeo.org/proj), and [geos](http://trac.osgeo.org/geos). For Mac OS users, see http://www.kyngchaos.com.
 
-Java is required for obtaining OpenStreetMap image (with the function`read_osm`). It can be installed in Linux (Ubuntu) with:
+Also, `tmaptools` relies indirectly on the R package `V8`. For Linux (Ubuntu), the `v8` library needs to be installed for this:
 
 ```bash
-sudo-apt install openjdk-9-jre
-sudo R CMD javareconf
+sudo apt-get install libv8-dev
 ```
 
 Java is required for obtaining OpenStreetMap bitmaps (with the function`read_osm`). It can be installed in Linux (Ubuntu) with:
 
 ```bash
-sudo-apt install openjdk-9-jre
+sudo apt-get install openjdk-9-jre
 sudo R CMD javareconf
 ```
 

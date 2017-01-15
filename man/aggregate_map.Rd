@@ -43,16 +43,17 @@ A shape object, in the same format as \code{shp}
 Aggregate spatial polygons, spatial lines or raster objects. For spatial polygons and lines, the units will be merged with the \code{by} variable. For rasters, the \code{fact} parameter determined how many rasters cells are aggregated both horizontally and vertically. Per data variable, an aggregation formula can be specified, by default mean for numeric and modal for categorical varaibles.
 }
 \examples{
-\dontrun{
 if (require(tmap)) {
     data(land)
 
     # original map
     qtm(land, raster="cover_cls")
 
+    \dontrun{
     # map decreased by factor 4 for each dimension
     land4 <- aggregate_map(land, fact=4, agg.fun="modal")
     qtm(land4, raster="cover_cls")
+    }
 
     # map decreased by factor 8, where the variable trees is
     # aggregated with mean, min, and max
@@ -80,7 +81,6 @@ if (require(tmap)) {
     # largest municipalities in area per province
     aggregate_map(NLD_muni, by="province",
                   agg.fun = list(name="modal"), weights = "AREA")@data
-    }
 }
 }
 

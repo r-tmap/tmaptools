@@ -59,7 +59,6 @@ A new bounding box can be created from scratch as follows:
 }
 }
 \examples{
-\dontrun{
 if (require(tmap)) {
 
     ## load shapes
@@ -85,7 +84,6 @@ if (require(tmap)) {
 
     tm_shape(World, bbox=bb_italy) + tm_polygons()
     # shorter alternative: tm_shape(World, bbox="Italy") + tm_polygons()
-}
 }
 }
 \seealso{

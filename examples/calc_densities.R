@@ -1,4 +1,3 @@
-\dontrun{
 if (require(tmap)) {
     data(NLD_muni)
 
@@ -11,5 +10,4 @@ if (require(tmap)) {
             title=expression("Population per " * km^2), style="quantile") +
     tm_facets(free.scales = FALSE) +
     tm_layout(panel.show = TRUE, panel.labels=c("Men", "Women"))
-}
 }

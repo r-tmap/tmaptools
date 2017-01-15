@@ -6,8 +6,9 @@
 \usage{
 sample_dots(shp, vars = NULL, convert2density = FALSE, nrow = NA,
   ncol = NA, N = 250000, npop = NA, n = 10000, w = NA,
-  shp.id = NULL, var.name = "class", var.labels = vars, unit = "km",
-  unit.size = 1000, randomize = TRUE, output = c("points", "grid"), ...)
+  shp.id = NULL, var.name = "class", var.labels = vars,
+  target = "metric", orig = NA, to = NA, randomize = TRUE,
+  output = c("points", "grid"), ...)
 }
 \arguments{
 \item{shp}{A shape object, more specifically, a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygonsDataFrame}} or an \code{sf} object that can be coerced as such.}
@@ -22,7 +23,7 @@ sample_dots(shp, vars = NULL, convert2density = FALSE, nrow = NA,
 
 \item{N}{Number of grid points}
 
-\item{npop}{Population total. If \code{NA}, it is recontructed from the data. If density values are specified, the population total is approximated using the polygon areas (see also \code{unit} and \code{unit.size}).}
+\item{npop}{Population total. If \code{NA}, it is recontructed from the data. If density values are specified, the population total is approximated using the polygon areas (see also \code{target}, \code{orig} and \code{to}).}
 
 \item{n}{Number of sampled dots}
 
@@ -34,9 +35,11 @@ sample_dots(shp, vars = NULL, convert2density = FALSE, nrow = NA,
 
 \item{var.labels}{Labels of the classes (see \code{var.name}).}
 
-\item{unit}{Unit, see \code{\link{calc_densities}}. Needed to relate \code{npop} to \code{w}, if they are not both specified.}
+\item{target}{target unit, see \code{\link{approx_areas}}}
 
-\item{unit.size}{Unit size, see \code{\link{calc_densities}}. Needed to relate \code{npop} to \code{w}, if they are not both specified.}
+\item{orig}{original unit, see \code{\link{approx_areas}}}
+
+\item{to}{unit multiplier, see \code{\link{approx_areas}}}
 
 \item{randomize}{should the order of sampled dots be randomized? The dots are sampled class-wise (specified by \code{vars}). If this order is not randomized (so if \code{randomize=FALSE}), then the dots from the last class will be drawn on top, which may introduce a perception bias. By default \code{randomize=TRUE}, so the sampled dots are randomized to prevent this bias.}
 
@@ -46,9 +49,6 @@ sample_dots(shp, vars = NULL, convert2density = FALSE, nrow = NA,
 }
 \description{
 Sample dots from spatial polygons according to a spatial distribution of a population. The population may consist of classes. The output, a SpatialPointsDataFrame, can be used to create a dot map (see \code{\link[tmap:tm_dots]{tm_dots}}), where the dots are colored according to the classes.
-}
-\details{
-The sampling algoritm is the following: TO DO
 }
 \examples{
 \dontrun{

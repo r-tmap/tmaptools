@@ -41,3 +41,4 @@ r_packages:
   - rgeos
   - roxygen2
   - rmarkdown
+  - tmap

@@ -1,4 +1,3 @@
-\dontrun{
 if (require(tmap)) {
     data(Europe, land, metro)
 
@@ -12,5 +11,4 @@ if (require(tmap)) {
     tm_shape(metro_europe) +
     	tm_bubbles("pop2010", col="red", title.size="European cities") +
     	tm_legend(frame=TRUE)
-}
 }

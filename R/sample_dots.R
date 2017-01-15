@@ -2,29 +2,28 @@
 #'
 #' Sample dots from spatial polygons according to a spatial distribution of a population. The population may consist of classes. The output, a SpatialPointsDataFrame, can be used to create a dot map (see \code{\link[tmap:tm_dots]{tm_dots}}), where the dots are colored according to the classes.
 #'
-#' The sampling algoritm is the following: TO DO
-#'
 #' @param shp A shape object, more specifically, a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygonsDataFrame}} or an \code{sf} object that can be coerced as such.
 #' @param vars Names of one or more variables that are contained in \code{shp}. If \code{vars} is not provided, the dots are sampled uniformly. If \code{vars} consists of one variable name, the dots are sampled according to the distribution of the corresponding variable. If \code{vars} consist of more than one variable names, then the dots are sampled according to the distributions of those variables. A categorical variable is added that contains the distrubtion classes (see \code{var.name}).
 #' @param convert2density Should the variables be converted to density values? Density values are used for the sampling algorithm, so use \code{TRUE} when the values are absolute counts.
 #' @param nrow Number of grid rows
 #' @param ncol Number of grid colums
 #' @param N Number of grid points
-#' @param npop Population total. If \code{NA}, it is recontructed from the data. If density values are specified, the population total is approximated using the polygon areas (see also \code{unit} and \code{unit.size}).
+#' @param npop Population total. If \code{NA}, it is recontructed from the data. If density values are specified, the population total is approximated using the polygon areas (see also \code{target}, \code{orig} and \code{to}).
 #' @param n Number of sampled dots
 #' @param w Number of population units per dot. It is the population total divided by \code{n}. If specified, \code{n} is calculated accordingly.
 #' @param shp.id Name of the variable of \code{shp} that contains the polygon identifying numbers or names.
 #' @param var.name Name of the variable that will be created to store the classes. The classes are defined by \code{vars}, and the labels can be configured with \code{var.labels}.
 #' @param var.labels Labels of the classes (see \code{var.name}).
-#' @param unit Unit, see \code{\link{calc_densities}}. Needed to relate \code{npop} to \code{w}, if they are not both specified.
-#' @param unit.size Unit size, see \code{\link{calc_densities}}. Needed to relate \code{npop} to \code{w}, if they are not both specified.
+#' @param target target unit, see \code{\link{approx_areas}}
+#' @param orig original unit, see \code{\link{approx_areas}}
+#' @param to unit multiplier, see \code{\link{approx_areas}}
 #' @param randomize should the order of sampled dots be randomized? The dots are sampled class-wise (specified by \code{vars}). If this order is not randomized (so if \code{randomize=FALSE}), then the dots from the last class will be drawn on top, which may introduce a perception bias. By default \code{randomize=TRUE}, so the sampled dots are randomized to prevent this bias.
 #' @param output format of the output: use \code{"points"} for spatial points, and \code{"grid"} for a spatial grid.
 #' @param ... other arguments passed on to \code{\link{calc_densities}} and \code{\link{approx_areas}}
 #' @export
 #' @example ./examples/sample_dots.R
 #' @importFrom raster raster extent rasterize couldBeLonLat crop
-sample_dots <- function(shp, vars=NULL, convert2density=FALSE, nrow=NA, ncol=NA, N=250000, npop=NA, n=10000, w=NA, shp.id=NULL, var.name="class", var.labels=vars, unit="km", unit.size=1000, randomize=TRUE, output = c("points", "grid"), ...) {
+sample_dots <- function(shp, vars=NULL, convert2density=FALSE, nrow=NA, ncol=NA, N=250000, npop=NA, n=10000, w=NA, shp.id=NULL, var.name="class", var.labels=vars, target="metric", orig=NA, to=NA, randomize=TRUE, output = c("points", "grid"), ...) {
 	args <- list(...)
 
 	is_sf <- inherits(shp, "sf")
@@ -60,14 +59,14 @@ sample_dots <- function(shp, vars=NULL, convert2density=FALSE, nrow=NA, ncol=NA,
 
 		# calculate densities
 		dens_args <- args[names(args) %in% c("total.area", "suffix")]
-		data <- do.call("calc_densities", args = c(list(shp=shp, var=vars, unit=unit, unit.size=unit.size, drop=FALSE), dens_args))
+		data <- do.call("calc_densities", args = c(list(shp=shp, var=vars, target=target, orig=orig, to=to, drop=FALSE), dens_args))
 		data[is.na(data)] <- 0
 	} else {
 		# calculate absolute values
 		if (!("total.area" %in% names(args)) && !projected) warning("unable to determine population total, unless total.area is specified.", call. = FALSE)
 		if (is.na(npop)) {
 			area_approx_args <- args[names(args) == "total.area"]
-			areas <- do.call("approx_areas", args = c(list(shp=shp, unit=unit, unit.size=unit.size), area_approx_args))
+			areas <- do.call("approx_areas", args = c(list(shp=shp, target=target, orig=orig, to=to), area_approx_args))
 
 			npop <- sum(rowSums(data) * areas)
 		}

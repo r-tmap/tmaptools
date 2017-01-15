@@ -34,7 +34,6 @@ bb_earth(projection = NULL, stepsize = 1, earth.datum = "WGS84",
 Convert bounding box to a \code{\link[sp:SpatialPolygons]{SpatialPolygons}}. Useful for plotting (see example). The function \code{bb_earth} returns a spatial polygon of the 'boundaries' of the earth, which can also be done in other projections (if a feasible solution exists).
 }
 \examples{
-\dontrun{
 if (require(tmap)) {
     data(Europe)
 
@@ -44,6 +43,6 @@ if (require(tmap)) {
     # restore mode
     tmap_mode(current.mode)
 }
-}
+
 }
 

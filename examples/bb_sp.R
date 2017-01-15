@@ -1,4 +1,3 @@
-\dontrun{
 if (require(tmap)) {
     data(Europe)
 
@@ -8,4 +7,4 @@ if (require(tmap)) {
     # restore mode
     tmap_mode(current.mode)
 }
-}
+

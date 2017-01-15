@@ -1,4 +1,3 @@
-\dontrun{
 if (require(tmap)) {
     data(World, metro)
 
@@ -17,4 +16,4 @@ if (require(tmap)) {
     	tm_text("name", shadow=TRUE) +
     tm_format_NLD(title="Dutch provinces and\nmunicipalities", bg.color="white")
 }
-}
+

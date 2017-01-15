@@ -17,7 +17,7 @@ is_projected <- function(x) {
             stop("x is not a Spatial/Raster/sf object nor a valid projection")
         proj4_is_projected(prj)
     }
-    if (is.na(isP) && !is.character(x)) isP <- !maybe_longlat(get_bb(x))
+    if (is.na(isP) && !is.character(x)) isP <- !maybe_longlat(get_bb(x)$b)
     isP
 }
 

@@ -31,7 +31,6 @@ Vector or data.frame (depending on whether \code{length(var)==1} with density va
 Transpose quantitative variables to densitiy variables, which are often needed for choroplets. For example, the colors of a population density map should correspond population density counts rather than absolute population numbers.
 }
 \examples{
-\dontrun{
 if (require(tmap)) {
     data(NLD_muni)
 
@@ -44,7 +43,6 @@ if (require(tmap)) {
             title=expression("Population per " * km^2), style="quantile") +
     tm_facets(free.scales = FALSE) +
     tm_layout(panel.show = TRUE, panel.labels=c("Men", "Women"))
-}
 }
 }
 \keyword{densities}

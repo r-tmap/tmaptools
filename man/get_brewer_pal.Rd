@@ -8,7 +8,7 @@ get_brewer_pal(palette, n = 5, contrast = NA, stretch = TRUE,
   plot = TRUE)
 }
 \arguments{
-\item{palette}{name of the color brewer palette. Run \code{\link[RColorBrewer:display.brewer.pal]{display.brewer.pal}} for options.}
+\item{palette}{name of the color brewer palette. Run \code{\link{palette_explorer}} (or \code{\link[RColorBrewer:display.brewer.pal]{display.brewer.pal}}) for options.}
 
 \item{n}{number of colors}
 
@@ -22,10 +22,10 @@ get_brewer_pal(palette, n = 5, contrast = NA, stretch = TRUE,
 vector of color values. It is silently returned when \code{plot=TRUE}.
 }
 \description{
-Get and plot a (modified) palette from Color Brewer. In addition to the base function \code{\link[RColorBrewer:brewer.pal]{brewer.pal}}, a palette can be created for any number of classes. The contrast of the palette can be adjusted for sequential and diverging palettes. For categorical palettes, intermediate colors can be generated.
+Get and plot a (modified) palette from Color Brewer. In addition to the base function \code{\link[RColorBrewer:brewer.pal]{brewer.pal}}, a palette can be created for any number of classes. The contrast of the palette can be adjusted for sequential and diverging palettes. For categorical palettes, intermediate colors can be generated. An interactive tool that uses this function is \code{\link{palette_explorer}}.
 }
 \details{
-The default contrast of the palette depends on the number of colors, \code{n}, in the following way. The deafult contrast is maximal, so \code{(0, 1)}, when \code{n = 9} for sequential palettes and \code{n = 11} for diverging palettes. The default contrast values for smaller values of \code{n} can be extracted with some R magic: \code{sapply(1:9, tmaptools:::default_contrast_seq)} for sequential palettes and \code{sapply(1:11, tmaptools:::default_contrast_div)} for diverging palettes.
+The default contrast of the palette depends on the number of colors, \code{n}, in the following way. The default contrast is maximal, so \code{(0, 1)}, when \code{n = 9} for sequential palettes and \code{n = 11} for diverging palettes. The default contrast values for smaller values of \code{n} can be extracted with some R magic: \code{sapply(1:9, tmaptools:::default_contrast_seq)} for sequential palettes and \code{sapply(1:11, tmaptools:::default_contrast_div)} for diverging palettes.
 }
 \examples{
 get_brewer_pal("Blues")
@@ -40,5 +40,8 @@ get_brewer_pal("RdYlGn", n=11, contrast=c(.4, 1))
 
 get_brewer_pal("Set2", n = 12)
 get_brewer_pal("Set2", n = 12, stretch = FALSE)
+}
+\seealso{
+\code{\link{palette_explorer}}
 }
 
