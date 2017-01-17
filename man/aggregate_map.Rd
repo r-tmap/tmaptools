@@ -42,6 +42,13 @@ A shape object, in the same format as \code{shp}
 \description{
 Aggregate spatial polygons, spatial lines or raster objects. For spatial polygons and lines, the units will be merged with the \code{by} variable. For rasters, the \code{fact} parameter determined how many rasters cells are aggregated both horizontally and vertically. Per data variable, an aggregation formula can be specified, by default mean for numeric and modal for categorical varaibles.
 }
+\details{
+This function is similar to \code{\link[raster:aggregate]{aggregate}} from the \code{raster} package. However, the aggregation can be specified in more detail: weights can be used (e.g. polygon area sizes). Also, an aggregation function can be specified per variable or raster layer. It is also possible to specify a general function for numeric data and a function for categorical data.
+
+By default, the data is not aggregated. In this case, this function is similar to \code{unionSpatialPolygons} from the \code{maptools} package. The only difference is way the aggregate-by variable is specified. When using \code{unionSpatialPolygons}, the values have to be assigned to \code{IDs} whereas when using \code{aggregate_map} the data variable name can be assigned to \code{by}.
+
+The underlying functions of \code{aggregate_map} for \code{Spatial} objects are \code{\link[rgeos:gUnaryUnion]{gUnaryUnion}}, \code{\link[rgeos:gUnionCascaded]{gUnionCascaded}}, and \code{\link[rgeos:gLineMerge]{gLineMerge}}. For \code{Raster} objects, the \code{\link[raster:aggregate]{aggregate}} is used.
+}
 \examples{
 if (require(tmap)) {
     data(land)

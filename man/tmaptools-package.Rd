@@ -11,41 +11,54 @@ This package offers a set of handy tool functions for reading and processing spa
 \details{
 This page provides a brief overview of all package functions.
 }
-\section{Handy tool functions}{
+\section{Get shape information}{
 
 \tabular{ll}{
 \code{\link{bb}}\tab To create, extract or modify a bounding box \cr
 \code{\link{bb_sp}}\tab Convert bounding box to a spatial polygon \cr
-\code{\link{geocode_OSM}}\tab To get location from an address description \cr
-\code{\link{rev_geocode_OSM}}\tab To get address description from a location \cr
 \code{\link{get_asp_ratio}}\tab To get the aspect ratio of a shape object \cr
 \code{\link{get_IDs}}\tab To get ID values of a shape object \cr
-\code{\link{append_data}}\tab To append a data frame to a shape object \cr
 \code{\link{approx_areas}}\tab To approximate area sizes of polygons \cr
 \code{\link{approx_distances}}\tab To approximate distances \cr
 \code{\link{projection_units}}\tab Get or translate units of a projection \cr
-\code{\link{calc_densities}}\tab To calculate density values \cr
-\code{\link{get_projection}}\tab To get the map projection \cr
-\code{\link{set_projection}}\tab To set the map projection \cr
 \code{\link{is_projected}}\tab Checks if the map is projected \cr
-\code{\link{sbind}}\tab To bind shape objects \cr
-\code{\link{crop_shape}}\tab To crop shape objects \cr
-\code{\link{simplify_shape}}\tab To simplify a shape \cr
-\code{\link{map_coloring}}\tab To color polygons with different colors for adjacent polygons \cr
-\code{\link{get_brewer_pal}}\tab Get and plot a (modified) Color Brewer palette \cr
+\code{\link{get_projection}}\tab To get the map projection \cr
 --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
 }
 }
 
-\section{Statistical transformation functions}{
+\section{Process shape data}{
 
 \tabular{ll}{
+\code{\link{append_data}}\tab To append a data frame to a shape object \cr
+\code{\link{calc_densities}}\tab To calculate density values \cr
+--------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
+}
+}
+
+\section{Color tools}{
+
+\tabular{ll}{
+\code{\link{map_coloring}}\tab To color polygons with different colors for adjacent polygons \cr
+\code{\link{get_brewer_pal}}\tab Get and plot a (modified) Color Brewer palette \cr
+\code{\link{palette_explorer}}\tab Interactive tool to explor Color Brewer palettes \cr
+--------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
+}
+}
+
+\section{Transform shapes (statistical transformation)}{
+
+\tabular{ll}{
+\code{\link{set_projection}}\tab To set the map projection \cr
+\code{\link{crop_shape}}\tab To crop shape objects \cr
+\code{\link{simplify_shape}}\tab To simplify a shape \cr
 \code{\link{smooth_map}}\tab To create a smooth map using a kernel density estimator \cr
 \code{\link{aggregate_map}}\tab To aggregate the units of a map \cr
 \code{\link{smooth_raster_cover}}\tab To create a smooth cover from a raster object \cr
 \code{\link{sample_dots}}\tab To sample dots from polygons \cr
 \code{\link{points_to_raster}}\tab To bin spatial points to a raster \cr
 \code{\link{poly_to_raster}}\tab To convert polygons to a raster \cr
+\code{\link{sbind}}\tab To bind shape objects \cr
 --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
 }
 }
@@ -57,6 +70,8 @@ This page provides a brief overview of all package functions.
 \code{\link{read_GPX}}\tab To read a GPX file \cr
 \code{\link{read_osm}}\tab To read Open Street Map data \cr
 \code{\link{write_shape}}\tab To write a shape object \cr
+\code{\link{geocode_OSM}}\tab To get location from an address description \cr
+\code{\link{rev_geocode_OSM}}\tab To get address description from a location \cr
 --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
 }
 }
