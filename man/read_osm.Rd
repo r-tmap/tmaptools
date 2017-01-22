@@ -7,7 +7,7 @@
 \alias{read_osm}
 \title{Read Open Street Map data}
 \usage{
-read_osm(x, raster = NA, zoom = NULL, type = NULL, minNumTiles = NULL,
+read_osm(x, raster = NA, zoom = NULL, type = "osm", minNumTiles = NULL,
   mergeTiles = NULL, ...)
 
 osm_poly(query)
@@ -23,7 +23,7 @@ osm_point(query)
 
 \item{zoom}{passed on to \code{\link[OpenStreetMap:openmap]{openmap}}. Only applicable when \code{raster=TRUE}.}
 
-\item{type}{passed on to \code{\link[OpenStreetMap:openmap]{openmap}} Only applicable when \code{raster=TRUE}.}
+\item{type}{tile provider, by default \code{"osm"}, which corresponds to OpenStreetMap Mapnik. See \code{\link[OpenStreetMap:openmap]{openmap}} for options. Only applicable when \code{raster=TRUE}.}
 
 \item{minNumTiles}{passed on to \code{\link[OpenStreetMap:openmap]{openmap}} Only applicable when \code{raster=TRUE}.}
 

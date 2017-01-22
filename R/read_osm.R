@@ -5,7 +5,7 @@
 #' @param x object that can be coerced to a bounding box with \code{\link{bb}} (e.g. an existing bounding box or a shape), or an \code{\link[osmar:osmar]{osmar}} object. In the first case, other arguments can be passed on to \code{\link{bb}} (see \code{...}). If an existing bounding box is specified in projected coordinates, plesae specify \code{current.projection}.
 #' @param raster logical that determines whether a raster or vector shapes are returned. In the latter case, specify the vector selections (see argument \code{...}). By default, \code{raster=TRUE} if no vector selections are made, and \code{raster=FALSE} otherwise.
 #' @param zoom passed on to \code{\link[OpenStreetMap:openmap]{openmap}}. Only applicable when \code{raster=TRUE}.
-#' @param type passed on to \code{\link[OpenStreetMap:openmap]{openmap}} Only applicable when \code{raster=TRUE}.
+#' @param type tile provider, by default \code{"osm"}, which corresponds to OpenStreetMap Mapnik. See \code{\link[OpenStreetMap:openmap]{openmap}} for options. Only applicable when \code{raster=TRUE}.
 #' @param minNumTiles passed on to \code{\link[OpenStreetMap:openmap]{openmap}} Only applicable when \code{raster=TRUE}.
 #' @param mergeTiles passed on to \code{\link[OpenStreetMap:openmap]{openmap}} Only applicable when \code{raster=TRUE}.
 #' @param ... arguments passed on to \code{\link{bb}}, or arguments that specify polygons, lines, and/or points queries, created with \code{osm_poly}, \code{osm_line}, and \code{osm_point} respectively.
@@ -17,7 +17,7 @@
 #' @export
 #' @example ./examples/read_osm.R
 #' @return The output of \code{read_osm} is a \code{\link[sp:SpatialGridDataFrame]{SpatialGridDataFrame}} if \code{raster=TRUE}, and otherwise a named list of \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygonsDataFrame}}, \code{\link[sp:SpatialLinesDataFrame]{SpatialLinesDataFrame}}, and/or \code{\link[sp:SpatialPointsDataFrame]{SpatialPointsDataFrame}} objects. The names of this list are the names of arguments defined at \code{...}.
-read_osm <- function(x, raster=NA, zoom=NULL, type=NULL, minNumTiles=NULL, mergeTiles=NULL, ...) {
+read_osm <- function(x, raster=NA, zoom=NULL, type="osm", minNumTiles=NULL, mergeTiles=NULL, ...) {
 	if (!get(".internet", envir = .TMAPTOOLS_CACHE)) stop("No internet connection found.")
 
 	# @importFrom OpenStreetMap openmap
@@ -35,12 +35,15 @@ read_osm <- function(x, raster=NA, zoom=NULL, type=NULL, minNumTiles=NULL, merge
 				 call. = FALSE)
 		} else {
 			openmap <- get("openmap", envir=asNamespace("OpenStreetMap"), mode="function")
+
+
 			optionalArgs <- list(zoom=zoom, type=type, minNumTiles=minNumTiles, mergeTiles=mergeTiles)
 			optionalArgs <- optionalArgs[!sapply(optionalArgs, is.null)]
 			om <- suppressWarnings({do.call("openmap", args = c(list(upperLeft=x[c(4,1)], lowerRight=x[c(2,3)]), optionalArgs))})
 			omr <- raster(om)
 			oms <- as(omr, "SpatialGridDataFrame")
 			oms@data <- raster_colors(oms)
+			attr(oms, "leaflet.provider") <- unname(OSM2LP[type])
 			attr(oms, "is.OSM") <- TRUE
 			return(oms)
 		}
@@ -117,3 +120,29 @@ osm_type <- function(query, unit) {
 		list(unit=unit, key.only=FALSE, k=items[1], v=items[2])
 	}
 }
+
+# matching between types available at openmap and leaflet providers
+OSM2LP <- c("osm"="OpenStreetMap.Mapnik",
+       "osm-bw"="OpenStreetMap.BlackAndWhite",
+       "maptoolkit-topo"=NA,
+       "waze"=NA,
+       "bing"=NA,
+       "stamen-toner"="Stamen.Toner",
+       "stamen-terrain"="Stamen.Terrain",
+       "stamen-watercolor"="Stamen.Watercolor",
+       "osm-german"="OpenStreetMap.DE",
+       "osm-wanderreitkarte"=NA,
+       "mapbox"="MapBox",
+       "esri"="Esri.WorldStreetMap",
+       "esri-topo"="Esri.WorldTopoMap",
+       "nps"=NA,
+       "apple-iphoto"=NA,
+       "skobbler"=NA,
+       "hillshade"="HikeBike.HillShading",
+       "opencyclemap"="Thunderforest.OpenCycleMap",
+       "osm-transport"="Thunderforest.Transport",
+       "osm-public-transport"=NA,
+       "osm-bbike"=NA,
+       "osm-bbike-german"=NA)
+
+
