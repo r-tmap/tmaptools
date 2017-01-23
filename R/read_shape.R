@@ -10,7 +10,7 @@
 #' @param current.projection the current projection of the shape object, if it is missing in the shape file. See \code{\link{get_proj4}} for options. Use \code{\link{set_projection}} to reproject the shape object.
 #' @param as.sf should the shape be returned as an \code{sf} object?
 #' @param ... other parameters, such as \code{stringsAsFactors}, are passed on to \code{\link[rgdal:readOGR]{readOGR}}
-#' @return shape object
+#' @return shape object from class \code{\link[sp:Spatial]{Spatial}}
 #' @importFrom rgdal readOGR
 #' @import sp
 #' @export

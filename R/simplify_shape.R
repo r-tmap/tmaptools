@@ -1,6 +1,6 @@
 #' Simplify shape
 #'
-#' Simplify a shape consisting of polygons or lines. The number of coordinates are reduced.
+#' Simplify a shape consisting of polygons or lines. This is can be useful for shapes that are too detailed for visualization, especially along natural borders such as coastlines and rivers. The number of coordinates is reduced.
 #'
 #' This function is a wrapper of \code{\link[rmapshaper:ms_simplify]{ms_simplify}}. In addition, the data is preserved. Also \code{sf} objects are supported.
 #'

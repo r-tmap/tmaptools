@@ -16,7 +16,7 @@ read_shape(file, current.projection = NULL, as.sf = FALSE, ...)
 \item{...}{other parameters, such as \code{stringsAsFactors}, are passed on to \code{\link[rgdal:readOGR]{readOGR}}}
 }
 \value{
-shape object
+shape object from class \code{\link[sp:Spatial]{Spatial}}
 }
 \description{
 Read an ESRI shape file. Optionally, set the current projection if it is missing.
