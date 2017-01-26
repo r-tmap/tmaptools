@@ -2,12 +2,12 @@
 % Please edit documentation in R/palette_explorer.R
 \name{palette_explorer}
 \alias{palette_explorer}
-\title{Color Palette Explorer}
+\title{Explore color palettes}
 \usage{
 palette_explorer()
 }
 \description{
-Explore Color Brewer Palettes. This interactive tool shows all Color Brewer palettes, where the number of colors can be adjusted as well as the constrast range. Categorical (qualitative) palettes can be stretched when the number of colors exceeds the number of palette colors. Output code needed to get the desired color values is generated. Finally, all colors can be tested for color blindness.
+This interactive tool shows all Color Brewer palettes, where the number of colors can be adjusted as well as the constrast range. Categorical (qualitative) palettes can be stretched when the number of colors exceeds the number of palette colors. Output code needed to get the desired color values is generated. Finally, all colors can be tested for color blindness.
 }
 \examples{
 \dontrun{

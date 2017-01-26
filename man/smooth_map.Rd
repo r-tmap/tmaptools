@@ -2,7 +2,7 @@
 % Please edit documentation in R/smooth_map.R
 \name{smooth_map}
 \alias{smooth_map}
-\title{Create a smooth map in various formats: smooth raster, contour lines, and polygons.}
+\title{Create a smooth map}
 \usage{
 smooth_map(shp, var = NULL, nrow = NA, ncol = NA, N = 250000,
   unit = "km", unit.size = 1000, smooth.raster = TRUE, nlevels = 5,

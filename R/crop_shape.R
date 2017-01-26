@@ -1,6 +1,6 @@
 #' Crop shape object
 #'
-#' Crop a shape object (from class \code{\link[sp:Spatial]{Spatial}}, \code{\link[raster:Raster-class]{Raster}}, or \code{sf}). A shape file \code{x} is cropped, either by the bounding box of another shape \code{y}, or by \code{y} itself if it is a SpatialPolygons object and \code{polygon=TRUE}.
+#' Crop a shape object (from class \code{\link[sp:Spatial]{Spatial}}, \code{\link[raster:Raster-class]{Raster}}, or \code{sf}). A shape file \code{x} is cropped, either by the bounding box of another shape \code{y}, or by \code{y} itself if it is a SpatialPolygons object and \code{polygon = TRUE}.
 #'
 #' This function is similar to \code{\link[raster:crop]{crop}} from the \code{raster} package. The main difference is that \code{crop_shape} also allows to crop using a polygon instead of a rectangle.
 #'

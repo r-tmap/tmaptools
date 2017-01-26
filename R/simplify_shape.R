@@ -1,10 +1,10 @@
 #' Simplify shape
 #'
-#' Simplify a shape consisting of polygons or lines. This is can be useful for shapes that are too detailed for visualization, especially along natural borders such as coastlines and rivers. The number of coordinates is reduced.
+#' Simplify a shape consisting of polygons or lines. This can be useful for shapes that are too detailed for visualization, especially along natural borders such as coastlines and rivers. The number of coordinates is reduced.
 #'
 #' This function is a wrapper of \code{\link[rmapshaper:ms_simplify]{ms_simplify}}. In addition, the data is preserved. Also \code{sf} objects are supported.
 #'
-#' @param shp a \code{\link[sp:SpatialPolygons]{SpatialPolygons(DataFrame)}} or a \code{\link[sp:SpatialLines]{SpatialLines(DataFrame)}}, or a \code{sf} object that can be coerced to one of them.
+#' @param shp a \code{\link[sp:SpatialPolygons]{SpatialPolygons(DataFrame)}} or a \code{\link[sp:SpatialLines]{SpatialLines(DataFrame)}}, or an \code{sf} object that can be coerced to one of them.
 #' @param fact simplification factor, number between 0 and 1 (default is 0.1)
 #' @param keep.units d
 #' @param keep.subunits d

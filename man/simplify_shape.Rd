@@ -8,7 +8,7 @@ simplify_shape(shp, fact = 0.1, keep.units = FALSE, keep.subunits = FALSE,
   ...)
 }
 \arguments{
-\item{shp}{a \code{\link[sp:SpatialPolygons]{SpatialPolygons(DataFrame)}} or a \code{\link[sp:SpatialLines]{SpatialLines(DataFrame)}}, or a \code{sf} object that can be coerced to one of them.}
+\item{shp}{a \code{\link[sp:SpatialPolygons]{SpatialPolygons(DataFrame)}} or a \code{\link[sp:SpatialLines]{SpatialLines(DataFrame)}}, or an \code{sf} object that can be coerced to one of them.}
 
 \item{fact}{simplification factor, number between 0 and 1 (default is 0.1)}
 
@@ -22,7 +22,7 @@ simplify_shape(shp, fact = 0.1, keep.units = FALSE, keep.subunits = FALSE,
 shape in the smae class as \code{shp}
 }
 \description{
-Simplify a shape consisting of polygons or lines. This is can be useful for shapes that are too detailed for visualization, especially along natural borders such as coastlines and rivers. The number of coordinates is reduced.
+Simplify a shape consisting of polygons or lines. This can be useful for shapes that are too detailed for visualization, especially along natural borders such as coastlines and rivers. The number of coordinates is reduced.
 }
 \details{
 This function is a wrapper of \code{\link[rmapshaper:ms_simplify]{ms_simplify}}. In addition, the data is preserved. Also \code{sf} objects are supported.

@@ -1,4 +1,4 @@
-#' Create a smooth map in various formats: smooth raster, contour lines, and polygons.
+#' Create a smooth map
 #'
 #' Create a smooth map from a shape object. A 2D kernel density estimator is applied to the shape, which can be a spatial points, polygons, or raster object. Various format are returned: a smooth raster, contour lines, and polygons. The covered area can be specified, i.e., the area outside of it is extracted from the output.
 #'
