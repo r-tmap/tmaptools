@@ -33,7 +33,7 @@
 #' --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
 #' }
 #'
-#' @section Spatial transform functions:
+#' @section Spatial transformation functions:
 #' \tabular{ll}{
 #' \code{\link{aggregate_map}}\tab Aggregate the units of a map \cr
 #' \code{\link{crop_shape}}\tab Crop shape objects \cr

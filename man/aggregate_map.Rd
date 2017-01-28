@@ -77,7 +77,7 @@ if (require(tmap)) {
     # aggregate Dutch municipalities to provinces
     NLD_prov2 <- aggregate_map(NLD_muni, by="province",
         agg.fun = list(population="sum", origin_native="mean", origin_west="mean",
-    				   origin_non_west="mean", name="modal"), weights = "population")
+        origin_non_west="mean", name="modal"), weights = "population")
 
     # see original provinces data
     NLD_prov@data[, c("name", "population", "origin_native", "origin_west", "origin_non_west")]
@@ -87,7 +87,7 @@ if (require(tmap)) {
 
     # largest municipalities in area per province
     aggregate_map(NLD_muni, by="province",
-                  agg.fun = list(name="modal"), weights = "AREA")@data
+        agg.fun = list(name="modal"), weights = "AREA")@data
 }
 }
 

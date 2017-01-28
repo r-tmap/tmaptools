@@ -46,7 +46,7 @@ This page provides a brief overview of all package functions.
 }
 }
 
-\section{Spatial transform functions}{
+\section{Spatial transformation functions}{
 
 \tabular{ll}{
 \code{\link{aggregate_map}}\tab Aggregate the units of a map \cr

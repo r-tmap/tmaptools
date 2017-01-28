@@ -1,3 +1,6 @@
+version 1.2
+- added palette_explorer
+
 version 1.0
 - first CRAN release after package split of tmap
 - non-plotting functions of tmap 1.6-1 are contained in tmaptools
