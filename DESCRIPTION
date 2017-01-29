@@ -29,7 +29,7 @@ Imports:
     dichromat,
     XML
 Suggests:
-    tmap (>= 1.8),
+    tmap (>= 1.8-1),
     OpenStreetMap,
     png,
     shiny,

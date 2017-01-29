@@ -12,7 +12,7 @@ This package offers a set of handy tool functions for reading and processing spa
 Installation
 ------------
 
-`tmaptools` will shortly be available on CRAN. The development version can be installed as follows:
+`tmaptools` is available on CRAN. The development version can be installed as follows:
 
 ```r
 library(devtools)
