@@ -9,7 +9,7 @@ is_projected <- function(x) {
     isP <- if (inherits(x, "Raster")) {
         !couldBeLonLat(x, warnings=FALSE)
     } else {
-        if (inherits(x, c("Spatial", "sf")))
+        if (inherits(x, c("Spatial", "sf", "sfc")))
             prj <- get_projection(x)
         else if (is.character(x) || inherits(x, "CRS"))
             prj <- get_proj4(x)

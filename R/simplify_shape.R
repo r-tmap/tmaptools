@@ -15,7 +15,7 @@
 #' @return shape in the smae class as \code{shp}
 #' @export
 simplify_shape <- function(shp, fact = 0.1, keep.units=FALSE, keep.subunits=FALSE, ...) {
-    is_sf <- inherits(shp, "sf")
+    is_sf <- inherits(shp, c("sf", "sfc"))
 
     if (is_sf) shp <- as(shp, "Spatial")
     if (!inherits(shp, c("SpatialLines", "SpatialPolygons"))) stop("shp is not a SpatialPolygons or SpatialLines object")

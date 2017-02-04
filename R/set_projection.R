@@ -27,7 +27,7 @@
 set_projection <- function(shp, projection=NA, current.projection=NA, overwrite.current.projection=FALSE) {
 	shp.name <- deparse(substitute(shp))
 
-	is_sf <- inherits(shp, "sf")
+	is_sf <- inherits(shp, c("sf", "sfc"))
 	if (is_sf) shp <- as(shp, "Spatial")
 
 	shp.CRS <- get_projection(shp, as.CRS = TRUE)
@@ -154,7 +154,7 @@ get_projection <- function(shp, as.CRS=FALSE, guess.longlat=FALSE) {
 			attr(shp, "proj4string")
 		} else if (inherits(shp, "Raster")) {
 			attr(shp, "crs")
-		} else if (inherits(shp, "sf")) {
+		} else if (inherits(shp, c("sf", "sfc"))) {
 		    CRS(get_sf_proj(shp) )
 		} else {
 			stop("shp is neither a Spatial nor a Raster object")
@@ -168,7 +168,7 @@ get_projection <- function(shp, as.CRS=FALSE, guess.longlat=FALSE) {
 		        CRS("")
 		} else res
 	} else {
-	    res <- if (inherits(shp, "sf")) {
+	    res <- if (inherits(shp, c("sf", "sfc"))) {
 	        get_sf_proj(shp)
 	    } else proj4string(shp)
 

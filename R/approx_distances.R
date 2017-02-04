@@ -22,7 +22,7 @@ approx_distances <- function(x, y = NULL, projection = NULL, target="metric", or
     if (is_metric) target <- "km"
     if (is_imperial) target <- "mi"
 
-    if (inherits(x, c("Spatial", "Raster", "sf"))) {
+    if (inherits(x, c("Spatial", "Raster", "sf", "sfc"))) {
         ## get projection and bounding box for spatial objects
         prj <- get_projection(x, as.CRS=FALSE, guess.longlat = TRUE)
         if (is.na(prj) && missing(projection)) stop("shape projection unknown; please specify it")

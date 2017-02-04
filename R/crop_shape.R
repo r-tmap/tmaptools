@@ -14,7 +14,7 @@
 #' @example ./examples/crop_shape.R
 #' @return cropped shape, in the same class as \code{x}
 crop_shape <- function(x, y, polygon = FALSE, ...) {
-    is_sf <- inherits(x, "sf")
+    is_sf <- inherits(x, "sf", "sfc")
 
 	xname <- deparse(substitute(x))
 	yname <- deparse(substitute(y))
@@ -30,7 +30,7 @@ crop_shape <- function(x, y, polygon = FALSE, ...) {
 	israsterx <- inherits(x, c("Raster", "SpatialGrid"))
 
 	if (inherits(y, c("Spatial", "Raster", "sf"))) {
-	    if (inherits(y, "sf")) y <- as(y, "Spatial")
+	    if (inherits(y, "sf", "sfc")) y <- as(y, "Spatial")
 		py <- get_projection(y)
 
 		# align projections

@@ -70,7 +70,7 @@ write_shape <- function(shp, file) {
 
 	if (substr(base, nchar(base)-3, nchar(base))==".shp")
 		base <- substr(base, 1, nchar(base)-4)
-	if (inherits(shp, "sf")) shp <- as(shp, "Spatial")
+	if (inherits(shp, c("sf", "sfc"))) shp <- as(shp, "Spatial")
 	if (!inherits(shp, "Spatial")) stop("shpname is not a Spatial object", call. = FALSE)
 	writeOGR(shp, dir, base, driver = "ESRI Shapefile", overwrite_layer=TRUE)
 }

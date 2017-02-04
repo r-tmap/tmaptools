@@ -198,7 +198,7 @@ get_bb <- function(x, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=NULL, ylim
     } else if (inherits(x, c("Spatial", "Raster"))) {
         b <- bbox(x)
         current.projection <- get_projection(x, as.CRS = TRUE)
-    } else if (inherits(x, "sf")) {
+    } else if (inherits(x, "sf", "sfc")) {
         b <- get_sf_bbox(x)
         current.projection <- get_projection(x, as.CRS = TRUE)
     } else if (is.matrix(x) && length(x)==4) {

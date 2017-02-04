@@ -20,7 +20,7 @@ projection_units <-function(x=NA, target="m", orig=NA, to=NA, latitude=0, show.w
 
 
     # get projection (if available)
-    if (inherits(x, c("Spatial", "Raster", "sf"))) {
+    if (inherits(x, c("Spatial", "Raster", "sf", "sfc"))) {
         projection <- get_projection(x)
     } else {
         projection <- get_proj4(x)

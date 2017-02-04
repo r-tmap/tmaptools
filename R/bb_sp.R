@@ -25,7 +25,7 @@ bb_sp <- function(x, projection=NULL, steps=100, stepsize=NA, as.sf=FALSE) {
     }
 
     if (missing(projection)) {
-        if (inherits(x, c("Spatial", "Raster", "sf"))) {
+        if (inherits(x, c("Spatial", "Raster", "sf", "sfc"))) {
             projection <- get_projection(x, as.CRS=FALSE, guess.longlat = TRUE)
         } else if (maybe_longlat(bbx)) {
             projection <- get_proj4("longlat")

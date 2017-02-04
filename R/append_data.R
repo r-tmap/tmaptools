@@ -22,7 +22,7 @@
 #' @rdname append_data
 #' @export
 append_data <- function(shp, data, key.shp = NULL, key.data = NULL, ignore.duplicates=FALSE, ignore.na=FALSE, fixed.order=is.null(key.data) && is.null(key.shp)) {
-    is_sf <- inherits(shp, "sf")
+    is_sf <- inherits(shp, c("sf", "sfc"))
     if (is_sf) shp <- as(shp, "Spatial")
 
 	spatialDF <- inherits(shp, c("SpatialPolygonsDataFrame", "SpatialPointsDataFrame", "SpatialLinesDataFrame", "SpatialGridDataFrame", "SpatialPixelsDataFrame"))

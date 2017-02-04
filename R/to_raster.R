@@ -16,7 +16,7 @@
 #' @example  ./examples/points_to_raster.R
 #' @seealso \code{\link{poly_to_raster}}
 points_to_raster <- function(shp, nrow=NA, ncol=NA, N=250000, by=NULL, to.Raster=FALSE) {
-    if (inherits(shp, "sf")) shp <- as(shp, "Spatial")
+    if (inherits(shp, c("sf", "sfc"))) shp <- as(shp, "Spatial")
 
 	if (!inherits(shp, "SpatialPoints")) stop("shp should be a SpatialPoints/Pixels(DataFrame)")
 
@@ -95,7 +95,7 @@ points_to_raster <- function(shp, nrow=NA, ncol=NA, N=250000, by=NULL, to.Raster
 #' @example  ./examples/poly_to_raster.R
 #' @seealso \code{\link{points_to_raster}}
 poly_to_raster <- function(shp, r=NULL, nrow=NA, ncol=NA, N=250000, use.cover=FALSE, copy.data=FALSE,  to.Raster=!copy.data, ...) {
-    if (inherits(shp, "sf")) shp <- as(shp, "Spatial")
+    if (inherits(shp, c("sf", "sfc"))) shp <- as(shp, "Spatial")
 
 	if (!inherits(shp, "SpatialPolygons")) stop("shp should be a SpatialPolygons(DataFrame)")
 

@@ -76,7 +76,7 @@ aggregate_map <- function(shp, by=NULL, fact=NULL, agg.fun=NULL, weights=NULL, n
 
 	agg.data <- !missing(agg.fun)
 
-	is_f <- inherits(shp, "sf")
+	is_f <- inherits(shp, c("sf", "sfc"))
 
 	if (is_f) shp <- as(shp, "Spatial")
 

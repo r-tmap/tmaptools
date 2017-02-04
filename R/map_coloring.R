@@ -13,7 +13,7 @@
 #' @example ./examples/map_coloring.R
 #' @export
 map_coloring <- function(x, algorithm="greedy", ncols=NA, minimize=FALSE, palette=NULL, contrast=1) {
-    if (inherits(x, "sf")) x <- as(x, "Spatial")
+    if (inherits(x, "sf", "sfc")) x <- as(x, "Spatial")
 	if (inherits(x, "SpatialPolygons")) {
 		# get adjacency list
 		adj <- poly2nb(x)

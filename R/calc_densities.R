@@ -16,7 +16,7 @@
 #' @export
 calc_densities <- function(shp, var, target="metric", orig=NA, to=NA, total.area=NA, suffix=NA, drop=TRUE) {
 	## calculate densities
-    if (inherits(shp, "sf")) shp <- as(shp, "Spatial")
+    if (inherits(shp, c("sf", "sfc"))) shp <- as(shp, "Spatial")
 
 	areas <- approx_areas(shp, target = target, orig = orig, to=to, total.area=total.area)
 

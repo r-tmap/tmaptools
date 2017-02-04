@@ -48,7 +48,7 @@
 #' @export
 smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", unit.size=1000, smooth.raster=TRUE, nlevels=5, style = ifelse(is.null(breaks), "pretty", "fixed"), breaks = NULL, bandwidth=NA, cover.type=NA, cover=NULL, cover.threshold=.6, weight=1, extracting.method="full", buffer.width=NA, to.Raster=FALSE) {
 
-    is_sf <- inherits(shp, "sf")
+    is_sf <- inherits(shp, c("sf", "sfc"))
     if (is_sf) shp <- as(shp, "Spatial")
 
 	bbx <- bb(shp)
