@@ -62,7 +62,7 @@ approx_areas <- function(shp, target="metric", orig=NA, to=NA, total.area=NA, sh
 
     if (any(is.na(x)) || any(is.infinite(x))) {
         naid <- sort(union(which(is.na(x)), which(is.infinite(x))))
-        warning("cannot determine area of polygon(s) ", paste(naid, collapse=","))
+        if (show.warnings) warning("cannot determine area of polygon(s) ", paste(naid, collapse=","))
     }
 
 	if (is.na(total.area)) total.area <- sum(x, na.rm = TRUE) * (to^2)
