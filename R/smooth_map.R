@@ -11,11 +11,12 @@
 #' @param N preferred number of points in the raster that is used to smooth the shape object. Only applicable if shp is not a \code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}} or \code{\link[raster:Raster-class]{Raster}}
 #' @param unit unit specification. Needed when calculating density values. When set to \code{NA}, the densities values are based on the dimensions of the raster (defined by \code{nrow} and \code{ncol}). See also \code{unit.size}.
 #' @param unit.size size of the unit in terms of coordinate units. The coordinate system of many projections is approximately in meters while thematic maps typically range many kilometers, so by default \code{unit="km"} and \code{unit.size=1000} (meaning 1 kilometer equals 1000 coordinate units).
-#' @param smooth.raster logical that determines whether 2D kernel density smoothing is applied to the raster shape object. Not applicable when \code{shp} is a \code{\link[sp:SpatialPoints]{SpatialPoints}} object.
+#' @param smooth.raster logical that determines whether 2D kernel density smoothing is applied to the raster shape object. Not applicable when \code{shp} is a \code{\link[sp:SpatialPoints]{SpatialPoints}} object (since it already requires a 2D kernel density estimator). Other spatial objects are converted to a raster, which is smoothed when \code{smooth.raster=TRUE}.
 #' @param nlevels preferred number of levels
 #' @param style method to cut the color scale: e.g. "fixed", "equal", "pretty", "quantile", or "kmeans". See the details in \code{\link[classInt:classIntervals]{classIntervals}}.
 #' @param breaks in case \code{style=="fixed"}, breaks should be specified
 #' @param bandwidth single numeric value or vector of two numeric values that specifiy the bandwidth of the kernal density estimator. By default, it is 1/50th of the shortest side in units (specified with \code{unit.size}).
+#' @param threshold threshold value when a 2D kernel density is applied. Density values below this threshold will be set to \code{NA}. Only applicable when \code{shp} is a \code{\link[sp:SpatialPoints]{SpatialPoints}} or \code{smooth.raster=TRUE}.
 #' @param cover.type character value that specifies the type of raster cover, in other words, how the boundaries are specified. Options: \code{"original"} uses the same boundaries as \code{shp} (default for polygons), \code{"smooth"} calculates a smooth boundary based on the 2D kernal density (determined by \code{\link{smooth_raster_cover}}), \code{"rect"} uses the bounding box of \code{shp} as boundaries (default for spatial points and grids).
 #' @param cover \code{\link[sp:SpatialPolygons]{SpatialPolygons}} shape that determines the covered area in which the contour lines are placed. If specified, \code{cover.type} is ignored.
 #' @param cover.threshold numeric value between 0 and 1 that determines which part of the estimated 2D kernal density is returned as cover. Only applicable when \code{cover.type="smooth"}.
@@ -46,7 +47,7 @@
 
 #' @example ./examples/smooth_map.R
 #' @export
-smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", unit.size=1000, smooth.raster=TRUE, nlevels=5, style = ifelse(is.null(breaks), "pretty", "fixed"), breaks = NULL, bandwidth=NA, cover.type=NA, cover=NULL, cover.threshold=.6, weight=1, extracting.method="full", buffer.width=NA, to.Raster=FALSE) {
+smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", unit.size=1000, smooth.raster=TRUE, nlevels=5, style = ifelse(is.null(breaks), "pretty", "fixed"), breaks = NULL, bandwidth=NA, threshold=0, cover.type=NA, cover=NULL, cover.threshold=.6, weight=1, extracting.method="full", buffer.width=NA, to.Raster=FALSE) {
 
     is_sf <- inherits(shp, c("sf", "sfc"))
     if (is_sf) shp <- as(shp, "Spatial")
@@ -188,14 +189,15 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 		} else {
 			# copy raster (without 2d kernel density) and deterine levels
 			r <- shp
-			lvls <- num2breaks(r[], n=nlevels, style=style, breaks=breaks)$brks
+			lvls <- num2breaks(as.vector(r[]), n=nlevels, style=style, breaks=breaks)$brks
 		}
 	}
 	setTxtProgressBar(pb, .5)
 
-	if (inherits(shp, "SpatialPoints") || smooth.raster) {
-		# in this case, the 2d kernel density has been applied
 
+	apply2kde <- inherits(shp, "SpatialPoints") || smooth.raster
+
+	if (apply2kde) {
 		# fill raster values
 		r <- raster(extent(bbx), nrows=nrow, ncols=ncol, crs=prj)
 		r[] <- as.vector(x$fhat[, ncol(x$fhat):1])
@@ -213,16 +215,28 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 		r[] <- r[] * norm_weight / cell.area
 		x$fhat <- x$fhat * norm_weight / cell.area
 
-		lvls <- num2breaks(x$fhat, n=nlevels, style=style, breaks=breaks)$brks
+		#x$fhat[x$fhat < threshold] <- NA
+#browser()
+
+		lvls <- num2breaks(as.vector(x$fhat), n=nlevels, style=style, breaks=breaks)$brks
 		#brks <- fancy_breaks(lvls, intervals=TRUE)
+
+		thresLevel <- (lvls[1]==0 && lvls[2] > threshold && threshold != 0)
+		if (thresLevel) {
+		    lvls_orig <- lvls
+		    lvls <- c(lvls[1], threshold, lvls[-1])
+		}
 
 		cl <- contourLines(x$x1, x$x2, x$fhat, levels=lvls)
 		if (length(cl) < 1L) stop("No iso lines found")
 		if (length(cl) > 10000) stop(paste("Number of iso lines over 10000:", length(cl)))
 		cl2 <- contour_lines_to_SLDF(cl, proj4string = CRS(prj))
+		if (thresLevel) levels(cl2$level) <- c(0, levels(cl2$level)[-1])
+
 		#cl2$levelNR <- as.numeric(as.character(cl2$level))
 	} else {
-		# no 2d kernel density has been applied. Instead contour lines are found from the original raster
+	    # no 2d kernel density has been applied. Instead contour lines are found from the original raster
+	    thresLevel <- FALSE
 
 		bbr <- bb(r)
 
@@ -246,6 +260,14 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 
 	# make sure lines are inside poly
 	cp <- lines2polygons(ply = cover, lns = cl2, rst = r, lvls=lvls, extracting.method="full", buffer.width = buffer.width)
+	if (thresLevel) {
+	    ids <- as.integer(cp$level)
+	    ids[ids==1] <- NA
+	    ids <- ids - 1L
+	    cp$level <- factor(ids, labels=fancy_breaks(lvls_orig, intervals=TRUE), ordered = TRUE)
+	}
+
+
 	if (is_sf) cp <- as(cp, "sf")
 
 	attr(cp, "kernel_density") <- TRUE
@@ -256,6 +278,8 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 	if (is_sf) lns <- as(lns, "sf")
 	attr(lns, "isolines") <- TRUE
 	setTxtProgressBar(pb, 1)
+
+	if (apply2kde && thresLevel) r[][r[]<threshold] <- NA
 
 	list(raster = if(to.Raster) r else as(r, "SpatialGridDataFrame"),
 		 iso = lns,
@@ -281,7 +305,7 @@ contour_lines_to_SLDF <- function (cL, proj4string = CRS(as.character(NA)))
 	}
 	cLstack <- tapply(1:length(cL), sapply(cL, function(x) x[[1]]),
 					  function(x) x, simplify = FALSE)
-	df <- data.frame(level = factor(names(cLstack), ordered=TRUE))
+	df <- data.frame(level = factor(names(cLstack), levels=names(cLstack), ordered=TRUE))
 	m <- length(cLstack)
 	res <- vector(mode = "list", length = m)
 	IDs <- paste("C", 1:m, sep = "_")
@@ -380,6 +404,7 @@ lines2polygons <- function(ply, lns, rst=NULL, lvls, extracting.method="full", b
 		ids <- cut(values, lvls, include.lowest=TRUE, right=FALSE, labels = FALSE)
 
 		if (any(is.na(ids))) stop("raster values not in range")
+		if (length(ids)==1) stop("Something went wrong. Probably threshold value too low.")
 
 
 		res <- lapply(1:(length(lvls)-1), function(i) {
