@@ -63,4 +63,3 @@ if (require(tmap)) {
 \seealso{
 \code{\link{rev_geocode_OSM}}, \code{\link{bb}}
 }
-

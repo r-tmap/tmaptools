@@ -27,4 +27,3 @@ if (require(tmap)) {
 }
 }
 }
-

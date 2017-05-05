@@ -90,4 +90,3 @@ if (require(tmap)) {
         agg.fun = list(name="modal"), weights = "AREA")@data
 }
 }
-

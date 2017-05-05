@@ -49,4 +49,3 @@ if (require(tmap)) {
 \seealso{
 \code{\link{points_to_raster}}
 }
-

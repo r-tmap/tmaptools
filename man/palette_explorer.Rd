@@ -22,4 +22,3 @@ if (require(shiny) && require(shinyjs)) {
 \seealso{
 \code{\link{get_brewer_pal}}, \code{\link[dichromat:dichromat]{dichromat}}, \code{\link[RColorBrewer:RColorBrewer]{RColorBrewer}}
 }
-

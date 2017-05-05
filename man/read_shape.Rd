@@ -26,4 +26,3 @@ This function is a convenient wrapper of rgdal's \code{\link[rgdal:readOGR]{read
 
 For the Netherlands: often, the Dutch Rijksdriehoekstelsel (Dutch National Grid) projection is provided in the shape file without proper datum shift parameters to wgs84. This functions automatically adds these parameters. See \url{http://www.qgis.nl/2011/12/05/epsg28992-of-rijksdriehoekstelsel-verschuiving/} (in Dutch) for details.
 }
-

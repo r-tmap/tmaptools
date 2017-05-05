@@ -43,4 +43,3 @@ if (require(tmap)) {
 \seealso{
 \code{\link{bb}}
 }
-

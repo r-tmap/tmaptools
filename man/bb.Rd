@@ -89,4 +89,3 @@ if (require(tmap)) {
 \seealso{
 \code{\link{geocode_OSM}}
 }
-

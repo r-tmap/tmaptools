@@ -41,4 +41,3 @@ if (require(tmap)) {
     get_asp_ratio("Germany") #note: bb("Germany") uses geocode_OSM("Germany")
 }
 }
-

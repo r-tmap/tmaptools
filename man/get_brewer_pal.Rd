@@ -44,4 +44,3 @@ get_brewer_pal("Set2", n = 12, stretch = FALSE)
 \seealso{
 \code{\link{palette_explorer}}
 }
-

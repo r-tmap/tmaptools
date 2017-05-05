@@ -41,4 +41,3 @@ if (require(tmap)) {
 \seealso{
 \code{\link{approx_distances}} for distances between two points and \code{\link{approx_areas}} for areas.
 }
-

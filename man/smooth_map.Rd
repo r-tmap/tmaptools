@@ -7,9 +7,9 @@
 smooth_map(shp, var = NULL, nrow = NA, ncol = NA, N = 250000,
   unit = "km", unit.size = 1000, smooth.raster = TRUE, nlevels = 5,
   style = ifelse(is.null(breaks), "pretty", "fixed"), breaks = NULL,
-  bandwidth = NA, cover.type = NA, cover = NULL, cover.threshold = 0.6,
-  weight = 1, extracting.method = "full", buffer.width = NA,
-  to.Raster = FALSE)
+  bandwidth = NA, threshold = 0, cover.type = NA, cover = NULL,
+  cover.threshold = 0.6, weight = 1, extracting.method = "full",
+  buffer.width = NA, to.Raster = FALSE)
 }
 \arguments{
 \item{shp}{shape object of class \code{\link[sp:Spatial]{Spatial}}, \code{\link[raster:Raster-class]{Raster}}, or \code{sf}. Spatial points, polygons, and grids are supported. Spatial lines are not.}
@@ -26,7 +26,7 @@ smooth_map(shp, var = NULL, nrow = NA, ncol = NA, N = 250000,
 
 \item{unit.size}{size of the unit in terms of coordinate units. The coordinate system of many projections is approximately in meters while thematic maps typically range many kilometers, so by default \code{unit="km"} and \code{unit.size=1000} (meaning 1 kilometer equals 1000 coordinate units).}
 
-\item{smooth.raster}{logical that determines whether 2D kernel density smoothing is applied to the raster shape object. Not applicable when \code{shp} is a \code{\link[sp:SpatialPoints]{SpatialPoints}} object.}
+\item{smooth.raster}{logical that determines whether 2D kernel density smoothing is applied to the raster shape object. Not applicable when \code{shp} is a \code{\link[sp:SpatialPoints]{SpatialPoints}} object (since it already requires a 2D kernel density estimator). Other spatial objects are converted to a raster, which is smoothed when \code{smooth.raster=TRUE}.}
 
 \item{nlevels}{preferred number of levels}
 
@@ -35,6 +35,8 @@ smooth_map(shp, var = NULL, nrow = NA, ncol = NA, N = 250000,
 \item{breaks}{in case \code{style=="fixed"}, breaks should be specified}
 
 \item{bandwidth}{single numeric value or vector of two numeric values that specifiy the bandwidth of the kernal density estimator. By default, it is 1/50th of the shortest side in units (specified with \code{unit.size}).}
+
+\item{threshold}{threshold value when a 2D kernel density is applied. Density values below this threshold will be set to \code{NA}. Only applicable when \code{shp} is a \code{\link[sp:SpatialPoints]{SpatialPoints}} or \code{smooth.raster=TRUE}.}
 
 \item{cover.type}{character value that specifies the type of raster cover, in other words, how the boundaries are specified. Options: \code{"original"} uses the same boundaries as \code{shp} (default for polygons), \code{"smooth"} calculates a smooth boundary based on the 2D kernal density (determined by \code{\link{smooth_raster_cover}}), \code{"rect"} uses the bounding box of \code{shp} as boundaries (default for spatial points and grids).}
 
@@ -175,4 +177,3 @@ if (require(tmap)) {
 }
 
 }
-

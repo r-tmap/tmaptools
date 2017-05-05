@@ -77,4 +77,3 @@ if (require(tmap)) {
 \seealso{
 \code{\link{projection_units}} and \code{\link{approx_distances}}
 }
-

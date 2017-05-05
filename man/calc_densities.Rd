@@ -45,4 +45,3 @@ if (require(tmap)) {
 }
 }
 \keyword{densities}
-

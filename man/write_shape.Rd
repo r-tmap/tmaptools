@@ -17,4 +17,3 @@ Write a shape object to an ESRI shape file.
 \details{
 This function is a convenient wrapper of rgdal's \code{\link[rgdal:writeOGR]{writeOGR}}.
 }
-

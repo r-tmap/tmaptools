@@ -15,4 +15,3 @@ logical: \code{TRUE} if the shape is projected and \code{FALSE} otherwise.
 \description{
 Checks whether the shape is projected. Applicable to \code{Spatial}, \code{Raster} and \code{sf} objects. In case the projection is missing, it checks whether the coordinates are within -180/180 and -90/90 (if so, it returns \code{FALSE}).
 }
-

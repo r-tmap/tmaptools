@@ -2,8 +2,8 @@
 % Please edit documentation in R/append_data.R
 \name{append_data}
 \alias{append_data}
-\alias{over_coverage}
 \alias{under_coverage}
+\alias{over_coverage}
 \title{Append data to a shape object}
 \usage{
 append_data(shp, data, key.shp = NULL, key.data = NULL,
@@ -72,4 +72,3 @@ if (require(tmap)) {
 }
 }
 }
-

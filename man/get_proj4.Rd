@@ -43,4 +43,3 @@ Get full PROJ.4 string from an existing PROJ.4 string, a shortcut, or a \code{\l
 \seealso{
 \url{http://en.wikipedia.org/wiki/List_of_map_projections} for a overview of projections. \url{http://trac.osgeo.org/proj/} for the \code{PROJ.4} project home page. An extensive list of \code{PROJ.4} codes can be created with rgdal's \code{\link[rgdal:make_EPSG]{make_EPSG}}.
 }
-

@@ -221,6 +221,7 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 		lvls <- num2breaks(as.vector(x$fhat), n=nlevels, style=style, breaks=breaks)$brks
 		#brks <- fancy_breaks(lvls, intervals=TRUE)
 
+		# check if threshold can be applied (i.e. if values < threshold => NA)
 		thresLevel <- (lvls[1]==0 && lvls[2] > threshold && threshold != 0)
 		if (thresLevel) {
 		    lvls_orig <- lvls
@@ -264,7 +265,7 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 	    ids <- as.integer(cp$level)
 	    ids[ids==1] <- NA
 	    ids <- ids - 1L
-	    cp$level <- factor(ids, labels=fancy_breaks(lvls_orig, intervals=TRUE), ordered = TRUE)
+	    cp$level <- factor(ids, levels=1:(length(lvls_orig)-1), labels=fancy_breaks(lvls_orig, intervals=TRUE), ordered = TRUE)
 	}
 
 

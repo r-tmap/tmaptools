@@ -56,4 +56,3 @@ if (require(tmap)) {
 \seealso{
 \code{\link{poly_to_raster}}
 }
-

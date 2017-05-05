@@ -20,4 +20,3 @@ shape object
 \description{
 Combine shape objects into one shape object. It works analogous to \code{\link{rbind}}.
 }
-
