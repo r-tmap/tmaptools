@@ -59,6 +59,7 @@ sample_dots <- function(shp, vars=NULL, convert2density=FALSE, nrow=NA, ncol=NA,
 
 		# calculate densities
 		dens_args <- args[names(args) %in% c("total.area", "suffix")]
+		dens_args$suffix <- "" # overwrite suffix (to maintain vars)
 		data <- do.call("calc_densities", args = c(list(shp=shp, var=vars, target=target, orig=orig, to=to, drop=FALSE), dens_args))
 		data[is.na(data)] <- 0
 	} else {

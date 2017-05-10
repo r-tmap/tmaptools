@@ -55,11 +55,11 @@ append_data <- function(shp, data, key.shp = NULL, key.data = NULL, ignore.dupli
 				duplicated_data <- paste(duplicated_data, collapse=", ")
 			}
 			if (ignore.duplicates) {
-				message("data contains duplicated keys: ", duplicated_data)
+				message("Data contains duplicated keys: ", duplicated_data)
 			  data_ID <- which(!duplicated(ids.data))
 				data <- data[data_ID, ]
 				ids.data <- ids.data[data_ID]
-			} else stop("data contains duplicated keys: ", duplicated_data,
+			} else stop("Data contains duplicated keys: ", duplicated_data,
 							  ". Set ignore.duplicates=TRUE to ignore duplicates in data.")
 		} else {
 		  data_ID <- 1L:nrow(data)
@@ -71,7 +71,7 @@ append_data <- function(shp, data, key.shp = NULL, key.data = NULL, ignore.dupli
 				message(dataName, " key variable \"", key.data, "\" contains NA's, which are ignored")
 				ids.data[is.na(ids.data)] <- "data_key_NA"
 			} else {
-				stop("data key contains NA's. Set ignore.na = TRUE to ignore them.")
+				stop("Data key contains NA's. Set ignore.na = TRUE to ignore them.")
 			}
 		}
 
@@ -145,7 +145,7 @@ append_data <- function(shp, data, key.shp = NULL, key.data = NULL, ignore.dupli
 			}
 		}
 		assign(".underCoverage", list(result=uc_res, call=callAD, id=uc_id, value=shp@data[uc_id, key.shp]), envir = .TMAPTOOLS_CACHE)
-		assign(".overCoverage", list(result=oc_res, call=callAD, id=data_ID[oc_id], value=data[oc_id, key.data]), envir = .TMAPTOOLS_CACHE)
+		assign(".overCoverage", list(result=oc_res, call=callAD, id=data_ID[oc_id], value=data[oc_id, ][[key.data]]), envir = .TMAPTOOLS_CACHE)
 
 	}
 
