@@ -8,7 +8,8 @@
 set_projection(shp, projection = NA, current.projection = NA,
   overwrite.current.projection = FALSE)
 
-get_projection(shp, as.CRS = FALSE, guess.longlat = FALSE)
+get_projection(shp, as.CRS = FALSE, guess.longlat = FALSE,
+  output = c("character", "crs", "epsg", "CRS"))
 }
 \arguments{
 \item{shp}{shape object of class \code{\link[sp:Spatial]{Spatial}},

@@ -1,17 +1,26 @@
 library(sf)
-library(tmaptools)
+library(sp)
+library(raster)
+library(mapview)
+
+devtools::load_all(".")
 devtools::load_all("../tmap")
 
 
 data(World, rivers, metro, land)
 
-World@proj4string <- sp::CRS()
-
-
 W <- as(World, "sf")
 r <- as(rivers, "sf")
 m <- as(metro, "sf")
 landr <- as(land, "RasterBrick")
+
+
+
+x <- st_graticule(crs=st_crs(get_proj4("rds")))
+
+mapview(x)
+
+plot(x)
 
 
 qtm(World)
@@ -26,6 +35,13 @@ st_crs(World)
 
 
 st_crs(W2)
+
+bb = st_bbox(W)
+bbox = st_linestring(rbind(c( bb[1],bb[2]),c( bb[3],bb[2]),
+                           c( bb[3],bb[4]),c( bb[1],bb[4]),c( bb[1],bb[2])))
+
+g = st_graticule(st_bbox(W), crs=st_crs(W))
+
 
 
 

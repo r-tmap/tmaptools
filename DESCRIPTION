@@ -13,6 +13,7 @@ Depends:
     methods
 Imports:
     sp,
+    sf,
     grid,
     raster (>= 2.5-2),
     rgdal,
