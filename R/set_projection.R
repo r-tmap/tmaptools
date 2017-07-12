@@ -148,42 +148,26 @@ set_projection <- function(shp, projection=NA, current.projection=NA, overwrite.
 #' @name get_projection
 #' @rdname set_projection
 #' @export
-get_projection <- function(shp, as.CRS=FALSE, guess.longlat=FALSE) {
-	if (as.CRS) {
-		res <- if (inherits(shp, "Spatial")) {
-			attr(shp, "proj4string")
-		} else if (inherits(shp, "Raster")) {
-			attr(shp, "crs")
-		} else if (inherits(shp, c("sf", "sfc"))) {
-		    CRS(get_sf_proj(shp) )
-		} else {
-			stop("shp is neither a Spatial nor a Raster object")
-		}
+get_projection <- function(shp, as.CRS=FALSE, guess.longlat=FALSE,
+                           output = c("character", "crs", "epsg", "CRS")) {
+    p <- if (inherits(shp, c("sf", "sfc"))) {
+        st_crs(shp)
+    } else if (inherits(shp, "Spatial")) {
+        st_crs(attr(attr(shp, "proj4string"), "projargs"))
+    } else if (inherits(shp, "Raster")) {
+        st_crs(attr(attr(shp, "crs"), "projargs"))
+    } else {
+        stop("shp is neither a sf, sp, nor a raster object")
+    }
 
-		# check for missing values
-		if (is.na(res) && guess.longlat) {
-		    if (!is_projected(shp)) {
-	            .CRS_longlat
-		    } else
-		        CRS("")
-		} else res
-	} else {
-	    res <- if (inherits(shp, c("sf", "sfc"))) {
-	        get_sf_proj(shp)
-	    } else proj4string(shp)
+    output <- match.arg(output)
 
-	    # check for missing values
-	    if (is.na(res) && guess.longlat) {
-	        if (!is_projected(shp)) {
-	            attr(.CRS_longlat, "projargs")
-	        } else
-	            NA
-	    } else res
-	}
-}
-
-get_sf_proj <- function(shp) {
-    attr(shp[[attr(shp, "sf_column")]], "crs")$proj4string
+    switch(output,
+           character = p$proj4string,
+           crs = p,
+           epsg = p$epsg,
+           CRS = CRS(ifelse(is.na(p$proj4string), "", p$proj4string))
+    )
 }
 
 

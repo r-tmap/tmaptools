@@ -186,25 +186,37 @@ get_sf_bbox <- function(shp) {
     matrix(attr(shp[[attr(shp, "sf_column")]], "bbox"), ncol=2, dimnames = list(c("x", "y"), c("min", "max")))
 }
 
+sfbb <- function(bb) {
+    if (is.matrix(bb)) {
+        structure(as.vector(bb), names = c("xmin", "ymin", "xmax", "ymax"), class="bbox")
+    } else if (inherits(bb, "Extent")) {
+        structure(as.vector(bb)[c(1, 3, 2, 4)], names = c("xmin", "ymin", "xmax", "ymax"), class="bbox")
+    } else stop("bb not 2x2 matrix nor extent object")
+}
+
+
 get_bb <- function(x, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=NULL, ylim=NULL, current.projection=NULL) {
     if (is.character(x)) {
-        res <- geocode_OSM(x)
+        res <- as.vector(geocode_OSM(x)) #TODO
         b <- res$bbox
         cx <- res$coords[1]
         cy <- res$coords[2]
         current.projection <- .CRS_longlat
     } else if (inherits(x, "Extent")) {
-        b <- bbox(x)
-    } else if (inherits(x, c("Spatial", "Raster"))) {
-        b <- bbox(x)
-        current.projection <- get_projection(x, as.CRS = TRUE)
+        b <- sfbb(x)
+    } else if (inherits(x, "Raster")) {
+        b <- sfbb(attr(x, "extent"))
+        current.projection <- get_projection(x, output = "crs")
+    } else if (inherits(x, "Spatial")) {
+        b <- sfbb(attr(x, "bbox"))
+        current.projection <- get_projection(x, output = "crs")
     } else if (inherits(x, c("sf", "sfc"))) {
-        b <- get_sf_bbox(x)
-        current.projection <- get_projection(x, as.CRS = TRUE)
+        b <- st_bbox(x)
+        current.projection <- st_crs(x)
     } else if (is.matrix(x) && length(x)==4) {
-        b <- x
+        b <- sfbb(x)
     } else if (is.vector(x) && length(x)==4) {
-        b <- matrix(x, ncol=2, byrow=TRUE)
+        b <- structure(x, names = c("xmin", "ymin", "xmax", "ymax"), class="bbox")
     } else if (!is.na(x)[1]) {
         stop("Incorrect x argument")
     } else {
@@ -213,9 +225,9 @@ get_bb <- function(x, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=NULL, ylim
         ## create new bounding box
         if (is.null(xlim)) xlim <- cx + c(-.5, .5) * width
         if (is.null(ylim)) ylim <- cy + c(-.5, .5) * height
-        b <- matrix(c(xlim, ylim), ncol=2,nrow=2, byrow = TRUE)
+        b <- structure(c(xlim[1], ylim[1], xlim[2], ylim[2]), names = c("xmin", "ymin", "xmax", "ymax"), class="bbox")
     }
-    if (is.null(current.projection)) current.projection <- CRS("")
+    if (is.null(current.projection)) current.projection <- st_crs(NA)
     list(b=b,
          cx=cx,
          cy=cy,

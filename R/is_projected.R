@@ -11,10 +11,8 @@ is_projected <- function(x) {
     } else {
         if (inherits(x, c("Spatial", "sf", "sfc")))
             prj <- get_projection(x)
-        else if (is.character(x) || inherits(x, "CRS"))
-            prj <- get_proj4(x)
-        else
-            stop("x is not a Spatial/Raster/sf object nor a valid projection")
+        else prj <- get_proj4(x)
+
         proj4_is_projected(prj)
     }
     if (is.na(isP) && !is.character(x)) isP <- !maybe_longlat(get_bb(x)$b)
@@ -30,5 +28,5 @@ proj4_is_projected <- function(p) {
 
 
 maybe_longlat <- function(bb) {
-    (bb[1,1] >= -180.1 && bb[1,2] <= 180.1 && bb[2,1] >= -90.1 && bb[2,2] <= 90.1)
+    (bb[1] >= -180.1 && bb[3] <= 180.1 && bb[2] >= -90.1 && bb[4] <= 90.1)
 }

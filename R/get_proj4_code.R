@@ -5,6 +5,7 @@
 #' @param x a projection. One of:
 #' \enumerate{
 #'    \item{a \code{PROJ.4} character string}
+#'    \item{a \code{\link[sf:st_crs]{crs}} object}
 #'    \item{a \code{\link[sp:CRS]{CRS}} object}
 #'    \item{an EPSG code}
 #'    \item{one the following shortcuts codes:
@@ -26,13 +27,14 @@
 #'    	\item{\code{"rd"}}{Rijksdriehoekstelsel. Triangulation coordinate system used in the Netherlands.}
 #'    }}
 #' }
+#' @param output the output format of the projection, one of \code{"character"}, \code{"crs"},\code{"epsg"}, or \code{"CRS"}
 #' @param as.CRS should a CRS object be returned instead of a PROJ.4 character string? Default is \code{FALSE}.
 #'	@return validated PROJ.4 character string, or, if \code{as.CRS=TRUE} a \code{\link[sp:CRS]{CRS}} object.
 #'	@importFrom rgdal CRSargs make_EPSG checkCRSArgs
 #'	@import sp
 #'	@seealso \url{http://en.wikipedia.org/wiki/List_of_map_projections} for a overview of projections. \url{http://trac.osgeo.org/proj/} for the \code{PROJ.4} project home page. An extensive list of \code{PROJ.4} codes can be created with rgdal's \code{\link[rgdal:make_EPSG]{make_EPSG}}.
 #'	@export
-get_proj4 <- function(x, as.CRS=FALSE) {
+get_proj4 <- function(x, as.CRS=FALSE, output = c("character", "crs", "epsg", "CRS")) {
 	if (is.null(x)) {
 		return(NULL)
 	} else if (is.na(x)) {
@@ -48,7 +50,7 @@ get_proj4 <- function(x, as.CRS=FALSE) {
 			return(CRSargs(x))
 		}
 	} else if (!is.numeric(x) && !is.character(x)) {
-		stop("x is not a CRS, a character, not a number", call.=FALSE)
+		stop("x is not a character, CRS object, crs object, nor a number", call.=FALSE)
 	} else {
 		if (x %in% names(.proj_sc)) {
 			y <- unname(.proj_sc[x])
