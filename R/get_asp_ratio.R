@@ -29,8 +29,8 @@ get_asp_ratio <- function(x, is.projected = NA, width=700, height=700, res=100) 
 	        if (is.na(is.projected)) is.projected <- !maybe_longlat(bbx)
 	    }
 
-	    xlim <- bbx[1, ]
-	    ylim <- bbx[2, ]
+	    xlim <- bbx[c(1,3)]
+	    ylim <- bbx[c(2,4)]
 
 	    asp <- if (diff(xlim)==0 || diff(ylim)==0) {
 	        1
