@@ -15,6 +15,11 @@ m <- as(metro, "sf")
 landr <- as(land, "RasterBrick")
 
 
+approx_areas(World)
+approx_areas(W)
+
+st_area(W)
+
 
 x <- st_graticule(crs=st_crs(get_proj4("rds")))
 
