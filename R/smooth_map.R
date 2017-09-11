@@ -415,7 +415,7 @@ lines2polygons <- function(ply, lns, rst=NULL, lvls, extracting.method="full", b
 		ids <- cut(values, lvls, include.lowest=TRUE, right=FALSE, labels = FALSE)
 
 		if (any(is.na(ids))) stop("raster values not in range")
-		if (length(ids)==1) stop("Something went wrong. Probably threshold value too low.")
+		if (length(ids)==1) warning("Only one polygon created. Probably threshold value too low.")
 
 
 		res <- lapply(1:(length(lvls)-1), function(i) {
