@@ -212,8 +212,8 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 		} else {
 			norm_weight <- sum(shp[], na.rm=TRUE) / sum(r[], na.rm=TRUE)
 		}
-		r[] <- r[] * norm_weight / cell.area
-		x$fhat <- x$fhat * norm_weight / cell.area
+		r[] <- r[] * norm_weight #/ cell.area
+		x$fhat <- x$fhat * norm_weight #/ cell.area
 
 		#x$fhat[x$fhat < threshold] <- NA
 #browser()
