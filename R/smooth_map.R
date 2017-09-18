@@ -212,8 +212,8 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 		} else {
 			norm_weight <- sum(shp[], na.rm=TRUE) / sum(r[], na.rm=TRUE)
 		}
-		r[] <- r[] * norm_weight / cell.area
-		x$fhat <- x$fhat * norm_weight / cell.area
+		r[] <- r[] * norm_weight #/ cell.area
+		x$fhat <- x$fhat * norm_weight #/ cell.area
 
 		#x$fhat[x$fhat < threshold] <- NA
 #browser()
@@ -229,10 +229,14 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 		}
 
 		cl <- contourLines(x$x1, x$x2, x$fhat, levels=lvls)
-		if (length(cl) < 1L) stop("No iso lines found")
-		if (length(cl) > 10000) stop(paste("Number of iso lines over 10000:", length(cl)))
-		cl2 <- contour_lines_to_SLDF(cl, proj4string = CRS(prj))
-		if (thresLevel) levels(cl2$level) <- c(0, levels(cl2$level)[-1])
+		if (length(cl) < 1L) {
+		    warning("No iso lines found")
+		    cl2 <- NULL
+		} else {
+		    if (length(cl) > 10000) stop(paste("Number of iso lines over 10000:", length(cl)))
+		    cl2 <- contour_lines_to_SLDF(cl, proj4string = CRS(prj))
+		    if (thresLevel) levels(cl2$level) <- c(0, levels(cl2$level)[-1])
+		}
 
 		#cl2$levelNR <- as.numeric(as.character(cl2$level))
 	} else {
@@ -275,9 +279,14 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 
 	setTxtProgressBar(pb, .9)
 
-	lns <- SpatialLinesDataFrame(gIntersection(cover, cl2, byid = TRUE), data=cl2@data, match.ID = FALSE)
-	if (is_sf) lns <- as(lns, "sf")
-	attr(lns, "isolines") <- TRUE
+	if (!is.null(cl2)) {
+	    lns <- SpatialLinesDataFrame(gIntersection(cover, cl2, byid = TRUE), data=cl2@data, match.ID = FALSE)
+	    if (is_sf) lns <- as(lns, "sf")
+	    attr(lns, "isolines") <- TRUE
+	} else {
+	    lns <- NULL
+	}
+
 	setTxtProgressBar(pb, 1)
 
 	if (apply2kde && thresLevel) r[][r[]<threshold] <- NA
@@ -330,11 +339,12 @@ lines2polygons <- function(ply, lns, rst=NULL, lvls, extracting.method="full", b
 
 	# add a little width to lines
 	if (is.na(buffer.width)) buffer.width <- buffer_width(bb(ply))
-	suppressWarnings(blpi <- gBuffer(lns, width = buffer.width))
+
+	if (is.null(lns)) blpi <- NULL else suppressWarnings(blpi <- gBuffer(lns, width = buffer.width))
 	suppressWarnings(ply <- gBuffer(ply, width = 0))
 
 	# cut the poly with isolines
-	dpi <- gDifference(ply, blpi)
+	dpi <- if (is.null(lns)) ply else gDifference(ply, blpi)
 
 	if (missing(rst)) {
 		dpi
@@ -405,7 +415,7 @@ lines2polygons <- function(ply, lns, rst=NULL, lvls, extracting.method="full", b
 		ids <- cut(values, lvls, include.lowest=TRUE, right=FALSE, labels = FALSE)
 
 		if (any(is.na(ids))) stop("raster values not in range")
-		if (length(ids)==1) stop("Something went wrong. Probably threshold value too low.")
+		if (length(ids)==1) warning("Only one polygon created. Probably threshold value too low.")
 
 
 		res <- lapply(1:(length(lvls)-1), function(i) {
