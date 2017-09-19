@@ -7,12 +7,19 @@ devtools::load_all(".")
 devtools::load_all("../tmap")
 
 
-data(World, rivers, metro, land)
+data(World, rivers, metro, land, NLD_prov)
 
 W <- as(World, "sf")
 r <- as(rivers, "sf")
 m <- as(metro, "sf")
 landr <- as(land, "RasterBrick")
+
+
+N <- as(tmap::NLD_prov, "sf")
+
+
+approx_distan
+
 
 
 approx_areas(World)
