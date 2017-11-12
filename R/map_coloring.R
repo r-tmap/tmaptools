@@ -72,3 +72,16 @@ map_coloring <- function(x, algorithm="greedy", ncols=NA, minimize=FALSE, palett
 		cols
 	}
 }
+
+st_neighbours <- function(x) {
+    y <- st_intersects(x, x)
+    n <- length(y)
+
+    mapply(function(yi, i) {
+        setdiff(yi, i)
+    }, y, 1L:n, SIMPLIFY = FALSE)
+
+}
+
+
+

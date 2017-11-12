@@ -12,8 +12,7 @@ if (require(tmap)) {
         list(min_area=min(x),
              max_area=max(x),
              mean_area=mean(x),
-             sum_area=sum(x),
-             units=paste0(attr(x, "unit")))
+             sum_area=sum(x))
     }
 
     # area of the polygons
@@ -26,7 +25,7 @@ if (require(tmap)) {
     approx_areas(NLD_muni, target = "prop") %>% summary_areas()
 
     # area in squared miles
-    approx_areas(NLD_muni, target = "mi") %>% summary_areas()
+    approx_areas(NLD_muni, target = "mi^2") %>% summary_areas()
 
     # area of the polygons when unprojected
     approx_areas(NLD_muni %>% set_projection(projection="longlat")) %>% summary_areas()
