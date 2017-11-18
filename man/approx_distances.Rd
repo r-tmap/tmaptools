@@ -4,7 +4,7 @@
 \alias{approx_distances}
 \title{Approximate distances}
 \usage{
-approx_distances(x, y = NULL, projection = NULL, target = "metric")
+approx_distances(x, y = NULL, projection = NULL, target = NULL)
 }
 \arguments{
 \item{x}{object that can be coerced to a bounding box with \code{\link{bb}}, or a pair of coordintes (vector of two). In the former case, the distance across the horizontal and vertical centerlines of the bounding box are approximated. In the latter case, \code{y} is also required; the distance between points \code{x} amd \code{y} is approximated.}

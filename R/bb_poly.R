@@ -55,7 +55,7 @@ bb_earth <- function(projection=NULL, stepsize=1, earth.datum=4326, bbx=c(-180, 
 
     for (b in bs) {
         bbxb <- bbx + c(b, b, -b, -b)
-        world_bb_sf <- create_sf_rect(bbx=bbxb, stepsize = stepsize, id="world_bb", projection=crs_datum)
+        world_bb_sf <- create_sf_rect(bbx=bbxb, stepsize = stepsize, projection=crs_datum)
 
         res <- if (is.na(projection)) {
             world_bb_sf
@@ -79,7 +79,9 @@ bb_earth <- function(projection=NULL, stepsize=1, earth.datum=4326, bbx=c(-180, 
     if (!as.sf) as(res, "SpatialPolygons") else res
 }
 
-create_sf_rect <- function(bbx, stepsize, id="rect", projection) {
+create_sf_rect <- function(bbx, stepsize=NA, projection=NULL) {
+    if (is.null(projection)) projection <- st_crs(bbx)
+
     x1 <- bbx[1]
     x2 <- bbx[3]
     y1 <- bbx[2]
@@ -88,13 +90,21 @@ create_sf_rect <- function(bbx, stepsize, id="rect", projection) {
     dx <- x2-x1
     dy <- y2-y1
 
-    ny <- dy / stepsize + 1
-    nx <- dx / stepsize + 1
-    step <- stepsize
+    if (is.na(stepsize)) stepsize <- min(dx,dy) / 10
+
+    ny <- round(dy / stepsize + 1)
+    nx <- round(dx / stepsize + 1)
 
     crds <- matrix(c(
-        rep(x1, ny), rep(seq(x1+step, x2-step, by=step), length.out=nx-2), rep(x2, ny), rep(seq(x2-step, x1+step, by=-step), length.out=nx-2),
-        rep(seq(y1, y2, by=step), length.out=ny), rep(y2, nx-2), rep(seq(y2, y1, by=-step), length.out=ny), rep(y1, nx-2)), ncol=2)
+            rep(x1, ny),
+            seq(x1+stepsize, x2-stepsize, length.out=nx-2),
+            rep(x2, ny),
+            seq(x2-stepsize, x1+stepsize, length.out=nx-2),
+            seq(y1, y2, length.out=ny),
+            rep(y2, nx-2),
+            seq(y2, y1, length.out=ny),
+            rep(y1, nx-2)),
+        ncol=2)
 
     #x <- SpatialPolygons(list(Polygons(list(Polygon(coords=crds)), ID=id)), proj4string=get_proj4(projection, as.CRS = TRUE))
 

@@ -29,17 +29,10 @@ set_projection <- function(shp, projection=NA, current.projection=NA, overwrite.
 
 	cls <- class(shp)
 
+
 	is_sp <- inherits(shp, "Spatial")
 	is_sp_raster <- inherits(shp, c("SpatialGrid", "SpatialPixels"))
-
-
-	if (is_sp) {
-	    if (is_sp_raster) {
-	        shp <- brick(shp)
-	    } else {
-	        shp <- as(shp, "sf")
-	    }
-	}
+	if (is_sp) shp <- (if (is_sp_raster) brick(shp) else as(shp, "sf"))
 
 	shp.crs <- get_projection(shp, output="crs")
 	current.crs <- get_proj4(current.projection, output = "crs")
