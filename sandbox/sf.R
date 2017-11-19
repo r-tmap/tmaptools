@@ -100,6 +100,9 @@ st_polygon(list(matrix(c(1,2,3,4), ncol=2)))
 # crop
 
 
-land_europe <- crop_shape(land, Europe)
+data(Europe)
+land_europe <- crop_shape(land, Europe, polygon = T)
 qtm(land_europe)
+
+x <- smooth_raster_cover(land, var="trees")
 

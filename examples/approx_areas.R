@@ -25,7 +25,7 @@ if (require(tmap)) {
     approx_areas(NLD_muni, target = "prop") %>% summary_areas()
 
     # area in squared miles
-    approx_areas(NLD_muni, target = "mi^2") %>% summary_areas()
+    approx_areas(NLD_muni, target = "mi mi") %>% summary_areas()
 
     # area of the polygons when unprojected
     approx_areas(NLD_muni %>% set_projection(projection="longlat")) %>% summary_areas()

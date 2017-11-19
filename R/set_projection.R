@@ -139,7 +139,9 @@ set_projection <- function(shp, projection=NA, current.projection=NA, overwrite.
 		}
 	}
 
-	if (is_sp && !is_sp_raster) as(shp, cls) else shp
+	shp
+
+	#if (is_sp && !is_sp_raster) as(shp, cls) else shp
 }
 
 

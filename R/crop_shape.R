@@ -15,9 +15,11 @@
 #' @return cropped shape, in the same class as \code{x}
 crop_shape <- function(x, y, polygon = FALSE, ...) {
 
+    # get original names
     xname <- deparse(substitute(x))
     yname <- deparse(substitute(y))
 
+    # check and convert x (to sf or brick)
     is_sp <- inherits(x, "Spatial")
     is_sp_raster <- inherits(x, c("SpatialGrid", "SpatialPixels"))
     if (is_sp) x <- (if (is_sp_raster) brick(x) else as(x, "sf"))
@@ -25,9 +27,9 @@ crop_shape <- function(x, y, polygon = FALSE, ...) {
 
 	if (!inherits(x, c("sf", "sfc", "Raster"))) stop(xname, " is not a sf/Spatial/Raster object.", call.=FALSE)
 
-
 	px <- get_projection(x)
 
+	# check and convert y (to sf or brick)
 	is_sp_y <- inherits(y, "Spatial")
 	is_sp_raster_y <- inherits(y, c("SpatialGrid", "SpatialPixels"))
 	if (is_sp_y) y <- (if (is_sp_raster_y) brick(y) else as(y, "sf"))
@@ -60,7 +62,7 @@ crop_shape <- function(x, y, polygon = FALSE, ...) {
 	    if (inherits(y, "bbox")) y <- create_sf_rect(y)
 
         yunion <- st_union(y)
-
+        ## REQUIRE SP
         if (israsterx) {
             yunion <- as(yunion, "Spatial")
             x2 <- raster::trim(raster::mask(x, yunion))

@@ -10,7 +10,6 @@
 #' @param to multiplier used as follows: \code{orig * to = target}. Only needed when \code{orig} or \code{target} is unknown. For instance, if \code{target} is set to \code{"hm"} (hectameter), and \code{orig} is \code{"m"}, then \code{to} should be 100, meaning 1 hectameter equals 100 meters.
 #' @param show.warnings should warnings be shown?
 #' @return If \code{y} is specifyed, a list of two: unit and dist. Else, a list of three: unit, hdist (horizontal distance) and vdist (vertical distance).
-#' @importFrom geosphere distGeo
 #' @importFrom units set_units
 #' @example ./examples/approx_distances.R
 #' @seealso \code{\link{projection_units}} and \code{\link{approx_areas}}

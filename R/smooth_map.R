@@ -34,7 +34,6 @@
 #' \item{\code{"nrow"}}{Number of columns in the raster}
 #' }
 #' @importFrom raster raster extent couldBeLonLat extract extend rasterToContour brick nlayers fromDisk colortable projectExtent
-#' @importFrom rgdal SGDF2PCT
 #' @importMethodsFrom raster as.vector
 #' @importFrom rgeos gConvexHull gUnaryUnion gPointOnSurface gContains gIsValid gIntersection gArea gBuffer gDifference
 #' @importFrom KernSmooth bkde2D
@@ -330,11 +329,15 @@ contour_lines_to_SLDF <- function (cL, proj4string = CRS(as.character(NA)))
 
 
 buffer_width <- function(bbx) {
-	prod(bbx[,2] - bbx[,1]) / 1e12
+	prod(bbx[3:4] - bbx[1:2]) / 1e12
 }
 
 
 lines2polygons <- function(ply, lns, rst=NULL, lvls, extracting.method="full", buffer.width=NA) {
+
+    if (inherits(ply, c("sf", "sfc"))) ply <- as(ply, "Spatial")
+    if (inherits(lns, c("sf", "sfc"))) lns <- as(lns, "Spatial")
+
 	prj <- get_projection(ply)
 
 	# add a little width to lines

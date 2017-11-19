@@ -9,14 +9,13 @@
 #' @param palette color palette.
 #' @param contrast vector of two numbers that determine the range that is used for sequential and diverging palettes (applicable when \code{auto.palette.mapping=TRUE}). Both numbers should be between 0 and 1. The first number determines where the palette begins, and the second number where it ends. For sequential palettes, 0 means the brightest color, and 1 the darkest color. For diverging palettes, 0 means the middle color, and 1 both extremes. If only one number is provided, this number is interpreted as the endpoint (with 0 taken as the start).
 #' @return If \code{palette} is defined, a vector of colors is returned, otherwise a vector of color indices.
-#' @importFrom spdep poly2nb
 #' @example ./examples/map_coloring.R
 #' @export
 map_coloring <- function(x, algorithm="greedy", ncols=NA, minimize=FALSE, palette=NULL, contrast=1) {
-    if (inherits(x, c("sf", "sfc"))) x <- as(x, "Spatial")
-	if (inherits(x, "SpatialPolygons")) {
+    if (inherits(x, "Spatial")) x <- as(x, "sf")
+	if (inherits(x, "sf")) {
 		# get adjacency list
-		adj <- poly2nb(x)
+		adj <- st_neighbours(x)
 	} else if (is.list(x)) {
 		adj <- x
 	} else stop("Unknown x argument")

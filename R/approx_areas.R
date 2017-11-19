@@ -30,8 +30,11 @@ approx_areas <- function(shp, target="metric", total.area=NULL) {
     is_metric <- target=="metric"
     is_imperial <- target=="imperial"
 
-    if (is_metric) target <- "km^2"
-    if (is_imperial) target <- "mi^2"
+    if (is_metric) target <- "km km"
+    if (is_imperial) target <- "mi mi"
+
+    nct <- nchar(target)
+    if (substr(target, nct-1, nct) == "^2") target <- paste(substr(target, 1, nct-2), substr(target, 1, nct-2))
 
     if (inherits(shp, "Spatial")) shp <- as(shp, "sf")
 
@@ -42,8 +45,8 @@ approx_areas <- function(shp, target="metric", total.area=NULL) {
     } else if (target == "norm") {
         areas <- areas / max(areas)
     } else {
-        areas <- areas * parse_unit(target)
-        if (!missing(total.area)) {
+        areas <- set_units(areas, parse_unit(target))
+        if (!is.null(total.area)) {
             fact <- total.area / sum(areas)
             areas <- areas * fact
         }
