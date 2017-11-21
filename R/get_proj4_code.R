@@ -28,14 +28,13 @@
 #'    }}
 #' }
 #' @param output the output format of the projection, one of \code{"character"}, \code{"crs"},\code{"epsg"}, or \code{"CRS"}
-#' @param as.CRS should a CRS object be returned instead of a PROJ.4 character string? Default is \code{FALSE}.
-#'	@return validated PROJ.4 character string, or, if \code{as.CRS=TRUE} a \code{\link[sp:CRS]{CRS}} object.
+#'	@return see \code{output}
 #'	@importFrom rgdal CRSargs make_EPSG checkCRSArgs
 #'	@import sp
 #'	@import sf
 #'	@seealso \url{http://en.wikipedia.org/wiki/List_of_map_projections} for a overview of projections. \url{http://trac.osgeo.org/proj/} for the \code{PROJ.4} project home page. An extensive list of \code{PROJ.4} codes can be created with rgdal's \code{\link[rgdal:make_EPSG]{make_EPSG}}.
 #'	@export
-get_proj4 <- function(x, as.CRS=FALSE, output = c("crs", "character", "epsg", "CRS")) {
+get_proj4 <- function(x, output = c("crs", "character", "epsg", "CRS")) {
     output <- match.arg(output)
 	y <- if (is.null(x)) {
 		return(NULL)
