@@ -14,20 +14,24 @@
 #' @return Vector or data.frame (depending on whether \code{length(var)==1} with density values. This can be appended directly to the shape file with \code{\link{append_data}} with \code{fixed.order=TRUE}.
 #' @example ./examples/calc_densities.R
 #' @export
-calc_densities <- function(shp, var, target="metric", orig=NA, to=NA, total.area=NA, suffix=NA, drop=TRUE) {
+calc_densities <- function(shp, var, target="metric", total.area=NULL, suffix=NA, drop=TRUE) {
 	## calculate densities
-    if (inherits(shp, c("sf", "sfc"))) shp <- as(shp, "Spatial")
+    #if (inherits(shp, c("sf", "sfc"))) shp <- as(shp, "Spatial")
 
-	areas <- approx_areas(shp, target = target, orig = orig, to=to, total.area=total.area)
+    if (inherits(shp, "Spatial")) shp <- as(shp, "sf")
+
+	areas <- approx_areas(shp, target = target, total.area=total.area)
 
 	areas_unit <- attr(areas, "unit")
 
 	if (is.na(suffix)) suffix <- paste("_", sub(" ", replacement = "_", areas_unit), sep = "")
 
 	## calculate and return densities
-    if (length(var)==1 && drop) return(shp@data[[var]] / areas)
+	shp <- st_set_geometry(shp, NULL)
 
-    data <- as.data.frame(lapply(shp@data[, var, drop=FALSE], function(x)x/areas))
+    if (length(var)==1 && drop) return(shp[[var]] / areas)
+
+    data <- as.data.frame(lapply(shp[, var, drop=FALSE], function(x)x/areas))
 	names(data) <- paste(var, suffix, sep="")
 	data
 }

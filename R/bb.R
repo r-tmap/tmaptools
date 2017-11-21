@@ -174,7 +174,11 @@ bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=N
 	    is_prj <- if (is.na(current.projection))
 	        !maybe_longlat(b)
 	    else is_projected(current.projection)
+
+	    if (is.na(current.projection) && !is_prj) current.projection  <- .crs_longlat
 	}
+
+
 
 	## check if long lat coordinates are valid
 	if (!is_prj) {
@@ -182,6 +186,10 @@ bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=N
 	    b[3:4] <- pmin(b[3:4], c(180, 90))
 	}
 
+	if (!inherits(b, "bbox")) {
+	    b <- structure(b, names = c("xmin", "ymin", "xmax", "ymax"), class="bbox")
+	}
+	if (is.null(attr(b, "crs"))) attr(b, "crs") <- st_crs(current.projection)
 
 	if (as.extent) extent(b[c(1,3,2,4)]) else b
 }
