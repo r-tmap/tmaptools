@@ -1,7 +1,8 @@
 if (require(tmap)) {
     data(NLD_muni)
 
-    NLD_muni_pop_per_km2 <- calc_densities(NLD_muni, target = "km km", var = c("pop_men", "pop_women"))
+    NLD_muni_pop_per_km2 <- calc_densities(NLD_muni,
+        target = "km km", var = c("pop_men", "pop_women"))
     NLD_muni <- append_data(NLD_muni, NLD_muni_pop_per_km2, fixed=TRUE)
 
     tm_shape(NLD_muni) +

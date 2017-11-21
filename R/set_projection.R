@@ -15,7 +15,7 @@
 #' @param projection new projection. See \code{\link{get_proj4}} for options. This argument is only used to transform the \code{shp}. Use \code{current.projection} to specify the current projection of \code{shp}.
 #' @param current.projection the current projection of \code{shp}. See \code{\link{get_proj4}} for possible options. Only use this if the current projection is missing or wrong.
 #' @param overwrite.current.projection logical that determines whether the current projection is overwritten if it already has a projection that is different.
-#' @param as.crs should a CRS object be returned instead of a PROJ.4 character string? Default is \code{FALSE}.
+#' @param output output format of the projection. One of \code{"character"}, \code{"crs"} (from \code{sf} package), \code{"epsg"} or \code{"CRS"} (from \code{sp}/\code{rgdal} package)
 #' @param guess.longlat if \code{TRUE}, it checks if the coordinates are within -180/180 and -90/90, and if so, it returns the WGS84 longlat projection (which is \code{get_proj4("longlat")}).
 #' @name set_projection
 #' @rdname set_projection

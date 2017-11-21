@@ -23,7 +23,7 @@ get_projection(shp, guess.longlat = FALSE, output = c("character", "crs",
 
 \item{guess.longlat}{if \code{TRUE}, it checks if the coordinates are within -180/180 and -90/90, and if so, it returns the WGS84 longlat projection (which is \code{get_proj4("longlat")}).}
 
-\item{as.crs}{should a CRS object be returned instead of a PROJ.4 character string? Default is \code{FALSE}.}
+\item{output}{output format of the projection. One of \code{"character"}, \code{"crs"} (from \code{sf} package), \code{"epsg"} or \code{"CRS"} (from \code{sp}/\code{rgdal} package)}
 }
 \value{
 \code{set_projection} returns a (transformed) shape object with updated projection information. \code{get_projection} returns the \code{PROJ.4} character string of \code{shp}.
