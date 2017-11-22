@@ -24,7 +24,8 @@ approx_distances <- function(x, y = NULL, projection = NULL, target = NULL) {
     if (missing(y)) {
         if (!inherits(x, c("sf", "Spatial", "raster"))) {
             if (missing(projection)) {
-                stop("Please specify projection")
+                projection <- st_crs(NA)
+                #stop("Please specify projection")
             } else {
                 projection <- get_proj4(projection, output = "crs")
             }

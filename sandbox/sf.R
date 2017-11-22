@@ -15,7 +15,9 @@ m <- as(metro, "sf")
 landr <- as(land, "RasterBrick")
 
 
+x <- bb(c(0,0,500, 600))
 
+approx_distances(x)
 
 approx_distan
 

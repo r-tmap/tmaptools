@@ -15,16 +15,18 @@
 #' @param var.name Name of the variable that will be created to store the classes. The classes are defined by \code{vars}, and the labels can be configured with \code{var.labels}.
 #' @param var.labels Labels of the classes (see \code{var.name}).
 #' @param target target unit, see \code{\link{approx_areas}}
-#' @param orig original unit, see \code{\link{approx_areas}}
-#' @param to unit multiplier, see \code{\link{approx_areas}}
 #' @param randomize should the order of sampled dots be randomized? The dots are sampled class-wise (specified by \code{vars}). If this order is not randomized (so if \code{randomize=FALSE}), then the dots from the last class will be drawn on top, which may introduce a perception bias. By default \code{randomize=TRUE}, so the sampled dots are randomized to prevent this bias.
 #' @param output format of the output: use \code{"points"} for spatial points, and \code{"grid"} for a spatial grid.
+#' @param orig not used anymore as of version 2.0
+#' @param to not used anymore as of version 2.0
 #' @param ... other arguments passed on to \code{\link{calc_densities}} and \code{\link{approx_areas}}
 #' @export
 #' @example ./examples/sample_dots.R
 #' @importFrom raster raster extent rasterize couldBeLonLat crop
-sample_dots <- function(shp, vars=NULL, convert2density=FALSE, nrow=NA, ncol=NA, N=250000, npop=NA, n=10000, w=NA, shp.id=NULL, var.name="class", var.labels=vars, target="metric", orig=NA, to=NA, randomize=TRUE, output = c("points", "grid"), ...) {
+sample_dots <- function(shp, vars=NULL, convert2density=FALSE, nrow=NA, ncol=NA, N=250000, npop=NA, n=10000, w=NA, shp.id=NULL, var.name="class", var.labels=vars, target="metric", randomize=TRUE, output = c("points", "grid"), orig=NULL, to=NULL, ...) {
 	args <- list(...)
+
+	if (!missing(orig) || !missing(to)) warning("The arguments orig and to are not used anymore as of tmaptools version 2.0")
 
 	is_sf <- inherits(shp, c("sf", "sfc"))
 	if (is_sf) shp <- as(shp, "Spatial")
@@ -64,10 +66,10 @@ sample_dots <- function(shp, vars=NULL, convert2density=FALSE, nrow=NA, ncol=NA,
 		data[is.na(data)] <- 0
 	} else {
 		# calculate absolute values
-		if (!("total.area" %in% names(args)) && !projected) warning("unable to determine population total, unless total.area is specified.", call. = FALSE)
+		#if (!("total.area" %in% names(args)) && !projected) warning("unable to determine population total, unless total.area is specified.", call. = FALSE)
 		if (is.na(npop)) {
 			area_approx_args <- args[names(args) == "total.area"]
-			areas <- do.call("approx_areas", args = c(list(shp=shp, target=target, orig=orig, to=to), area_approx_args))
+			areas <- as.vector(do.call("approx_areas", args = c(list(shp=shp, target=target), area_approx_args)))
 
 			npop <- sum(rowSums(data) * areas)
 		}
