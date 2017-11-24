@@ -1,3 +1,6 @@
+version 1.2-2
+- improved smooth_map
+
 version 1.2-1
 - added threshold argument to smooth_map
 - fixed bug in approx_areas (all warnings now ignored when show.warnings=FALSE)
