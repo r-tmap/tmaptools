@@ -4,8 +4,8 @@
 \alias{calc_densities}
 \title{Calculate densities}
 \usage{
-calc_densities(shp, var, target = "metric", orig = NA, to = NA,
-  total.area = NA, suffix = NA, drop = TRUE)
+calc_densities(shp, var, target = "metric", total.area = NULL,
+  suffix = NA, drop = TRUE)
 }
 \arguments{
 \item{shp}{a shape object, i.e., a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}, or a \code{sf} object that can be coerced as such.}
@@ -14,15 +14,15 @@ calc_densities(shp, var, target = "metric", orig = NA, to = NA,
 
 \item{target}{the target unit, see \code{\link{approx_areas}}. Density values are calculated in \code{var/target^2}.}
 
-\item{orig}{original units, i.e. by which the coordinates are defined, see \code{\link{approx_areas}}.}
-
-\item{to}{multiplier used as follows: \code{orig * to = target}. See \code{\link{approx_areas}}.}
-
 \item{total.area}{total area size of \code{shp} in number of target units (defined by \code{unit}), \code{\link{approx_areas}}.}
 
 \item{suffix}{character that is appended to the variable names. The resulting names are used as column names of the returned data.frame. By default, \code{_sq_<target>}, where target corresponds to the target unit, e.g. \code{_sq_km}}
 
 \item{drop}{boolean that determines whether an one-column data-frame should be returned as a vector}
+
+\item{orig}{original units, i.e. by which the coordinates are defined, see \code{\link{approx_areas}}.}
+
+\item{to}{multiplier used as follows: \code{orig * to = target}. See \code{\link{approx_areas}}.}
 }
 \value{
 Vector or data.frame (depending on whether \code{length(var)==1} with density values. This can be appended directly to the shape file with \code{\link{append_data}} with \code{fixed.order=TRUE}.
@@ -34,11 +34,11 @@ Transpose quantitative variables to densitiy variables, which are often needed f
 if (require(tmap)) {
     data(NLD_muni)
 
-    NLD_muni_pop_per_km2 <- calc_densities(NLD_muni, target = "km", var = c("pop_men", "pop_women"))
+    NLD_muni_pop_per_km2 <- calc_densities(NLD_muni, target = "km km", var = c("pop_men", "pop_women"))
     NLD_muni <- append_data(NLD_muni, NLD_muni_pop_per_km2, fixed=TRUE)
 
     tm_shape(NLD_muni) +
-    	tm_polygons(c("pop_men_sq_km", "pop_women_sq_km"),
+    	tm_polygons(c("pop_women_km^2", "pop_women_km^2"),
             title=expression("Population per " * km^2), style="quantile") +
     tm_facets(free.scales = FALSE) +
     tm_layout(panel.show = TRUE, panel.labels=c("Men", "Women"))

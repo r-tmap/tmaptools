@@ -5,6 +5,7 @@
 #' @param x a projection. One of:
 #' \enumerate{
 #'    \item{a \code{PROJ.4} character string}
+#'    \item{a \code{\link[sf:st_crs]{crs}} object}
 #'    \item{a \code{\link[sp:CRS]{CRS}} object}
 #'    \item{an EPSG code}
 #'    \item{one the following shortcuts codes:
@@ -26,49 +27,44 @@
 #'    	\item{\code{"rd"}}{Rijksdriehoekstelsel. Triangulation coordinate system used in the Netherlands.}
 #'    }}
 #' }
+#' @param output the output format of the projection, one of \code{"character"}, \code{"crs"},\code{"epsg"}, or \code{"CRS"}
 #' @param as.CRS should a CRS object be returned instead of a PROJ.4 character string? Default is \code{FALSE}.
 #'	@return validated PROJ.4 character string, or, if \code{as.CRS=TRUE} a \code{\link[sp:CRS]{CRS}} object.
 #'	@importFrom rgdal CRSargs make_EPSG checkCRSArgs
 #'	@import sp
+#'	@import sf
 #'	@seealso \url{http://en.wikipedia.org/wiki/List_of_map_projections} for a overview of projections. \url{http://trac.osgeo.org/proj/} for the \code{PROJ.4} project home page. An extensive list of \code{PROJ.4} codes can be created with rgdal's \code{\link[rgdal:make_EPSG]{make_EPSG}}.
 #'	@export
-get_proj4 <- function(x, as.CRS=FALSE) {
-	if (is.null(x)) {
+get_proj4 <- function(x, as.CRS=FALSE, output = c("crs", "character", "epsg", "CRS")) {
+    output <- match.arg(output)
+	y <- if (is.null(x)) {
 		return(NULL)
 	} else if (is.na(x)) {
-		if (as.CRS) {
-			return(CRS(as.character(NA), doCheckCRSArgs=FALSE))
-		} else {
-			return(NA)
-		}
+		sf::st_crs()
+	} else if (inherits(x, "crs")) {
+	    x
 	} else if (inherits(x, "CRS")) {
-		if (as.CRS) {
-			return(x)
-		} else {
-			return(CRSargs(x))
-		}
+	    sf::st_crs(attr(x, "projargs"))
 	} else if (!is.numeric(x) && !is.character(x)) {
-		stop("x is not a CRS, a character, not a number", call.=FALSE)
+		stop("x is not a character, crs object, CRS object, nor a number", call.=FALSE)
 	} else {
 		if (x %in% names(.proj_sc)) {
-			y <- unname(.proj_sc[x])
-			check_args <- FALSE
+			sf::st_crs(unname(.proj_sc[x]))
 		} else if (is_num_string(x)) {
-			ycheck <- checkCRSArgs(paste("+init=epsg:", x, sep=""))
-			if (!ycheck[[1]]) stop("unknown EPSG code")
-			y <- ycheck[[2]]
-			check_args <- FALSE
+		    sf::st_crs(x)
 		} else if (substr(x, 1, 3)=="utm") {
 		    if (!(nchar(x) %in% c(5,6))) stop("\"utm\" shortcut code should be utmXX or utmXXs where XX refers to the utm zone")
-			y <- paste("+proj=utm +zone=", substr(x, 4, 5), ifelse(substr(x, 6, 6)=="s", " +south", ""), " +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0", sep="")
-			check_args <- TRUE
+			sf::st_crs(paste("+proj=utm +zone=", substr(x, 4, 5), ifelse(substr(x, 6, 6)=="s", " +south", ""), " +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0", sep=""))
 		} else {
-			y <- x
-			check_args <- TRUE
+			sf::st_crs(x)
 		}
 	}
-	z <- CRS(y, doCheckCRSArgs = check_args)
-	if (as.CRS) z else CRSargs(z)
+
+	switch(output,
+	       character = y$proj4string,
+	       crs = y,
+	       epsg = y$epsg,
+	       CRS = CRS(ifelse(is.na(y$proj4string), "", y$proj4string)))
 }
 
 is_num_string <- function(x) {

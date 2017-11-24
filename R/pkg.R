@@ -9,7 +9,7 @@
 #' \code{\link{approx_areas}}\tab Approximate area sizes of polygons \cr
 #' \code{\link{approx_distances}}\tab Approximate distances \cr
 #' \code{\link{bb}}\tab Create, extract or modify a bounding box \cr
-#' \code{\link{bb_sp}}\tab Convert bounding box to a spatial polygon \cr
+#' \code{\link{bb_poly}}\tab Convert bounding box to a polygon \cr
 #' \code{\link{get_asp_ratio}}\tab Get the aspect ratio of a shape object \cr
 #' \code{\link{get_IDs}}\tab Get ID values of a shape object \cr
 #' \code{\link{is_projected}}\tab Check if the map is projected \cr

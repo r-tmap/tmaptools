@@ -5,7 +5,7 @@
 #' This function is similar to \code{\link[raster:crop]{crop}} from the \code{raster} package. The main difference is that \code{crop_shape} also allows to crop using a polygon instead of a rectangle.
 #'
 #' @param x shape object, i.e. an object from class \code{\link[sp:Spatial]{Spatial-class}}, \code{\link[raster:Raster-class]{Raster}}, or \code{sf}.
-#' @param y bounding box (2 by 2 matrix), an \code{\link[raster:extent]{extent}}, or a shape object from which the bounding box is extracted (unless \code{polygon} is \code{TRUE} and \code{x} is a \code{SpatialPolygons} object).
+#' @param y bounding box, an \code{\link[raster:extent]{extent}}, or a shape object from which the bounding box is extracted (unless \code{polygon} is \code{TRUE} and \code{x} is a \code{SpatialPolygons} object).
 #' @param polygon should \code{x} be cropped by the polygon defined by \code{y}? If \code{FALSE} (default), \code{x} is cropped by the bounding box of \code{x}. Polygon cropping only works when \code{x} is a spatial object and \code{y} is a \code{SpatialPolygons} object.
 #' @param ... arguments passed on to \code{\link[raster:crop]{crop}}
 #' @export
@@ -14,23 +14,31 @@
 #' @example ./examples/crop_shape.R
 #' @return cropped shape, in the same class as \code{x}
 crop_shape <- function(x, y, polygon = FALSE, ...) {
-    is_sf <- inherits(x, c("sf", "sfc"))
 
-	xname <- deparse(substitute(x))
-	yname <- deparse(substitute(y))
+    # get original names
+    xname <- deparse(substitute(x))
+    yname <- deparse(substitute(y))
 
-	if (is_sf) x <- as(x, "Spatial")
+    # check and convert x (to sf or brick)
+    is_sp <- inherits(x, "Spatial")
+    is_sp_raster <- inherits(x, c("SpatialGrid", "SpatialPixels"))
+    if (is_sp) x <- (if (is_sp_raster) brick(x) else as(x, "sf"))
+    israsterx <- inherits(x, "Raster")
 
-	if (!inherits(x, c("Spatial", "Raster"))) stop(xname, " is not a Spatial/Raster/sf object.", call.=FALSE)
+	if (!inherits(x, c("sf", "sfc", "Raster"))) stop(xname, " is not a sf/Spatial/Raster object.", call.=FALSE)
 
 	px <- get_projection(x)
 
-	polycut <- polygon && inherits(y, "SpatialPolygons") # && !inherits(x, c("Raster", "SpatialGrid"))
+	# check and convert y (to sf or brick)
+	is_sp_y <- inherits(y, "Spatial")
+	is_sp_raster_y <- inherits(y, c("SpatialGrid", "SpatialPixels"))
+	if (is_sp_y) y <- (if (is_sp_raster_y) brick(y) else as(y, "sf"))
+	israstery <- inherits(y, "Raster")
 
-	israsterx <- inherits(x, c("Raster", "SpatialGrid"))
+	polycut <- polygon && !israstery # && !inherits(x, c("Raster", "SpatialGrid"))
 
-	if (inherits(y, c("Spatial", "Raster", "sf"))) {
-	    if (inherits(y, c("sf", "sfc"))) y <- as(y, "Spatial")
+
+	if (inherits(y, c("Raster", "sf"))) {
 		py <- get_projection(y)
 
 		# align projections
@@ -40,53 +48,33 @@ crop_shape <- function(x, y, polygon = FALSE, ...) {
 			}
 		}
 		if (!polycut) {
-			y <- bb(y, as.extent = TRUE)
+			y <- bb(y)
 		}
 	} else {
 	    y <- tryCatch({
-	        bb(y, as.extent = TRUE)
+	        bb(y)
 	    }, error=function(e){
 	        stop(yname, " is not a shape and cannot be coerced by bb")
 	    })
 	}
 
-	# sp objects are cast to rasters for fast crop method
-	sp2r2sp <- inherits(x, "SpatialGrid")# && !polycut
-
-	hasData <- ("data" %in% slotNames(x))
-
-	if (sp2r2sp) x <- brick(x)
-
 	if (polycut) {
-        yunion <- gUnaryUnion(y)
+	    if (inherits(y, "bbox")) y <- create_sf_rect(y)
 
-        if (inherits(x, "SpatialPoints")) {
-          ids <- over(x, yunion)
-          x2 <- x[!is.na(ids), ]
-        } else if (inherits(x, "Spatial")) {
-          x2 <- gIntersection(x, yunion, byid = TRUE, id=as.character(1e9 + 1:length(x)))
-          if (hasData) {
-            ids <- as.integer(get_IDs(x2))
-            if (inherits(x, "SpatialPolygons")) {
-              x2 <- SpatialPolygonsDataFrame(x2, x@data[ids-1e9, ], match.ID = FALSE)
-            } else if (inherits(x, "SpatialLines")) {
-              x2 <- SpatialLinesDataFrame(x2, x@data[ids-1e9, ], match.ID = FALSE)
-            }
-          }
+        yunion <- st_union(y)
+        ## REQUIRE SP
+        if (israsterx) {
+            yunion <- as(yunion, "Spatial")
+            x2 <- raster::trim(raster::mask(x, yunion))
         } else {
-            # x has to be raster
-            x2 <- raster::trim(raster::mask(x, y))
+            x2 <- st_intersection(x, yunion)
         }
+
 	} else {
 	  # bounding box crop (suppress warnings, because projections may not be perfectly identical)
-	  x2 <- suppressWarnings(crop(x, y, ...))
-
-	  if (sp2r2sp) {
-	    if (hasData) data <- get_raster_data(x2)
-	    x2 <- as(x2, "SpatialGrid")
-	    if (hasData) x2 <- SpatialGridDataFrame(x2, data=data)
-	  }
+	    y <- bb(y, as.extent = TRUE)
+        x2 <- suppressWarnings(crop(x, y, ...))
 	}
 
-	if (is_sf) as(x2, "sf") else x2
+	x2
 }

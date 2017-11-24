@@ -15,7 +15,7 @@
 #' @param projection new projection. See \code{\link{get_proj4}} for options. This argument is only used to transform the \code{shp}. Use \code{current.projection} to specify the current projection of \code{shp}.
 #' @param current.projection the current projection of \code{shp}. See \code{\link{get_proj4}} for possible options. Only use this if the current projection is missing or wrong.
 #' @param overwrite.current.projection logical that determines whether the current projection is overwritten if it already has a projection that is different.
-#' @param as.CRS should a CRS object be returned instead of a PROJ.4 character string? Default is \code{FALSE}.
+#' @param as.crs should a CRS object be returned instead of a PROJ.4 character string? Default is \code{FALSE}.
 #' @param guess.longlat if \code{TRUE}, it checks if the coordinates are within -180/180 and -90/90, and if so, it returns the WGS84 longlat projection (which is \code{get_proj4("longlat")}).
 #' @name set_projection
 #' @rdname set_projection
@@ -27,64 +27,62 @@
 set_projection <- function(shp, projection=NA, current.projection=NA, overwrite.current.projection=FALSE) {
 	shp.name <- deparse(substitute(shp))
 
-	is_sf <- inherits(shp, c("sf", "sfc"))
-	if (is_sf) shp <- as(shp, "Spatial")
+	cls <- class(shp)
 
-	shp.CRS <- get_projection(shp, as.CRS = TRUE)
-	current.CRS <- get_proj4(current.projection, as.CRS=TRUE)
-	proj.CRS <- get_proj4(projection, as.CRS=TRUE)
 
-	if (is.na(shp.CRS)) {
-		if (is.na(current.CRS)) {
+	is_sp <- inherits(shp, "Spatial")
+	is_sp_raster <- inherits(shp, c("SpatialGrid", "SpatialPixels"))
+	if (is_sp) shp <- (if (is_sp_raster) brick(shp) else as(shp, "sf"))
+
+	shp.crs <- get_projection(shp, output="crs")
+	current.crs <- get_proj4(current.projection, output = "crs")
+	proj.crs <- get_proj4(projection, output = "crs")
+
+	if (is.na(shp.crs)) {
+		if (is.na(current.crs)) {
 			stop("Currect projection of shape object unknown. Please specify the argument current.projection. The value \"longlat\", which stands for Longitude-latitude (WGS84), is most commonly used.")
 		} else {
-			if (inherits(shp, "Spatial")) {
-				shp@proj4string <- current.CRS
+			if (inherits(shp, "sf")) {
+				st_crs(shp) <- current.crs
 			} else {
-				shp@crs <- current.CRS
+				shp@crs <- get_proj4(current.crs, output = "CRS")
 			}
 			#current.projection <- current.proj4
 		}
 	} else {
-		if (!is.na(current.CRS)) {
-			if (identical(current.CRS, shp.CRS)) {
+		if (!is.na(current.crs)) {
+			if (identical(current.crs, shp.crs)) {
 				warning("Current projection of ", shp.name, " already known.", call. = FALSE)
 			} else {
 				if (overwrite.current.projection) {
-					warning("Current projection of ", shp.name, " differs from ", CRSargs(current.CRS), ", but is overwritten.", call. = FALSE)
-					if (inherits(shp, "Spatial")) {
-						shp@proj4string <- current.CRS
+					warning("Current projection of ", shp.name, " differs from ", current.crs$proj4string, ", but is overwritten.", call. = FALSE)
+					if (inherits(shp, "sf")) {
+					    st_crs(shp) <- current.crs
 					} else {
-						shp@crs <- current.CRS
+						shp@crs <- get_proj4(current.crs, output = "CRS")
 					}
 
 				} else {
-					stop(shp.name, " already has projection: ", CRSargs(shp.CRS), ". This is different from the specified current projection ", CRSargs(current.CRS), ". If the specified projection is correct, use overwrite.current.projection=TRUE.", call. = FALSE)
+					stop(shp.name, " already has projection: ", shp.crs$proj4string, ". This is different from the specified current projection ", current.crs$proj4string, ". If the specified projection is correct, use overwrite.current.projection=TRUE.", call. = FALSE)
 				}
 			}
 		} else {
-			current.CRS <- shp.CRS
+			current.crs <- shp.crs
 		}
 	}
 
 
-	if (!is.na(proj.CRS)) {
+	if (!is.na(proj.crs)) {
 		PROJ4_version_nr <- get_proj4_version()
 
-		if (length(grep("+proj=wintri", CRSargs(current.CRS), fixed = TRUE)) && PROJ4_version_nr < 491) {
+		if (length(grep("+proj=wintri", current.crs$proj4string, fixed = TRUE)) && PROJ4_version_nr < 491) {
 			stop("Unable to reproject a shape from the Winkel Tripel projection with PROJ.4 version < 4.9.1")
 		}
 
-		cls <- class(shp)
-
-		if (inherits(shp, c("SpatialGrid", "SpatialPixels"))) {
-			shp <- brick(shp)
-			recast <- TRUE
-		} else {
-			recast <- FALSE
-		}
 
 		if (inherits(shp, "Raster")) {
+		    proj.CRS <- get_proj4(proj.crs, output = "CRS")
+
 			#raster_data <- get_raster_data(shp)
 			has_color_table <- (length(colortable(shp))>0)
 
@@ -128,62 +126,48 @@ set_projection <- function(shp, projection=NA, current.projection=NA, overwrite.
 			# shp@data@attributes <- dfs
 		} else {
 			shp <- tryCatch({
-				spTransform(shp, proj.CRS)
+				st_transform(shp, proj.crs)
 			}, error=function(e) {
-				stop("Unable to set the projection to ", CRSargs(proj.CRS), ".", call.=FALSE)
+				stop("Unable to set the projection to ", proj.crs$proj4string, ".", call.=FALSE)
 			}, warning=function(w){
 				NULL
 			})
 		}
-		if (recast) {
+		if (is_sp_raster) {
 			shp <- as(shp, cls)
 			names(shp) <- names(isnum)
 		}
 	}
 
-	if (is_sf) as(shp, "sf") else shp
+	shp
+
+	#if (is_sp && !is_sp_raster) as(shp, cls) else shp
 }
 
 
 #' @name get_projection
 #' @rdname set_projection
 #' @export
-get_projection <- function(shp, as.CRS=FALSE, guess.longlat=FALSE) {
-	if (as.CRS) {
-		res <- if (inherits(shp, "Spatial")) {
-			attr(shp, "proj4string")
-		} else if (inherits(shp, "Raster")) {
-			attr(shp, "crs")
-		} else if (inherits(shp, c("sf", "sfc"))) {
-		    CRS(get_sf_proj(shp) )
-		} else {
-			stop("shp is neither a Spatial nor a Raster object")
-		}
+get_projection <- function(shp, guess.longlat=FALSE,
+                           output = c("character", "crs", "epsg", "CRS")) {
+    p <- if (inherits(shp, c("sf", "sfc"))) {
+        st_crs(shp)
+    } else if (inherits(shp, "Spatial")) {
+        st_crs(attr(attr(shp, "proj4string"), "projargs"))
+    } else if (inherits(shp, "Raster")) {
+        st_crs(attr(attr(shp, "crs"), "projargs"))
+    } else {
+        stop("shp is neither a sf, sp, nor a raster object")
+    }
 
-		# check for missing values
-		if (is.na(res) && guess.longlat) {
-		    if (!is_projected(shp)) {
-	            .CRS_longlat
-		    } else
-		        CRS("")
-		} else res
-	} else {
-	    res <- if (inherits(shp, c("sf", "sfc"))) {
-	        get_sf_proj(shp)
-	    } else proj4string(shp)
+    output <- match.arg(output)
 
-	    # check for missing values
-	    if (is.na(res) && guess.longlat) {
-	        if (!is_projected(shp)) {
-	            attr(.CRS_longlat, "projargs")
-	        } else
-	            NA
-	    } else res
-	}
-}
-
-get_sf_proj <- function(shp) {
-    attr(shp[[attr(shp, "sf_column")]], "crs")$proj4string
+    switch(output,
+           character = p$proj4string,
+           crs = p,
+           epsg = p$epsg,
+           CRS = CRS(ifelse(is.na(p$proj4string), "", p$proj4string))
+    )
 }
 
 

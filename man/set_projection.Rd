@@ -8,7 +8,8 @@
 set_projection(shp, projection = NA, current.projection = NA,
   overwrite.current.projection = FALSE)
 
-get_projection(shp, as.CRS = FALSE, guess.longlat = FALSE)
+get_projection(shp, guess.longlat = FALSE, output = c("character", "crs",
+  "epsg", "CRS"))
 }
 \arguments{
 \item{shp}{shape object of class \code{\link[sp:Spatial]{Spatial}},
@@ -20,9 +21,9 @@ get_projection(shp, as.CRS = FALSE, guess.longlat = FALSE)
 
 \item{overwrite.current.projection}{logical that determines whether the current projection is overwritten if it already has a projection that is different.}
 
-\item{as.CRS}{should a CRS object be returned instead of a PROJ.4 character string? Default is \code{FALSE}.}
-
 \item{guess.longlat}{if \code{TRUE}, it checks if the coordinates are within -180/180 and -90/90, and if so, it returns the WGS84 longlat projection (which is \code{get_proj4("longlat")}).}
+
+\item{as.crs}{should a CRS object be returned instead of a PROJ.4 character string? Default is \code{FALSE}.}
 }
 \value{
 \code{set_projection} returns a (transformed) shape object with updated projection information. \code{get_projection} returns the \code{PROJ.4} character string of \code{shp}.

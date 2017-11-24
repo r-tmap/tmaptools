@@ -55,12 +55,12 @@ bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=N
 
     ## impute cx and cy
     if (!is.character(x)) {
-		if (is.null(cx)) cx <- mean(b[1,])
-		if (is.null(cy)) cy <- mean(b[2,])
+		if (is.null(cx)) cx <- mean(b[c(1,3)])
+		if (is.null(cy)) cy <- mean(b[c(2,4)])
 	}
 
     ## translate ext to width and height
-	steps <- b[, 2] - b[, 1]
+	steps <- b[3:4] - b[1:2]
 	if (!missing(ext)) {
 		relative <- TRUE
 		if (ext > 0) {
@@ -84,39 +84,38 @@ bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=N
 	## modify bb
 	if (relative) {
 		xlim <- if (!is.null(xlim)) {
-			b[1,1] + xlim * steps[1]
+			b[1] + xlim * steps[1]
 		} else if (!is.null(width)) {
 			c(cx - (width/2) * steps[1],
 			  cx + (width/2) * steps[1])
 		} else {
-			b[1, ]
+			b[c(1,3)]
 		}
 		ylim <- if (!is.null(ylim)) {
-			b[2,1] + ylim * steps[2]
+			b[2] + ylim * steps[2]
 		} else if (!is.null(height)) {
 			c(cy - (height/2) * steps[2],
 			  cy + (height/2) * steps[2])
 		} else {
-			b[2, ]
+			b[c(2,4)]
 		}
 	} else {
 		if (!is.null(width)) {
 			xlim <- c(cx - (width/2),
 					  cx + (width/2))
 		} else if (is.null(xlim)) {
-			xlim <- b[1, ]
+			xlim <- b[c(1,3)]
 		}
 		if (!is.null(height)) {
 			ylim <- c(cy - (height/2),
 					  cy + (height/2))
 		} else if (is.null(ylim)) {
-			ylim <- b[2, ]
+			ylim <- b[c(2,4)]
 		}
 	}
 
 	## create bb
-	b <- matrix(c(xlim, ylim), ncol = 2, byrow=TRUE,
-		   dimnames=list(c("x", "y"), c("min", "max")))
+	b <- c(xlim[1], ylim[1], xlim[2], ylim[2])
 
 	## reproject bb
 	if (!missing(projection)) {
@@ -128,83 +127,110 @@ bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=N
 				stop("Current projection unknown. Please specify the projection.")
 			}
 			warning("Current projection unknown. Long lat coordinates (wgs84) assumed.", call. = FALSE)
-			current.projection <- .CRS_longlat
-		} else current.projection <- get_proj4(current.projection, as.CRS = TRUE)
-		projection <- get_proj4(projection, as.CRS = TRUE)
+			current.projection <- .crs_longlat
+		} else current.projection <- get_proj4(current.projection, output = "crs")
+		projection <- get_proj4(projection, output = "crs")
 
-	    sp_poly <- as(extent(b), "SpatialPolygons")
-	    attr(sp_poly, "proj4string") <- current.projection
+		sf_poly <- sf::st_sfc(sf::st_polygon(list(matrix(c(b[1], b[2], b[1], b[4], b[3], b[4], b[3], b[2], b[1], b[2]), byrow = TRUE, ncol = 2))), crs=current.projection)
 
 	    # STEP 1: try to cut the bounding box, such that it is feasible (i.e. corresponding to lon between -180 and 180 and lat between -90 and 90)
 	    earth_end <- suppressWarnings(bb_earth(projection=current.projection))
 
 	    if (is.null(earth_end)) {
-	        sp_poly2 <- sp_poly
+	        sf_poly2 <- sf_poly
 	    } else {
-	        sp_poly2 <- tryCatch({
-	            gIntersection(sp_poly, earth_end)
+	        sf_poly2 <- tryCatch({
+	            sf::st_intersection(sf_poly, earth_end)
 	        }, error=function(e){
-	            sp_poly
+	            sf_poly
 	        })
-	        if (is.null(sp_poly2) || !inherits(sp_poly2, "SpatialPolygons")) sp_poly2 <- sp_poly
+	        if (is.null(sf_poly2) || !inherits(sf_poly2, "sf") || length(sf_poly2) == 0) sf_poly2 <- sf_poly
 	    }
 
 	    # STEP 2: Extract the bounding box corner points and add intermediate points, which can be needed since the exterme values may not be corner points once they are projected. Create a SpatialPoints objects from these points.
-	    co <- sp_poly2@polygons[[1]]@Polygons[[1]]@coords
+	    co <- sf::st_coordinates(sf_poly2)[,1:2]
 	    co2 <- apply(co, 2, function(v) {
 	        n <- length(v)
 	        c(v[1], rep(v[-n], each=4) + as.vector(sapply((v[-1] - v[-n]) / 4, function(w)cumsum(rep(w,4)))))
 	    })
-	    sp_pnts <- SpatialPoints(co2, proj4string = current.projection)
+
+	    sf_pnts <- sf::st_sfc(sf::st_multipoint(co2), crs=current.projection)
+
 
 	    # STEP 3: Reproject SpatialPoints object
 	    tryCatch({
-	        sp_pnts2_prj <- set_projection(sp_pnts, projection=projection)
+	        sf_pnts2_prj <- sf::st_transform(sf_pnts, crs=projection)
 	    }, error=function(e) {
 	        stop("Something went wrong with the bounding box. Please check the projection.", call.=FALSE)
 	    })
 
 	    # STEP 4: Get bounding box of reprojected object
-	    b <- sp_pnts2_prj@bbox
-	    dimnames(b) <- list(c("x", "y"), c("min", "max"))
-	    is_prj <- is_projected(attr(projection, "projargs"))
+
+
+
+	    b <- sf::st_bbox(sf_pnts2_prj)
+	    is_prj <- is_projected(projection)
 	} else {
 	    is_prj <- if (is.na(current.projection))
 	        !maybe_longlat(b)
-	    else is_projected(get_proj4(current.projection, as.CRS = FALSE))
+	    else is_projected(current.projection)
+
+	    if (is.na(current.projection) && !is_prj) current.projection  <- .crs_longlat
 	}
+
+
 
 	## check if long lat coordinates are valid
 	if (!is_prj) {
-	    b[,1] <- pmax(b[,1], c(-180, -90))
-	    b[,2] <- pmin(b[,2], c(180, 90))
+	    b[1:2] <- pmax(b[1:2], c(-180, -90))
+	    b[3:4] <- pmin(b[3:4], c(180, 90))
 	}
-	if (as.extent) extent(b) else b
+
+	if (!inherits(b, "bbox")) {
+	    b <- structure(b, names = c("xmin", "ymin", "xmax", "ymax"), class="bbox")
+	}
+	if (is.null(attr(b, "crs"))) attr(b, "crs") <- st_crs(current.projection)
+
+	if (as.extent) extent(b[c(1,3,2,4)]) else b
 }
 
 get_sf_bbox <- function(shp) {
     matrix(attr(shp[[attr(shp, "sf_column")]], "bbox"), ncol=2, dimnames = list(c("x", "y"), c("min", "max")))
 }
 
+sfbb <- function(bb) {
+    if (is.matrix(bb)) {
+        structure(as.vector(bb), names = c("xmin", "ymin", "xmax", "ymax"), class="bbox")
+    } else if (inherits(bb, "Extent")) {
+        structure(as.vector(bb)[c(1, 3, 2, 4)], names = c("xmin", "ymin", "xmax", "ymax"), class="bbox")
+    } else stop("bb not 2x2 matrix nor extent object")
+}
+
+
 get_bb <- function(x, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=NULL, ylim=NULL, current.projection=NULL) {
     if (is.character(x)) {
-        res <- geocode_OSM(x)
+        res <- as.vector(geocode_OSM(x)) #TODO
         b <- res$bbox
         cx <- res$coords[1]
         cy <- res$coords[2]
         current.projection <- .CRS_longlat
     } else if (inherits(x, "Extent")) {
-        b <- bbox(x)
-    } else if (inherits(x, c("Spatial", "Raster"))) {
-        b <- bbox(x)
-        current.projection <- get_projection(x, as.CRS = TRUE)
+        b <- sfbb(x)
+    } else if (inherits(x, "Raster")) {
+        b <- sfbb(attr(x, "extent"))
+        current.projection <- get_projection(x, output = "crs")
+    } else if (inherits(x, "Spatial")) {
+        b <- sfbb(attr(x, "bbox"))
+        current.projection <- get_projection(x, output = "crs")
     } else if (inherits(x, c("sf", "sfc"))) {
-        b <- get_sf_bbox(x)
-        current.projection <- get_projection(x, as.CRS = TRUE)
+        b <- st_bbox(x)
+        current.projection <- st_crs(x)
     } else if (is.matrix(x) && length(x)==4) {
+        b <- sfbb(x)
+    } else if (inherits(x, "bbox")) {
         b <- x
     } else if (is.vector(x) && length(x)==4) {
-        b <- matrix(x, ncol=2, byrow=TRUE)
+        b <- structure(x, names = c("xmin", "ymin", "xmax", "ymax"), class="bbox")
     } else if (!is.na(x)[1]) {
         stop("Incorrect x argument")
     } else {
@@ -213,9 +239,9 @@ get_bb <- function(x, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=NULL, ylim
         ## create new bounding box
         if (is.null(xlim)) xlim <- cx + c(-.5, .5) * width
         if (is.null(ylim)) ylim <- cy + c(-.5, .5) * height
-        b <- matrix(c(xlim, ylim), ncol=2,nrow=2, byrow = TRUE)
+        b <- structure(c(xlim[1], ylim[1], xlim[2], ylim[2]), names = c("xmin", "ymin", "xmax", "ymax"), class="bbox")
     }
-    if (is.null(current.projection)) current.projection <- CRS("")
+    if (is.null(current.projection)) current.projection <- st_crs(NA)
     list(b=b,
          cx=cx,
          cy=cy,
