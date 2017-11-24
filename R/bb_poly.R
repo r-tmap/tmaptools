@@ -60,21 +60,17 @@ bb_earth <- function(projection=NULL, stepsize=1, earth.datum=4326, bbx=c(-180, 
         res <- if (is.na(projection)) {
             world_bb_sf
         } else {
-            tryCatch({
-                #suppressMessages({
-                sf::st_transform(world_bb_sf, crs=projection)
-                #    spTransform(world_bb_sf, projection)
-                #})
-            }, error=function(e){
-                NULL
-            }, warning=function(w){
-                NULL
-            })
+			sf::st_transform(world_bb_sf, crs=projection)
         }
-        if (!is.null(res)) break
+        if (!is.na(sf::st_is_valid(res))) break
     }
 
-    if (is.null(res)) warning("Unable to determine bounding box of the earth in projection \"", projection, "\"", call. = FALSE)
+    isV <- sf::st_is_valid(res)
+    
+    if (is.na(isV) || !isV) {
+    	warning("Unable to determine bounding box of the earth in projection \"", projection, "\"", call. = FALSE)
+    	return(NULL)
+    }
 
     if (!as.sf) as(res, "SpatialPolygons") else res
 }
