@@ -1,3 +1,6 @@
+version 2.0 (in development)
+- tmaptools migrated from sp to sf
+
 version 1.2-2
 - improved smooth_map
 

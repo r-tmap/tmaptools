@@ -149,7 +149,7 @@ rev_geocode_OSM <- function(x, y=NULL, zoom=NULL, projection=NULL, as.data.frame
 
 	project <- !missing(projection)
 
-	if (project) projection <- get_proj4(projection, as.CRS = TRUE)
+	if (project) projection <- get_proj4(projection, output = "CRS")
 
 	if (inherits(x, "SpatialPoints")) {
 
@@ -181,7 +181,7 @@ rev_geocode_OSM <- function(x, y=NULL, zoom=NULL, projection=NULL, as.data.frame
 			lon <- x
 			lat <- y
 		} else {
-			projection <- get_proj4(projection, as.CRS = TRUE)
+			projection <- get_proj4(projection, output = "CRS")
 			single_point <- SpatialPoints(matrix(c(x,y), ncol=2), proj4string=projection)
 			coords <- attr(set_projection(single_point, projection = .CRS_longlat), "coords")
 			lon <- coords[,1]

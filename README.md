@@ -19,34 +19,13 @@ library(devtools)
 install_github("mtennekes/tmaptools")
 ```
 
-The `tmaptools` packages relies on the R packages `rgdal` and `rgeos`, which depend on the external libraries `gdal`, `proj.4` and `geos`. On Windows, these are embedded in `rgdal` and `rgeos`. On Linux (Ubuntu), these libraries can be installed as follows:
+Linux and MacOS may
 
-```bash
-sudo apt-get install libgdal-dev
-sudo apt-get install libproj-dev
-sudo apt-get install libgeos-dev
-```
-
-See source pages for [gdal](http://trac.osgeo.org/gdal), [proj](http://trac.osgeo.org/proj), and [geos](http://trac.osgeo.org/geos). For Mac OS users, see http://www.kyngchaos.com.
-
-Also, `tmaptools` relies indirectly on the R package `V8`. For Linux (Ubuntu), the `v8` library needs to be installed for this:
-
-```bash
-sudo apt-get install libv8-dev
-```
-
-Java is required for obtaining OpenStreetMap bitmaps (with the function`read_osm`). It can be installed in Linux (Ubuntu) with:
-
-```bash
-sudo apt-get install openjdk-9-jre
-sudo R CMD javareconf
-```
+See installation https://github.com/mtennekes/tmap
 
 
 Development
 ------------
-
-Odd numbered versions will be development versions and even numbered versions stable CRAN releases (as with data.table).
 
 The latest development version can be installed using `devtools`.
 

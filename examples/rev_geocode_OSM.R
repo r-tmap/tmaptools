@@ -3,6 +3,7 @@ if (require(tmap)) {
     data(metro)
 
     # sample five cities from metro dataset
+    set.seed(1234)
     five_cities <- metro[sample(length(metro), 5), ]
 
     # obtain reverse geocode address information
