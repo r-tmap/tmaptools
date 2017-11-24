@@ -51,7 +51,7 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
     is_sf <- inherits(shp, c("sf", "sfc"))
     if (is_sf) shp <- as(shp, "Spatial")
 
-	bbx <- bb(shp)
+	bbx <- as.vector(bb(shp))
 	prj <- get_projection(shp)
 #	asp <- get_asp_ratio(shp)
 
@@ -69,8 +69,8 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 
 	## determine bounding box and grid size
 	if (inherits(shp, c("SpatialPoints", "SpatialPolygons"))) {
-		bbx <- bb(bbx, ext=-1.05)
-		shp@bbox <- bbx
+		bbx <- as.vector(bb(bbx, ext=-1.05))
+		shp@bbox <- matrix(bbx, ncol=2)
 		asp <- get_asp_ratio(shp)
 		if (is.na(nrow) || is.na(ncol)) {
 			nrow <- round(sqrt(N/asp))
@@ -99,8 +99,8 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 		warning("shp is not projected; therefore density values cannot be calculated", call. = FALSE)
 		cell.area <- 1
 	} else {
-		cell.width <- (bbx[1,2] - bbx[1,1]) / (unit.size * ncol)
-		cell.height <- (bbx[2,2] - bbx[2,1]) / (unit.size * nrow)
+		cell.width <- (bbx[3] - bbx[1]) / (unit.size * ncol)
+		cell.height <- (bbx[4] - bbx[2]) / (unit.size * nrow)
 		cell.area <- cell.width * cell.height
 	}
 
@@ -109,7 +109,7 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 	# edit bandwidth
 	if (is.na(bandwidth[1])) {
 		#bandwidth <- 3 * (bbx[,2] - bbx[,1]) / c(ncol, nrow)
-		short_side <- min((bbx[,2] - bbx[,1]) / unit.size)
+		short_side <- min((bbx[3:4] - bbx[1:2]) / unit.size)
 		bandwidth <- rep(short_side/100, 2)
 	} else {
 		# make sure bandwith is a vector of 2
@@ -117,7 +117,7 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 	}
 
 	# create an empty grid
-	cover_r <- raster(extent(bbx), nrows=nrow, ncols=ncol, crs=prj)
+	cover_r <- raster(extent(bbx[c(1,3,2,4)]), nrows=nrow, ncols=ncol, crs=prj)
 
 	setTxtProgressBar(pb, .1)
 
@@ -126,13 +126,13 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 	if (missing(cover)) {
 
 		if (cover.type=="rect") {
-			cover <- as(extent(bbx), "SpatialPolygons")
+			cover <- as(extent(bbx[c(1,3,2,4)]), "SpatialPolygons")
 			if (!is.na(prj)) cover <- set_projection(cover, current.projection = prj)
 			cover_r[] <- TRUE
 		} else if (cover.type=="original") {
 			if (inherits(shp, "Raster")) {
 				warning("cover.type=\"original\" only applied to raster output")
-				cover <- as(extent(bbx), "SpatialPolygons")
+				cover <- as(extent(bbx[c(1,3,2,4)]), "SpatialPolygons")
 				if (!is.na(prj)) cover <- set_projection(cover, current.projection = prj)
 
 				cover_r <- shp
@@ -144,7 +144,7 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 					cover <- gUnaryUnion(shp)
 				}
 				if (!gIsValid(cover)) cover <- gBuffer(cover, width=0)
-				cover@bbox <- bbx
+				cover@bbox <- matrix(bbx, ncol=2)
 				cover_r <- poly_to_raster(cover, nrow = nrow, ncol = ncol, to.Raster = TRUE)
 			}
 		}  else if (cover.type=="smooth") {
@@ -157,9 +157,9 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 	} else {
 		cover <- gUnaryUnion(cover)
 		cover_r <- poly_to_raster(cover, nrow = nrow, ncol = ncol, to.Raster = TRUE)
-		bbc <- bb(cover)
-		bbx[, 1] <- pmin(bbx[, 1], bbc[, 1])
-		bbx[, 2] <- pmin(bbx[, 2], bbc[, 2])
+		bbc <- as.vector(bb(cover))
+		bbx[1:2] <- pmin(bbx[1:2], bbc[1:2])
+		bbx[3:4] <- pmin(bbx[3:4], bbc[3:4])
 	}
 	setTxtProgressBar(pb, .3)
 
@@ -167,7 +167,7 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 	if (inherits(shp, "SpatialPoints")) {
 		# for spatial points, use the 2d binned kernel density estimator from KernSmooth
 		co <- coordinates(shp)
-		x <- bkde2D(co, bandwidth=bandwidth*unit.size, gridsize=c(ncol, nrow), range.x=list(bbx[1,], bbx[2,]))
+		x <- bkde2D(co, bandwidth=bandwidth*unit.size, gridsize=c(ncol, nrow), range.x=list(bbx[c(1,3)], bbx[c(2,4)]))
 
 		var <- "count"
 	} else {
@@ -183,7 +183,7 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 		if (smooth.raster) {
 			# apply 2d kernel density estimator, similar to bkde2D, but without binning (since this is already binned data)
 			m <- as.matrix(shp)
-			x <- kde2D(m, bandwidth = bandwidth*unit.size, gridsize=c(ncol, nrow), range.x=list(bbx[1,], bbx[2,]))
+			x <- kde2D(m, bandwidth = bandwidth*unit.size, gridsize=c(ncol, nrow), range.x=list(bbx[c(1,3)], bbx[c(2,4)]))
 
 		} else {
 			# copy raster (without 2d kernel density) and deterine levels
@@ -198,7 +198,7 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 
 	if (apply2kde) {
 		# fill raster values
-		r <- raster(extent(bbx), nrows=nrow, ncols=ncol, crs=prj)
+		r <- raster(extent(bbx[c(1,3,2,4)]), nrows=nrow, ncols=ncol, crs=prj)
 		r[] <- as.vector(x$fhat[, ncol(x$fhat):1])
 		names(r) <- var
 
@@ -242,16 +242,16 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 	    # no 2d kernel density has been applied. Instead contour lines are found from the original raster
 	    thresLevel <- FALSE
 
-		bbr <- bb(r)
+		bbr <- as.vector(bb(r))
 
 		# extend raster to prevent bleeding (due to isolines that do not reach the boundary)
 		rxtra <- (floor(nrow(r) / 10) + 1) * 2
 		cxtra <- (floor(ncol(r) / 10) + 1) * 2
-		bbr2 <- bb(bbr, width=(ncol(r)+cxtra)/ncol(r),
+		bbr2 <- as.vector(bb(bbr, width=(ncol(r)+cxtra)/ncol(r),
 				   height=(nrow(r)+rxtra)/nrow(r),
-				   relative=TRUE)
+				   relative=TRUE))
 
-		r2 <- extend(r, extent(bbr2))
+		r2 <- extend(r, extent(bbr2[c(1,3,2,4)]))
 		r2[1:(rxtra/2),(cxtra/2+1):(ncol(r2)-cxtra/2)] <- r[1,]
 		r2[(nrow(r2)-(rxtra/2)+1):nrow(r2),(cxtra/2+1):(ncol(r2)-cxtra/2)] <- r[nrow(r),]
 

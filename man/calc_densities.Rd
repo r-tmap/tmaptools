@@ -19,10 +19,6 @@ calc_densities(shp, var, target = "metric", total.area = NULL,
 \item{suffix}{character that is appended to the variable names. The resulting names are used as column names of the returned data.frame. By default, \code{_sq_<target>}, where target corresponds to the target unit, e.g. \code{_sq_km}}
 
 \item{drop}{boolean that determines whether an one-column data-frame should be returned as a vector}
-
-\item{orig}{original units, i.e. by which the coordinates are defined, see \code{\link{approx_areas}}.}
-
-\item{to}{multiplier used as follows: \code{orig * to = target}. See \code{\link{approx_areas}}.}
 }
 \value{
 Vector or data.frame (depending on whether \code{length(var)==1} with density values. This can be appended directly to the shape file with \code{\link{append_data}} with \code{fixed.order=TRUE}.
@@ -34,7 +30,8 @@ Transpose quantitative variables to densitiy variables, which are often needed f
 if (require(tmap)) {
     data(NLD_muni)
 
-    NLD_muni_pop_per_km2 <- calc_densities(NLD_muni, target = "km km", var = c("pop_men", "pop_women"))
+    NLD_muni_pop_per_km2 <- calc_densities(NLD_muni,
+        target = "km km", var = c("pop_men", "pop_women"))
     NLD_muni <- append_data(NLD_muni, NLD_muni_pop_per_km2, fixed=TRUE)
 
     tm_shape(NLD_muni) +

@@ -5,8 +5,6 @@
 #' @param shp a shape object, i.e., a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}, or a \code{sf} object that can be coerced as such.
 #' @param var name(s) of a qualtity variable name contained in the \code{shp} data
 #' @param target the target unit, see \code{\link{approx_areas}}. Density values are calculated in \code{var/target^2}.
-#' @param orig original units, i.e. by which the coordinates are defined, see \code{\link{approx_areas}}.
-#' @param to multiplier used as follows: \code{orig * to = target}. See \code{\link{approx_areas}}.
 #' @param total.area total area size of \code{shp} in number of target units (defined by \code{unit}), \code{\link{approx_areas}}.
 #' @param suffix character that is appended to the variable names. The resulting names are used as column names of the returned data.frame. By default, \code{_sq_<target>}, where target corresponds to the target unit, e.g. \code{_sq_km}
 #' @param drop boolean that determines whether an one-column data-frame should be returned as a vector

@@ -20,12 +20,6 @@ approx_areas(shp, target = "metric", total.area = NULL)
 These units are the output units. See \code{orig} for the coordinate units used by the shape \code{shp}.}
 
 \item{total.area}{total area size of \code{shp} in number of target units (defined by \code{target}). Useful if the total area of the \code{shp} differs from a reference total area value. For \code{"metric"} and \code{"imperial"} units, please provide the total area in squared kilometers respectively miles.}
-
-\item{orig}{original unit, i.e. by which the coordinates are defined. By default, the value is taken from the crs projection string defined in \code{shp}. Not needed for non-projected shapes, since their areas are determined in another way (see details).}
-
-\item{to}{multiplier used as follows: \code{orig * to = target}. Only needed when \code{orig} or \code{target} is unknown. For instance, if \code{target} is set to \code{"hm"} (hectameter), and \code{orig} is \code{"m"}, then \code{to} should be 100, meaning 1 hectameter equals 100 meters.}
-
-\item{show.warnings}{should warnings be shown?}
 }
 \value{
 Numeric vector of area sizes. An attribute called unit is added to specify the used target units, which is especially useful when units were set to metric or imperial.
@@ -66,12 +60,12 @@ if (require(tmap)) {
     approx_areas(NLD_muni, target = "prop") \%>\% summary_areas()
 
     # area in squared miles
-    approx_areas(NLD_muni, target = "mi^2") \%>\% summary_areas()
+    approx_areas(NLD_muni, target = "mi mi") \%>\% summary_areas()
 
     # area of the polygons when unprojected
     approx_areas(NLD_muni \%>\% set_projection(projection="longlat")) \%>\% summary_areas()
 }
 }
 \seealso{
-\code{\link{projection_units}} and \code{\link{approx_distances}}
+\code{\link{approx_distances}}
 }

@@ -15,7 +15,7 @@ map_coloring <- function(x, algorithm="greedy", ncols=NA, minimize=FALSE, palett
     if (inherits(x, "Spatial")) x <- as(x, "sf")
 	if (inherits(x, "sf")) {
 		# get adjacency list
-		adj <- st_neighbours(x)
+		adj <- get_neighbours(x)
 	} else if (is.list(x)) {
 		adj <- x
 	} else stop("Unknown x argument")
@@ -72,7 +72,14 @@ map_coloring <- function(x, algorithm="greedy", ncols=NA, minimize=FALSE, palett
 	}
 }
 
-st_neighbours <- function(x) {
+#' Get neighbours list from spatial objects
+#'
+#' Get neighbours list from spatial objects. The output is similar to the function \code{poly2nb} of the \code{spdep} package, but uses \code{sf} instead of \code{sp}.
+#'
+#' @param x a shape object, i.e., a \code{sf} object or a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}.
+#' @return A list where the items correspond to the features. Each item is a vector of neighbours.
+#' @export
+get_neighbours <- function(x) {
     y <- st_intersects(x, x)
     n <- length(y)
 
@@ -81,6 +88,3 @@ st_neighbours <- function(x) {
     }, y, 1L:n, SIMPLIFY = FALSE)
 
 }
-
-
-

@@ -213,7 +213,7 @@ get_bb <- function(x, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=NULL, ylim
         b <- res$bbox
         cx <- res$coords[1]
         cy <- res$coords[2]
-        current.projection <- .CRS_longlat
+        current.projection <- .crs_longlat
     } else if (inherits(x, "Extent")) {
         b <- sfbb(x)
     } else if (inherits(x, "Raster")) {

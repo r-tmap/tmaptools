@@ -4,7 +4,7 @@
 \alias{get_proj4}
 \title{Get a PROJ.4 character string}
 \usage{
-get_proj4(x, as.CRS = FALSE, output = c("crs", "character", "epsg", "CRS"))
+get_proj4(x, output = c("crs", "character", "epsg", "CRS"))
 }
 \arguments{
 \item{x}{a projection. One of:
@@ -33,12 +33,10 @@ get_proj4(x, as.CRS = FALSE, output = c("crs", "character", "epsg", "CRS"))
    }}
 }}
 
-\item{as.CRS}{should a CRS object be returned instead of a PROJ.4 character string? Default is \code{FALSE}.}
-
 \item{output}{the output format of the projection, one of \code{"character"}, \code{"crs"},\code{"epsg"}, or \code{"CRS"}}
 }
 \value{
-validated PROJ.4 character string, or, if \code{as.CRS=TRUE} a \code{\link[sp:CRS]{CRS}} object.
+see \code{output}
 }
 \description{
 Get full PROJ.4 string from an existing PROJ.4 string, a shortcut, or a \code{\link[sp:CRS]{CRS}} object.

@@ -14,7 +14,6 @@
 #' \code{\link{get_IDs}}\tab Get ID values of a shape object \cr
 #' \code{\link{is_projected}}\tab Check if the map is projected \cr
 #' \code{\link{get_projection}}\tab Get the map projection \cr
-#' \code{\link{projection_units}}\tab Get or translate units of a projection \cr
 #' --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
 #' }
 #'
