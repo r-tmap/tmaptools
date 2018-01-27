@@ -144,7 +144,7 @@ bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=N
 	        }, error=function(e){
 	            sf_poly
 	        })
-	        if (is.null(sf_poly2) || !inherits(sf_poly2, "sf") || length(sf_poly2) == 0) sf_poly2 <- sf_poly
+	        if (is.null(sf_poly2) || !inherits(sf_poly2, c("sf", "sfc")) || length(sf_poly2) == 0) sf_poly2 <- sf_poly
 	    }
 
 	    # STEP 2: Extract the bounding box corner points and add intermediate points, which can be needed since the exterme values may not be corner points once they are projected. Create a SpatialPoints objects from these points.
