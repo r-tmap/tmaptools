@@ -31,8 +31,13 @@
 #' @param relative boolean that determines whether relative values are used for \code{width}, \code{height}, \code{xlim} and \code{ylim} or absolute. If \code{x} is unspecified, \code{relative} is set to \code{"FALSE"}.
 #' @param current.projection projection that corresponds to the bounding box specified by \code{x}. See \code{\link{get_proj4}} for options.
 #' @param projection projection to transform the bounding box to. See \code{\link{get_proj4}} for options.
-#' @param as.extent should the bounding box be returned as \code{\link[raster:extent]{extent}}? If \code{FALSE} (default) then a matrix is returned
-#' @return bounding box (see argument \code{as.extent})
+#' @param output output format of the bounding box, one of:
+#' \itemize{
+#' \item \code{"bbox"} a \code{sf::bbox} object, which is a numeric vector of 4: xmin, ymin, xmax, ymax. This representation used by the \code{sf} package.
+#' \item \code{"matrix"} a 2 by 2 numeric matrix, where the rows correspond to x and y, and the columns to min and max. This representation used by the \code{sp} package.
+#' \item \code{"extent"} an \code{raster::extent} object, which is a numeric vector of 4: xmin, xmax, ymin, ymax. This representation used by the \code{raster} package.
+#' }
+#' @return bounding box (see argument \code{output})
 #' @import sp
 #' @importFrom raster extent
 #' @importFrom XML xmlTreeParse xmlChildren xmlRoot xmlAttrs
@@ -40,7 +45,7 @@
 #' @example ./examples/bb.R
 #' @seealso \code{\link{geocode_OSM}}
 #' @export
-bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=NULL, ylim=NULL, relative = FALSE, current.projection=NULL, projection=NULL, as.extent=FALSE) {
+bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=NULL, ylim=NULL, relative = FALSE, current.projection=NULL, projection=NULL, output = c("bbox", "matrix", "extent")) {
 
     ## get unprocessed bounding box
     res <- get_bb(x, cx=cx, cy=cy, width=width, height=height, xlim=xlim, ylim=ylim, current.projection=current.projection)
@@ -140,7 +145,7 @@ bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=N
 	        sf_poly2 <- sf_poly
 	    } else {
 	        sf_poly2 <- tryCatch({
-	            sf::st_intersection(sf_poly, earth_end)
+	            suppressMessages(sf::st_intersection(sf_poly, earth_end))
 	        }, error=function(e){
 	            sf_poly
 	        })
@@ -186,12 +191,20 @@ bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=N
 	    b[3:4] <- pmin(b[3:4], c(180, 90))
 	}
 
-	if (!inherits(b, "bbox")) {
-	    b <- structure(b, names = c("xmin", "ymin", "xmax", "ymax"), class="bbox")
-	}
-	if (is.null(attr(b, "crs"))) attr(b, "crs") <- st_crs(current.projection)
+	output <- match.arg(output)
 
-	if (as.extent) extent(b[c(1,3,2,4)]) else b
+	if (output == "bbox") {
+	    if (!inherits(b, "bbox")) {
+	        b <- structure(b, names = c("xmin", "ymin", "xmax", "ymax"), class="bbox")
+	    }
+	    if (is.null(attr(b, "crs"))) attr(b, "crs") <- st_crs(current.projection)
+	} else if (output == "matrix") {
+	    b <- matrix(b, ncol=2, dimnames = list(c("x", "y"), c("min", "max")))
+	} else {
+	    b <- extent(b[c(1,3,2,4)])
+	}
+
+	b
 }
 
 get_sf_bbox <- function(shp) {
@@ -209,7 +222,7 @@ sfbb <- function(bb) {
 
 get_bb <- function(x, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=NULL, ylim=NULL, current.projection=NULL) {
     if (is.character(x)) {
-        res <- as.vector(geocode_OSM(x)) #TODO
+        res <- as.vector(geocode_OSM(x))
         b <- res$bbox
         cx <- res$coords[1]
         cy <- res$coords[2]

@@ -44,15 +44,15 @@ approx_distances <- function(x, y = NULL, projection = NULL, target = NULL) {
             list(hdist = st_distance(pW, pE)[1,1],
                  vdist = st_distance(pS, pN)[1,1])
         } else {
-            list(hdist = set_units(st_distance(pW, pE)[1,1], target),
-                 vdist = set_units(st_distance(pS, pN)[1,1], target))
+            list(hdist = set_units(st_distance(pW, pE)[1,1], target, mode = "standard"),
+                 vdist = set_units(st_distance(pS, pN)[1,1], target, mode = "standard"))
         }
 
     } else {
         if (missing(target)) {
             st_distance(x, y)
         } else {
-            set_units(st_distance(x, y), target)
+            set_units(st_distance(x, y), target, mode = "standard")
         }
 
     }

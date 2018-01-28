@@ -72,7 +72,7 @@ crop_shape <- function(x, y, polygon = FALSE, ...) {
 
 	} else {
 	  # bounding box crop (suppress warnings, because projections may not be perfectly identical)
-	    y <- bb(y, as.extent = TRUE)
+	    y <- bb(y, output = "extent")
         x2 <- suppressWarnings(crop(x, y, ...))
 	}
 

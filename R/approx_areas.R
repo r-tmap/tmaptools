@@ -21,7 +21,7 @@
 #' @example ./examples/approx_areas.R
 #' @seealso \code{\link{approx_distances}}
 #' @importFrom rgeos gArea
-#' @importFrom units set_units parse_unit
+#' @importFrom units set_units as_units
 #' @export
 approx_areas <- function(shp, target="metric", total.area=NULL) {
     is_metric <- target=="metric"
@@ -42,7 +42,7 @@ approx_areas <- function(shp, target="metric", total.area=NULL) {
     } else if (target == "norm") {
         areas <- areas / max(areas)
     } else {
-        areas <- set_units(areas, parse_unit(target))
+        areas <- set_units(areas, as_units(target), mode = "standard")
         if (!is.null(total.area)) {
             fact <- total.area / sum(areas)
             areas <- areas * fact

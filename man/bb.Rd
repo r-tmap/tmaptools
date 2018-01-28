@@ -6,7 +6,8 @@
 \usage{
 bb(x = NA, ext = NULL, cx = NULL, cy = NULL, width = NULL,
   height = NULL, xlim = NULL, ylim = NULL, relative = FALSE,
-  current.projection = NULL, projection = NULL, as.extent = FALSE)
+  current.projection = NULL, projection = NULL, output = c("bbox",
+  "matrix", "extent"))
 }
 \arguments{
 \item{x}{One of the following:
@@ -36,10 +37,15 @@ If \code{x} is not specified, a bounding box can be created from scratch (see de
 
 \item{projection}{projection to transform the bounding box to. See \code{\link{get_proj4}} for options.}
 
-\item{as.extent}{should the bounding box be returned as \code{\link[raster:extent]{extent}}? If \code{FALSE} (default) then a matrix is returned}
+\item{output}{output format of the bounding box, one of:
+\itemize{
+\item \code{"bbox"} a \code{sf::bbox} object, which is a numeric vector of 4: xmin, ymin, xmax, ymax. This representation used by the \code{sf} package.
+\item \code{"matrix"} a 2 by 2 numeric matrix, where the rows correspond to x and y, and the columns to min and max. This representation used by the \code{sp} package.
+\item \code{"extent"} an \code{raster::extent} object, which is a numeric vector of 4: xmin, xmax, ymin, ymax. This representation used by the \code{raster} package.
+}}
 }
 \value{
-bounding box (see argument \code{as.extent})
+bounding box (see argument \code{output})
 }
 \description{
 Swiss army knife for bounding boxes. Modify an existing bounding box or create a new bounding box from scratch. See details.
