@@ -14,7 +14,7 @@ Depends:
 Imports:
     sp,
     sf (>= 0.6-0),
-    units (>= 0.5-1),,
+    units (>= 0.5-1),
     grid,
     raster (>= 2.5-2),
     rgdal,
