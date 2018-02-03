@@ -243,6 +243,7 @@ get_bb <- function(x, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=NULL, ylim
     } else if (inherits(x, "bbox")) {
         b <- x
     } else if (is.vector(x) && length(x)==4) {
+        x <- check_bb_order(x)
         b <- structure(x, names = c("xmin", "ymin", "xmax", "ymax"), class="bbox")
     } else if (!is.na(x)[1]) {
         stop("Incorrect x argument")
@@ -266,4 +267,11 @@ get_bb <- function(x, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=NULL, ylim
          xlim=xlim,
          ylim=ylim,
          current.projection=current.projection)
+}
+
+check_bb_order <- function(x) {
+    if (((x[1] > x[3]) || (x[2] > x[4])) && x[1] < x[2] && x[3] < x[4]) {
+        message("Bounding box format automatically changed from [xmin, xmax, ymin, ymax] to [xmin, ymin, xmax, ymax]")
+        x[c(1,3,2,4)]
+    } else x
 }
