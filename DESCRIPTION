@@ -13,8 +13,8 @@ Depends:
     methods
 Imports:
     sp,
-    sf,
-    units,
+    sf (>= 0.6-0),
+    units (>= 0.5-1),,
     grid,
     raster (>= 2.5-2),
     rgdal,
@@ -30,6 +30,7 @@ Imports:
     XML
 Suggests:
     tmap (>= 1.8-1),
+    lwgeom (>= 0.1-2),
     OpenStreetMap,
     png,
     shiny,
