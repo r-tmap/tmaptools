@@ -42,7 +42,7 @@ read_osm <- function(x, raster=NA, zoom=NULL, type="osm", minNumTiles=NULL, merg
 			om <- suppressWarnings({do.call("openmap", args = c(list(upperLeft=x[c(4,1)], lowerRight=x[c(2,3)]), optionalArgs))})
 			omr <- raster(om)
 			oms <- as(omr, "SpatialGridDataFrame")
-			oms@data <- raster_colors(oms)
+			oms@data <- data.frame(PIXEL__COLOR = raster_colors(as.matrix(oms@data)))
 			attr(oms, "leaflet.provider") <- unname(OSM2LP[type])
 			attr(oms, "is.OSM") <- TRUE
 			return(oms)

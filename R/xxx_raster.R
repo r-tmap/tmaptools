@@ -71,7 +71,7 @@ raster_colors <- function(x) {
 
 	ids2 <- apply(dists, MARGIN = 1, which.min)
 
-	m2 <- ids[m]
+	m2 <- ids2[m]
 
 	ind <- integer(length=n)
 
@@ -81,7 +81,7 @@ raster_colors <- function(x) {
 
 	cols <- rgb(rs, gs, bs, maxColorValue = 255)
 
-	factor(ind, levels=cols)
+	factor(ind, labels=cols)
 }
 
 
