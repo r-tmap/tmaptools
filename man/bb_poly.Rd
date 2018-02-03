@@ -5,21 +5,19 @@
 \alias{bb_earth}
 \title{Convert bounding box to a spatial polygon}
 \usage{
-bb_poly(x, projection = NULL, steps = 100, stepsize = NA, as.sf = TRUE)
+bb_poly(x, steps = 100, stepsize = NA, projection = NULL)
 
 bb_earth(projection = NULL, stepsize = 1, earth.datum = 4326,
-  bbx = c(-180, -90, 180, 90), buffer = 1e-06, as.sf = TRUE)
+  bbx = c(-180, -90, 180, 90), buffer = 1e-06)
 }
 \arguments{
 \item{x}{object that can be coerced to a bounding box with \code{\link{bb}}}
-
-\item{projection}{projection in which the coordinates of \code{x} are provided, see \code{\link{get_proj4}}. For \code{bb_earth}, \code{projection} is the projection in which the bounding box is returned (if possible).}
 
 \item{steps}{number of intermediate points along the shortest edge of the bounding box. The number of intermediate points along the longest edge scales with the aspect ratio. These intermediate points are needed if the bounding box is plotted in another projection.}
 
 \item{stepsize}{stepsize in terms of coordinates (usually meters when the shape is projected and degrees of longlat coordinates are used). If specified, it overrules \code{steps}}
 
-\item{as.sf}{return object as an \code{sf} object}
+\item{projection}{projection in which the coordinates of \code{x} are provided, see \code{\link{get_proj4}}. For \code{bb_earth}, \code{projection} is the projection in which the bounding box is returned (if possible).}
 
 \item{earth.datum}{Geodetic datum to determine the earth boundary. By default \code{"WGS84"}, other frequently used datums are \code{"NAD83"} and \code{"NAD27"}. Any other \code{PROJ.4} character string can be used. See \code{\link{get_proj4}}.}
 

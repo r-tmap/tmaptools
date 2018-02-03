@@ -255,6 +255,9 @@ get_bb <- function(x, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=NULL, ylim
         b <- structure(c(xlim[1], ylim[1], xlim[2], ylim[2]), names = c("xmin", "ymin", "xmax", "ymax"), class="bbox")
     }
     if (is.null(current.projection)) current.projection <- st_crs(NA)
+
+    attr(b, "crs") <- current.projection
+
     list(b=b,
          cx=cx,
          cy=cy,

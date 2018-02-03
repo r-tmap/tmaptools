@@ -1,12 +1,6 @@
 language: r
 cache: packages
 
-addons:
-  apt:
-    packages:
-      - libv8-dev
-      - valgrind
-
 before_install:
   - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable --yes
   - sudo apt-get --yes --force-yes update -qq
@@ -20,12 +14,19 @@ before_install:
   - sudo apt-get install --yes libudunits2-dev
   # sf dependencies:
   - sudo apt-get install --yes libproj-dev libgeos-dev libgdal-dev
+  # other dependencies (indirect)
+  - sudo apt-get install -y libprotobuf-dev protobuf-compiler
+  - sudo apt-get install libssl-dev
+  - sudo apt-get install libcairo2-dev
 
 sudo: required
 
 dist: trusty
 
 warnings_are_errors: true
+
+r_github_packages:
+  - mtennekes/tmap
 
 r_packages:
   - sp
