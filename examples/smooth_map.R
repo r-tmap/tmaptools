@@ -10,7 +10,7 @@ if (require(tmap)) {
     vol_smooth <- smooth_map(vol, smooth.raster = FALSE, nlevels = 10)
 
     tm_shape(vol_smooth$polygons) +
-    	tm_fill(palette=terrain.colors(11), title="Elevation") +
+    	tm_fill("level", palette=terrain.colors(11), title="Elevation") +
     	tm_shape(vol_smooth$iso) +
     	tm_iso(col = "black", size = .7, fontcolor="black") +
     	tm_layout("Maunga Whau volcano (Auckland)", title.position=c("left", "bottom"),
@@ -23,7 +23,7 @@ if (require(tmap)) {
     ####################################
     data(NLD_muni)
 
-    NLD_muni$population_dens <- calc_densities(NLD_muni, "population")
+    NLD_muni$population_dens <- as.vector(calc_densities(NLD_muni, "population"))
 
     qtm(NLD_muni, fill="population_dens")
 

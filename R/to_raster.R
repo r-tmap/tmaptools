@@ -104,7 +104,7 @@ poly_to_raster <- function(shp, r=NULL, nrow=NA, ncol=NA, N=250000, use.cover=FA
 
     if (missing(r)) {
         # get shp metadata
-        bbx <- bb(shp)
+        bbx <- bb(shp, output = "matrix")
         asp <- get_asp_ratio(shp)
         # determine grid size
         if (is.na(nrow) || is.na(ncol)) {

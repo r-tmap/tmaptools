@@ -5,7 +5,7 @@
 #' For the estimation of the 2D kernal density, code is borrowed from \code{\link[KernSmooth:bkde2D]{bkde2D}}. This implemention is slightly different: \code{\link[KernSmooth:bkde2D]{bkde2D}} takes point coordinates and applies linear binning, whereas in this function, the data is already binned, with values 1 if the values of \code{var} are not missing and 0 if values of \code{var} are missing.
 #'
 #' @param shp shape object of class \code{\link[sp:Spatial]{Spatial}}, \code{\link[raster:Raster-class]{Raster}}, or \code{sf}. Spatial points, polygons, and grids are supported. Spatial lines are not.
-#' @param var variable name. Not needed for \code{\link[sp:SpatialPoints]{SpatialPoints}}. If missing, the first variable name is taken.
+#' @param var variable name. Not needed for \code{\link[sp:SpatialPoints]{SpatialPoints}}. If missing, the first variable name is taken. For polygons, the variable should contain densities, not absolute numbers.
 #' @param nrow number of rows in the raster that is used to smooth the shape object. Only applicable if shp is not a \code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}} or \code{\link[raster:Raster-class]{Raster}}
 #' @param ncol number of rows in the raster that is used to smooth the shape object. Only applicable if shp is not a \code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}} or \code{\link[raster:Raster-class]{Raster}}
 #' @param N preferred number of points in the raster that is used to smooth the shape object. Only applicable if shp is not a \code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}} or \code{\link[raster:Raster-class]{Raster}}
@@ -156,6 +156,7 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 		}
 	} else {
 		cover <- gUnaryUnion(cover)
+		cover <- spTransform(cover, CRS(prj))
 		cover_r <- poly_to_raster(cover, nrow = nrow, ncol = ncol, to.Raster = TRUE)
 		bbc <- as.vector(bb(cover))
 		bbx[1:2] <- pmin(bbx[1:2], bbc[1:2])
@@ -207,7 +208,7 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 
 		# normalize r and x$fhat
 		if (inherits(shp, "SpatialPoints")) {
-			norm_weight <- length(shp) * weight / sum(r[], na.rm=TRUE)
+			norm_weight <- length(shp) * weight / sum(r[], na.rm=TRUE) / cell.area
 		} else {
 			norm_weight <- sum(shp[], na.rm=TRUE) / sum(r[], na.rm=TRUE)
 		}
@@ -263,7 +264,7 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 	setTxtProgressBar(pb, .7)
 
 	# make sure lines are inside poly
-	cp <- lines2polygons(ply = cover, lns = cl2, rst = r, lvls=lvls, extracting.method="full", buffer.width = buffer.width)
+	cp <- suppressWarnings(lines2polygons(ply = cover, lns = cl2, rst = r, lvls=lvls, extracting.method="full", buffer.width = buffer.width))
 	if (thresLevel) {
 	    ids <- as.integer(cp$level)
 	    ids[ids==1] <- NA
@@ -279,7 +280,7 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 	setTxtProgressBar(pb, .9)
 
 	if (!is.null(cl2)) {
-	    lns <- SpatialLinesDataFrame(gIntersection(cover, cl2, byid = TRUE), data=cl2@data, match.ID = FALSE)
+	    lns <- SpatialLinesDataFrame(suppressWarnings(gIntersection(cover, cl2, byid = TRUE)), data=cl2@data, match.ID = FALSE)
 	    if (is_sf) lns <- as(lns, "sf")
 	    attr(lns, "isolines") <- TRUE
 	} else {
