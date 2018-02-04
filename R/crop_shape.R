@@ -67,13 +67,19 @@ crop_shape <- function(x, y, polygon = FALSE, ...) {
             yunion <- as(yunion, "Spatial")
             x2 <- raster::trim(raster::mask(x, yunion))
         } else {
-            x2 <- st_intersection(x, yunion)
+            x2 <-  suppressMessages(suppressWarnings(st_intersection(x, yunion)))
         }
 
 	} else {
 	  # bounding box crop (suppress warnings, because projections may not be perfectly identical)
-	    y <- bb(y, output = "extent")
-        x2 <- suppressWarnings(crop(x, y, ...))
+
+	    if (israsterx) {
+	        y <- bb(y, output = "extent")
+	        x2 <- suppressWarnings(crop(x, y, ...))
+	    } else {
+	        y <- create_sf_rect(y)
+	        x2 <- suppressMessages(suppressWarnings(st_intersection(x, y)))
+	    }
 	}
 
 	x2
