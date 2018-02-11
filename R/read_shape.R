@@ -14,7 +14,7 @@
 #' @importFrom rgdal readOGR
 #' @import sp
 #' @export
-read_shape <- function(file, current.projection=NULL, as.sf=FALSE, ...){
+read_shape <- function(file, current.projection=NULL, as.sf=TRUE, ...){
 
 	# determine region ID
 	if (file.exists(file)) {

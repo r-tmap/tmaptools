@@ -4,7 +4,7 @@
 \alias{read_shape}
 \title{Read shape file}
 \usage{
-read_shape(file, current.projection = NULL, as.sf = FALSE, ...)
+read_shape(file, current.projection = NULL, as.sf = TRUE, ...)
 }
 \arguments{
 \item{file}{a shape file name (including directory)}

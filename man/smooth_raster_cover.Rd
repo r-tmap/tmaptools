@@ -5,7 +5,7 @@
 \title{Get a smoothed cover of a raster object}
 \usage{
 smooth_raster_cover(shp, var = NULL, bandwidth = NA, threshold = 0.6,
-  output = "SpatialPolygons")
+  output = "polygons")
 }
 \arguments{
 \item{shp}{raster object, from either \code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}} or \code{\link[raster:Raster-class]{Raster}} class.}
@@ -16,7 +16,7 @@ smooth_raster_cover(shp, var = NULL, bandwidth = NA, threshold = 0.6,
 
 \item{threshold}{numeric value between 0 and 1 that determines which part of the estimated 2D kernal density is returned as cover.}
 
-\item{output}{class of the returned object. One of: \code{\link[sp:SpatialPolygons]{SpatialPolygons}}, \code{\link[sp:SpatialLines]{SpatialLines}}, \code{\link[sp:SpatialGridDataFrame]{SpatialGridDataFrame}}, or \code{\link[raster:Raster-class]{RasterLayer}}. A vector of class names results in a list of output objects.}
+\item{output}{class of the returned object. One of: \code{polygons} (\code{sf} object), \code{lines} (\code{sf} object), or a \code{\link[raster:Raster-class]{raster}}. A vector of class names results in a list of output objects.}
 }
 \description{
 Get a smoothed cover of a raster object. From all non-missing values of a raster object, a 2D kernal density is applied. The output is a SpatialPolygons object. Used by \code{\link{smooth_map}}.

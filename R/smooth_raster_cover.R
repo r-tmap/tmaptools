@@ -8,11 +8,11 @@
 #' @param var name of the variable from which missing values are flagged. If unspecified, the first variable will be taken.
 #' @param bandwidth single numeric value or vector of two numeric values that specifiy the bandwidth of the kernal density estimator. See details.
 #' @param threshold numeric value between 0 and 1 that determines which part of the estimated 2D kernal density is returned as cover.
-#' @param output class of the returned object. One of: \code{\link[sp:SpatialPolygons]{SpatialPolygons}}, \code{\link[sp:SpatialLines]{SpatialLines}}, \code{\link[sp:SpatialGridDataFrame]{SpatialGridDataFrame}}, or \code{\link[raster:Raster-class]{RasterLayer}}. A vector of class names results in a list of output objects.
+#' @param output class of the returned object. One of: \code{polygons} (\code{sf} object), \code{lines} (\code{sf} object), or a \code{\link[raster:Raster-class]{raster}}. A vector of class names results in a list of output objects.
 #' @importFrom raster raster extent
 #' @importMethodsFrom raster as.matrix
 #' @export
-smooth_raster_cover <- function(shp, var=NULL, bandwidth=NA, threshold=.6, output="SpatialPolygons") {
+smooth_raster_cover <- function(shp, var=NULL, bandwidth=NA, threshold=.6, output="polygons") {
 
 	# convert to rasterlayer
 	if (!inherits(shp, "RasterLayer")) {
@@ -61,10 +61,10 @@ smooth_raster_cover <- function(shp, var=NULL, bandwidth=NA, threshold=.6, outpu
 	### OUTPUTS
 
 	# Lines
-	SL <- as(cl2_nna, "SpatialLines")
+	SL <- st_as_sf(as(cl2_nna, "SpatialLines"))
 
 	# SpatialPolygons
-	SP <- as(cp_nna, "SpatialPolygons")
+	SP <- st_as_sf(as(cp_nna, "SpatialPolygons"))
 
 	# SpatialGridDataFrame
 	SG <- as(shp$NNA__VALUES, "SpatialGridDataFrame")
@@ -75,18 +75,16 @@ smooth_raster_cover <- function(shp, var=NULL, bandwidth=NA, threshold=.6, outpu
 
 	if (length(output)==1) {
 		switch(output,
-			   SpatialLines=SL,
-			   SpatialPolygons=SP,
-			   SpatialGridDataFrame=shp,
-			   RasterLayer=RL)
+			   lines=SL,
+			   polygons=SP,
+			   raster=RL)
 	} else {
 		names(output) <- output
 		lapply(output, function(out) {
 			switch(out,
-				   SpatialLines=SL,
-				   SpatialPolygons=SP,
-				   SpatialGridDataFrame=shp,
-				   RasterLayer=RL)
+				   lines=SL,
+				   polygons=SP,
+				   raster=RL)
 		})
 	}
 }

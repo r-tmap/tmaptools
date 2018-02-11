@@ -149,10 +149,10 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 			}
 		}  else if (cover.type=="smooth") {
 			if (!inherits(shp, "Raster")) stop("Raster shape required when cover.type=\"smooth\"")
-			cover_list <- smooth_raster_cover(shp, var=var, bandwidth = bandwidth*unit.size, threshold = cover.threshold, output=c("RasterLayer", "SpatialPolygons"))
-			cover_r <- cover_list$RasterLayer
+			cover_list <- smooth_raster_cover(shp, var=var, bandwidth = bandwidth*unit.size, threshold = cover.threshold, output=c("raster", "polygons"))
+			cover_r <- cover_list$raster
 			cover_r[!cover_r[]] <- NA
-			cover <- cover_list$SpatialPolygons
+			cover <- cover_list$polygons
 		}
 	} else {
 		cover <- gUnaryUnion(cover)
@@ -273,7 +273,7 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 	}
 
 
-	if (is_sf) cp <- as(cp, "sf")
+	cp <- as(cp, "sf")
 
 	attr(cp, "kernel_density") <- TRUE
 
@@ -281,7 +281,7 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 
 	if (!is.null(cl2)) {
 	    lns <- SpatialLinesDataFrame(suppressWarnings(gIntersection(cover, cl2, byid = TRUE)), data=cl2@data, match.ID = FALSE)
-	    if (is_sf) lns <- as(lns, "sf")
+	    lns <- as(lns, "sf")
 	    attr(lns, "isolines") <- TRUE
 	} else {
 	    lns <- NULL
