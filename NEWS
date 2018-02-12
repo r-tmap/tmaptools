@@ -1,3 +1,6 @@
+version 1.2-3
+- fixed bug in smooth_map
+
 version 1.2-2
 - improved smooth_map
 

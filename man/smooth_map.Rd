@@ -14,7 +14,7 @@ smooth_map(shp, var = NULL, nrow = NA, ncol = NA, N = 250000,
 \arguments{
 \item{shp}{shape object of class \code{\link[sp:Spatial]{Spatial}}, \code{\link[raster:Raster-class]{Raster}}, or \code{sf}. Spatial points, polygons, and grids are supported. Spatial lines are not.}
 
-\item{var}{variable name. Not needed for \code{\link[sp:SpatialPoints]{SpatialPoints}}. If missing, the first variable name is taken.}
+\item{var}{variable name. Not needed for \code{\link[sp:SpatialPoints]{SpatialPoints}}. If missing, the first variable name is taken. For polygons, the variable should contain densities, not absolute numbers.}
 
 \item{nrow}{number of rows in the raster that is used to smooth the shape object. Only applicable if shp is not a \code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}} or \code{\link[raster:Raster-class]{Raster}}}
 
