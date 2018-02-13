@@ -8,7 +8,6 @@ if (require(tmap)) {
     # map decreased by factor 4 for each dimension
     land4 <- aggregate_map(land, fact=4, agg.fun="modal")
     qtm(land4, raster="cover_cls")
-    }
 
     # map decreased by factor 8, where the variable trees is
     # aggregated with mean, min, and max
@@ -19,6 +18,7 @@ if (require(tmap)) {
     	tm_raster(c("trees.1", "trees.2", "trees.3"), title="Trees (%)") +
     	tm_facets(free.scales=FALSE) +
     	tm_layout(panel.labels = c("mean", "min", "max"))
+    }
 
     data(NLD_muni, NLD_prov)
 
