@@ -12,16 +12,14 @@ This package offers a set of handy tool functions for reading and processing spa
 Installation
 ------------
 
-`tmaptools` is available on CRAN (version 1.2-1). The development version can be installed as follows:
+`tmaptools` is available on CRAN (version 1.2-3). The development version can be installed as follows:
 
 ```r
 library(devtools)
 install_github("mtennekes/tmaptools")
 ```
 
-Linux and MacOS may
-
-See installation https://github.com/mtennekes/tmap
+See [installation procedure](https://github.com/mtennekes/tmap#installation)
 
 
 Development
