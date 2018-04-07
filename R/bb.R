@@ -176,9 +176,9 @@ bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=N
 	    b <- sf::st_bbox(sf_pnts2_prj)
 	    is_prj <- is_projected(projection)
 	} else {
-	    is_prj <- if (is.na(current.projection))
+	    is_prj <- if (is.na(current.projection)) {
 	        !maybe_longlat(b)
-	    else is_projected(current.projection)
+	    } else is_projected(current.projection)
 
 	    if (is.na(current.projection) && !is_prj) current.projection  <- .crs_longlat
 	}
@@ -195,9 +195,9 @@ bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=N
 
 	if (output == "bbox") {
 	    if (!inherits(b, "bbox")) {
-	        b <- structure(b, names = c("xmin", "ymin", "xmax", "ymax"), class="bbox")
+	        b <- unname(b)
+	        b <- st_bbox(c(xmin = b[1], ymin = b[2], xmax = b[3], ymax = b[4]), crs = st_crs(current.projection))
 	    }
-	    if (is.null(attr(b, "crs"))) attr(b, "crs") <- st_crs(current.projection)
 	} else if (output == "matrix") {
 	    b <- matrix(b, ncol=2, dimnames = list(c("x", "y"), c("min", "max")))
 	} else {
@@ -213,9 +213,11 @@ get_sf_bbox <- function(shp) {
 
 sfbb <- function(bb) {
     if (is.matrix(bb)) {
-        structure(as.vector(bb), names = c("xmin", "ymin", "xmax", "ymax"), class="bbox")
+        bb <- unname(as.vector(bb))
+        st_bbox(c(xmin = bb[1], ymin = bb[2], xmax = bb[3], ymax = bb[4]), crs = st_crs(NA))
     } else if (inherits(bb, "Extent")) {
-        structure(as.vector(bb)[c(1, 3, 2, 4)], names = c("xmin", "ymin", "xmax", "ymax"), class="bbox")
+        bb <- unname(as.vector(bb))
+        st_bbox(c(xmin = bb[1], ymin = bb[3], xmax = bb[2], ymax = bb[4]), crs = st_crs(NA))
     } else stop("bb not 2x2 matrix nor extent object")
 }
 
@@ -243,8 +245,8 @@ get_bb <- function(x, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=NULL, ylim
     } else if (inherits(x, "bbox")) {
         b <- x
     } else if (is.vector(x) && length(x)==4) {
-        x <- check_bb_order(x)
-        b <- structure(x, names = c("xmin", "ymin", "xmax", "ymax"), class="bbox")
+        x <- unname(check_bb_order(x))
+        b <- st_bbox(c(xmin = x[1], ymin = x[2], xmax = x[3], ymax = x[4]), crs = st_crs(NA))
     } else if (!is.na(x)[1]) {
         stop("Incorrect x argument")
     } else {
@@ -253,7 +255,8 @@ get_bb <- function(x, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=NULL, ylim
         ## create new bounding box
         if (is.null(xlim)) xlim <- cx + c(-.5, .5) * width
         if (is.null(ylim)) ylim <- cy + c(-.5, .5) * height
-        b <- structure(c(xlim[1], ylim[1], xlim[2], ylim[2]), names = c("xmin", "ymin", "xmax", "ymax"), class="bbox")
+        b <- st_bbox(c(xmin = xlim[1], ymin = ylim[1], xmax = xlim[2], ymax = ylim[2]), crs = st_crs(NA))
+
     }
     if (is.null(current.projection)) current.projection <- st_crs(NA)
     if (!is.na(current.projection)) {
