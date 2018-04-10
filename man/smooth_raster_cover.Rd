@@ -12,7 +12,7 @@ smooth_raster_cover(shp, var = NULL, bandwidth = NA, threshold = 0.6,
 
 \item{var}{name of the variable from which missing values are flagged. If unspecified, the first variable will be taken.}
 
-\item{bandwidth}{single numeric value or vector of two numeric values that specifiy the bandwidth of the kernal density estimator. See details.}
+\item{bandwidth}{single numeric value or vector of two numeric values that specify the bandwidth of the kernal density estimator. See details.}
 
 \item{threshold}{numeric value between 0 and 1 that determines which part of the estimated 2D kernal density is returned as cover.}
 
@@ -22,7 +22,7 @@ smooth_raster_cover(shp, var = NULL, bandwidth = NA, threshold = 0.6,
 Get a smoothed cover of a raster object. From all non-missing values of a raster object, a 2D kernal density is applied. The output is a SpatialPolygons object. Used by \code{\link{smooth_map}}.
 }
 \details{
-For the estimation of the 2D kernal density, code is borrowed from \code{\link[KernSmooth:bkde2D]{bkde2D}}. This implemention is slightly different: \code{\link[KernSmooth:bkde2D]{bkde2D}} takes point coordinates and applies linear binning, whereas in this function, the data is already binned, with values 1 if the values of \code{var} are not missing and 0 if values of \code{var} are missing.
+For the estimation of the 2D kernal density, code is borrowed from \code{\link[KernSmooth:bkde2D]{bkde2D}}. This implementation is slightly different: \code{\link[KernSmooth:bkde2D]{bkde2D}} takes point coordinates and applies linear binning, whereas in this function, the data is already binned, with values 1 if the values of \code{var} are not missing and 0 if values of \code{var} are missing.
 }
 \references{
 Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}

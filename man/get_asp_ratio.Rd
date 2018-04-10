@@ -10,7 +10,7 @@ get_asp_ratio(x, is.projected = NA, width = 700, height = 700,
 \arguments{
 \item{x}{shape object (either \code{\link[sp:Spatial]{Spatial}}, a \code{\link[raster:Raster-class]{Raster}}, or an \code{sf}), a bounding box (that can be coerced by \code{\link{bb}}), or a \code{\link[tmap:tmap-element]{tmap}} object.}
 
-\item{is.projected}{Logical that determined wether the coordinates of \code{x} are projected (\code{TRUE}) or longitude latitude coordinates (\code{FALSE}). By deafult, it is determined by the coordinates of \code{x}.}
+\item{is.projected}{Logical that determined whether the coordinates of \code{x} are projected (\code{TRUE}) or longitude latitude coordinates (\code{FALSE}). By default, it is determined by the coordinates of \code{x}.}
 
 \item{width}{See details; only applicable if \code{x} is a \code{\link[tmap:tmap-element]{tmap}} object.}
 

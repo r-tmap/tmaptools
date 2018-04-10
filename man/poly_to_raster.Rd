@@ -18,7 +18,7 @@ poly_to_raster(shp, r = NULL, nrow = NA, ncol = NA, N = 250000,
 
 \item{N}{preferred number of raster cells.}
 
-\item{use.cover}{logical; should the cover method be used? This method determines per raster cell which polygon has the highest cover fraction. This method is better, but very slow, since N times the number of polygons combinations are processed (using the \code{getCover} argument of \code{\link[raster:rasterize]{rasterize}}). By default, when a raster cell is covered by multiple polygons, the last polygon is taken (see \code{fun} argment of \code{\link[raster:rasterize]{rasterize}}))}
+\item{use.cover}{logical; should the cover method be used? This method determines per raster cell which polygon has the highest cover fraction. This method is better, but very slow, since N times the number of polygons combinations are processed (using the \code{getCover} argument of \code{\link[raster:rasterize]{rasterize}}). By default, when a raster cell is covered by multiple polygons, the last polygon is taken (see \code{fun} argument of \code{\link[raster:rasterize]{rasterize}}))}
 
 \item{copy.data}{should the polygon data be appended to the raster? Only recommended when \code{N} is small.}
 

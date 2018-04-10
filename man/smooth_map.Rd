@@ -34,7 +34,7 @@ smooth_map(shp, var = NULL, nrow = NA, ncol = NA, N = 250000,
 
 \item{breaks}{in case \code{style=="fixed"}, breaks should be specified}
 
-\item{bandwidth}{single numeric value or vector of two numeric values that specifiy the bandwidth of the kernal density estimator. By default, it is 1/50th of the shortest side in units (specified with \code{unit.size}).}
+\item{bandwidth}{single numeric value or vector of two numeric values that specify the bandwidth of the kernal density estimator. By default, it is 1/50th of the shortest side in units (specified with \code{unit.size}).}
 
 \item{threshold}{threshold value when a 2D kernel density is applied. Density values below this threshold will be set to \code{NA}. Only applicable when \code{shp} is a \code{\link[sp:SpatialPoints]{SpatialPoints}} or \code{smooth.raster=TRUE}.}
 
@@ -67,7 +67,7 @@ List with the following items:
 Create a smooth map from a shape object. A 2D kernel density estimator is applied to the shape, which can be a spatial points, polygons, or raster object. Various format are returned: a smooth raster, contour lines, and polygons. The covered area can be specified, i.e., the area outside of it is extracted from the output.
 }
 \details{
-For the estimation of the 2D kernal density, code is borrowed from \code{\link[KernSmooth:bkde2D]{bkde2D}}. This implemention is slightly different: \code{\link[KernSmooth:bkde2D]{bkde2D}} takes point coordinates and applies linear binning, whereas in this function, the data is already binned, with values 1 if the values of \code{var} are not missing and 0 if values of \code{var} are missing.
+For the estimation of the 2D kernal density, code is borrowed from \code{\link[KernSmooth:bkde2D]{bkde2D}}. This implementation is slightly different: \code{\link[KernSmooth:bkde2D]{bkde2D}} takes point coordinates and applies linear binning, whereas in this function, the data is already binned, with values 1 if the values of \code{var} are not missing and 0 if values of \code{var} are missing.
 }
 \examples{
 \dontrun{

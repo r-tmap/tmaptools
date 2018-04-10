@@ -79,7 +79,7 @@ is_light <- function(col) {
 
 #' Explore color palettes
 #'
-#' This interactive tool shows all Color Brewer palettes, where the number of colors can be adjusted as well as the constrast range. Categorical (qualitative) palettes can be stretched when the number of colors exceeds the number of palette colors. Output code needed to get the desired color values is generated. Finally, all colors can be tested for color blindness.
+#' This interactive tool shows all Color Brewer palettes, where the number of colors can be adjusted as well as the contrast range. Categorical (qualitative) palettes can be stretched when the number of colors exceeds the number of palette colors. Output code needed to get the desired color values is generated. Finally, all colors can be tested for color blindness.
 #' @export
 #' @importFrom grDevices col2rgb
 #' @importFrom dichromat dichromat

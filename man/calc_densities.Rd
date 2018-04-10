@@ -10,7 +10,7 @@ calc_densities(shp, var, target = "metric", orig = NA, to = NA,
 \arguments{
 \item{shp}{a shape object, i.e., a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}, or a \code{sf} object that can be coerced as such.}
 
-\item{var}{name(s) of a qualtity variable name contained in the \code{shp} data}
+\item{var}{name(s) of a quantitative variable name contained in the \code{shp} data}
 
 \item{target}{the target unit, see \code{\link{approx_areas}}. Density values are calculated in \code{var/target^2}.}
 
@@ -28,7 +28,7 @@ calc_densities(shp, var, target = "metric", orig = NA, to = NA,
 Vector or data.frame (depending on whether \code{length(var)==1} with density values. This can be appended directly to the shape file with \code{\link{append_data}} with \code{fixed.order=TRUE}.
 }
 \description{
-Transpose quantitative variables to densitiy variables, which are often needed for choroplets. For example, the colors of a population density map should correspond population density counts rather than absolute population numbers.
+Transpose quantitative variables to density variables, which are often needed for choropleths. For example, the colors of a population density map should correspond population density counts rather than absolute population numbers.
 }
 \examples{
 if (require(tmap)) {

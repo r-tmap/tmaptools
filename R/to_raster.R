@@ -14,6 +14,7 @@
 #' @export
 #' @importFrom raster raster extent rasterize
 #' @example  ./examples/points_to_raster.R
+#' @references Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}
 #' @seealso \code{\link{poly_to_raster}}
 points_to_raster <- function(shp, nrow=NA, ncol=NA, N=250000, by=NULL, to.Raster=FALSE) {
     if (inherits(shp, c("sf", "sfc"))) shp <- as(shp, "Spatial")
@@ -85,7 +86,7 @@ points_to_raster <- function(shp, nrow=NA, ncol=NA, N=250000, by=NULL, to.Raster
 #' @param nrow number of raster rows. If \code{NA}, it is automatically determined by \code{N} and the aspect ratio of \code{shp}.
 #' @param ncol number of raster columns. If \code{NA}, it is automatically determined by \code{N} and the aspect ratio of \code{shp}.
 #' @param N preferred number of raster cells.
-#' @param use.cover logical; should the cover method be used? This method determines per raster cell which polygon has the highest cover fraction. This method is better, but very slow, since N times the number of polygons combinations are processed (using the \code{getCover} argument of \code{\link[raster:rasterize]{rasterize}}). By default, when a raster cell is covered by multiple polygons, the last polygon is taken (see \code{fun} argment of \code{\link[raster:rasterize]{rasterize}}))
+#' @param use.cover logical; should the cover method be used? This method determines per raster cell which polygon has the highest cover fraction. This method is better, but very slow, since N times the number of polygons combinations are processed (using the \code{getCover} argument of \code{\link[raster:rasterize]{rasterize}}). By default, when a raster cell is covered by multiple polygons, the last polygon is taken (see \code{fun} argument of \code{\link[raster:rasterize]{rasterize}}))
 #' @param copy.data should the polygon data be appended to the raster? Only recommended when \code{N} is small.
 #' @param to.Raster logical; should the output be a \code{\link[raster:Raster-class]{Raster}} object (\code{TRUE}), or a \code{\link[sp:SpatialGridDataFrame]{SpatialGridDataFrame}} (\code{FALSE}). If \code{TRUE}, a \code{RasterBrick} is returned when \code{by} is specified, and a \code{RasterLayer} when \code{by} is unspecified. For very large rasters, use \code{TRUE}, since large \code{\link[raster:Raster-class]{Raster}} objects are accessed from disk.
 #' @param ... arguments passed on to \code{\link[raster:rasterize]{rasterize}}

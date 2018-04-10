@@ -12,7 +12,7 @@
 #' @example ./examples/simplify_shape.R
 #' @importFrom rmapshaper ms_simplify
 #' @importFrom rgeos gIsValid gBuffer
-#' @return shape in the smae class as \code{shp}
+#' @return shape in the same class as \code{shp}
 #' @references Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}
 #' @export
 simplify_shape <- function(shp, fact = 0.1, keep.units=FALSE, keep.subunits=FALSE, ...) {

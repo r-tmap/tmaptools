@@ -1,13 +1,13 @@
 #' Approximate distances
 #'
-#' Approximate distances between two points or across the horizontal and vertical centerlines of a bounding box.
+#' Approximate distances between two points or across the horizontal and vertical center lines of a bounding box.
 #'
-#' @param x object that can be coerced to a bounding box with \code{\link{bb}}, or a pair of coordintes (vector of two). In the former case, the distance across the horizontal and vertical centerlines of the bounding box are approximated. In the latter case, \code{y} is also required; the distance between points \code{x} amd \code{y} is approximated.
+#' @param x object that can be coerced to a bounding box with \code{\link{bb}}, or a pair of coordinates (vector of two). In the former case, the distance across the horizontal and vertical centerlines of the bounding box are approximated. In the latter case, \code{y} is also required; the distance between points \code{x} and \code{y} is approximated.
 #' @param y a pair of coordintes, vector of two. Only required when \code{x} is also a pair of coordintes.
 #' @param projection projection code, needed in case \code{x} is a bounding box or when \code{x} and \code{y} are pairs of coordinates. See \code{\link{get_proj4}}
 #' @param target target unit, one of:  \code{"m"}, \code{"km"}, \code{"mi"}, and \code{"ft"}.
 #' @param orig original unit, i.e. by which \code{x} is defined. Only needed if this information is missing from \code{x} and \code{x} is projected. Options:  \code{"m"}, \code{"km"}, \code{"mi"}, and \code{"ft"}.
-#' @param to multiplier used as follows: \code{orig * to = target}. Only needed when \code{orig} or \code{target} is unknown. For instance, if \code{target} is set to \code{"hm"} (hectameter), and \code{orig} is \code{"m"}, then \code{to} should be 100, meaning 1 hectameter equals 100 meters.
+#' @param to multiplier used as follows: \code{orig * to = target}. Only needed when \code{orig} or \code{target} is unknown. For instance, if \code{target} is set to \code{"hm"} (hectometer), and \code{orig} is \code{"m"}, then \code{to} should be 100, meaning 1 hectameter equals 100 meters.
 #' @param show.warnings should warnings be shown?
 #' @return If \code{y} is specifyed, a list of two: unit and dist. Else, a list of three: unit, hdist (horizontal distance) and vdist (vertical distance).
 #' @importFrom geosphere distGeo

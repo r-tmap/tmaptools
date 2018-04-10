@@ -138,7 +138,7 @@ geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, details=FALS
 #' @param server OpenStreetMap Nominatim server name. Could also be a local OSM Nominatim server.
 #' @export
 #' @importFrom XML xmlChildren xmlRoot xmlAttrs xmlTreeParse xmlValue
-#' @return A data frmame with all atributes that are contained in the search result
+#' @return A data frame with all attributes that are contained in the search result
 #' @example ./examples/rev_geocode_OSM.R
 #' @seealso \code{\link{geocode_OSM}}
 rev_geocode_OSM <- function(x, y=NULL, zoom=NULL, projection=NULL, as.data.frame=NA, server="http://nominatim.openstreetmap.org") {

@@ -21,7 +21,7 @@ rev_geocode_OSM(x, y = NULL, zoom = NULL, projection = NULL,
 \item{server}{OpenStreetMap Nominatim server name. Could also be a local OSM Nominatim server.}
 }
 \value{
-A data frmame with all atributes that are contained in the search result
+A data frame with all attributes that are contained in the search result
 }
 \description{
 Reverse geocodes a location (based on spatial coordinates) to an address. It uses OpenStreetMap Nominatim. For processing large amount of queries, please read the usage policy (\url{http://wiki.openstreetmap.org/wiki/Nominatim_usage_policy}).

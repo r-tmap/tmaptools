@@ -1,9 +1,9 @@
 #' Calculate densities
 #'
-#' Transpose quantitative variables to densitiy variables, which are often needed for choroplets. For example, the colors of a population density map should correspond population density counts rather than absolute population numbers.
+#' Transpose quantitative variables to density variables, which are often needed for choropleths. For example, the colors of a population density map should correspond population density counts rather than absolute population numbers.
 #'
 #' @param shp a shape object, i.e., a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}, or a \code{sf} object that can be coerced as such.
-#' @param var name(s) of a qualtity variable name contained in the \code{shp} data
+#' @param var name(s) of a quantitative variable name contained in the \code{shp} data
 #' @param target the target unit, see \code{\link{approx_areas}}. Density values are calculated in \code{var/target^2}.
 #' @param orig original units, i.e. by which the coordinates are defined, see \code{\link{approx_areas}}.
 #' @param to multiplier used as follows: \code{orig * to = target}. See \code{\link{approx_areas}}.

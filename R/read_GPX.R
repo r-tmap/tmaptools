@@ -3,9 +3,9 @@
 #' Read a GPX file. By default, it reads all possible GPX layers, and only returns shapes for layers that have any features.
 #'
 #' @param file a GPX filename (including directory)
-#' @param layers vector of GPX layers. Possible options are \code{"waypoints"}, \code{"tracks"}, \code{"routes"}, \code{"track_points"}, \code{"route_points"}. By dedault, all those layers are read.
+#' @param layers vector of GPX layers. Possible options are \code{"waypoints"}, \code{"tracks"}, \code{"routes"}, \code{"track_points"}, \code{"route_points"}. By default, all those layers are read.
 #' @param as.sf should \code{sf} objects be returned?
-#' @return for each defiend layer, a shape is returned (only if the layer has any features). If only one layer is defined, the corresponding shape is returned. If more than one layer is defined, a list of shape objects, one for each layer, is returned.
+#' @return for each defined layer, a shape is returned (only if the layer has any features). If only one layer is defined, the corresponding shape is returned. If more than one layer is defined, a list of shape objects, one for each layer, is returned.
 #' @importFrom rgdal readOGR ogrInfo
 #' @export
 #' @example ./examples/read_GPX.R

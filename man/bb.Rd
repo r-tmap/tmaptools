@@ -54,7 +54,7 @@ An existing bounding box (defined by \code{x}) can be modified as follows:
 A new bounding box can be created from scratch as follows:
 \itemize{
 \item Using the extension factor \code{ext}.
-\item Setting the center coorinates \code{cx} and \code{cy}, together with the \code{width} and \code{height}.
+\item Setting the center coordinates \code{cx} and \code{cy}, together with the \code{width} and \code{height}.
 \item Setting the x and y limits \code{xlim} and \code{ylim}
 }
 }

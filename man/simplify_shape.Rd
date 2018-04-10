@@ -19,7 +19,7 @@ simplify_shape(shp, fact = 0.1, keep.units = FALSE, keep.subunits = FALSE,
 \item{...}{other arguments passed on to the underlying function \code{\link[rmapshaper:ms_simplify]{ms_simplify}} (except for the arguments \code{input}, \code{keep}, \code{keep_shapes} and \code{explode})}
 }
 \value{
-shape in the smae class as \code{shp}
+shape in the same class as \code{shp}
 }
 \description{
 Simplify a shape consisting of polygons or lines. This can be useful for shapes that are too detailed for visualization, especially along natural borders such as coastlines and rivers. The number of coordinates is reduced.
