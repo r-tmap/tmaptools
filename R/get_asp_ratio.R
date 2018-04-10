@@ -13,6 +13,7 @@
 #' @import sp
 #' @importFrom raster couldBeLonLat
 #' @example ./examples/get_asp_ratio.R
+#' @references Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}
 #' @export
 get_asp_ratio <- function(x, is.projected = NA, width=700, height=700, res=100) {
 	if (inherits(x, "tmap")) {

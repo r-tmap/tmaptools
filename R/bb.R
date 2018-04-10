@@ -39,6 +39,7 @@
 #' @importFrom rgeos gIntersection
 #' @example ./examples/bb.R
 #' @seealso \code{\link{geocode_OSM}}
+#' @references Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}
 #' @export
 bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=NULL, ylim=NULL, relative = FALSE, current.projection=NULL, projection=NULL, as.extent=FALSE) {
 

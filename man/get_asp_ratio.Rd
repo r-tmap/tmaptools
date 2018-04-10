@@ -41,3 +41,6 @@ if (require(tmap)) {
     get_asp_ratio("Germany") #note: bb("Germany") uses geocode_OSM("Germany")
 }
 }
+\references{
+Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}
+}

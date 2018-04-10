@@ -1,3 +1,6 @@
+version 1.2-4
+- added references to JSS paper (including citation)
+
 version 1.2-3
 - fixed bug in smooth_map
 

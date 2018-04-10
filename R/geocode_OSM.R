@@ -1,7 +1,7 @@
 #' Geocodes a location using OpenStreetMap Nominatim
-#' 
+#'
 #' Geocodes a location (based on a search query) to coordinates and a bounding box. Similar to geocode from the ggmap package. It uses OpenStreetMap Nominatim. For processing large amount of queries, please read the usage policy (\url{http://wiki.openstreetmap.org/wiki/Nominatim_usage_policy}).
-#' 
+#'
 #' @param q a character (vector) that specifies a search query. For instance \code{"India"} or \code{"CBS Weg 11, Heerlen, Netherlands"}.
 #' @param projection projection in which the coordinates and bounding box are returned. Either a \code{\link[sp:CRS]{CRS}} object or a character value. If it is a character, it can either be a \code{PROJ.4} character string or a shortcut. See \code{\link{get_proj4}} for a list of shortcut values. By default latitude longitude coordinates.
 #' @param return.first.only Only return the first result
@@ -14,38 +14,39 @@
 #' @importFrom XML xmlChildren xmlRoot xmlAttrs xmlTreeParse xmlValue
 #' @example ./examples/geocode_OSM.R
 #' @seealso \code{\link{rev_geocode_OSM}}, \code{\link{bb}}
+#' @references Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}
 geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, details=FALSE, as.data.frame=NA, as.SPDF=FALSE, server="http://nominatim.openstreetmap.org") {
 	n <- length(q)
 	q2 <- gsub(" ", "+", enc2utf8(q), fixed = TRUE)
 	addr <- paste0(server, "/search?q=", q2, "&format=xml&polygon=0&addressdetails=0")
-	
+
 	project <- !missing(projection)
 	if (project) projection <- get_proj4(projection, as.CRS = TRUE)
-	
-	
+
+
 	if (is.na(as.data.frame)) as.data.frame <- (n>1)
 	if (as.SPDF) {
 		as.data.frame <- TRUE
 		return.first.only <- TRUE
 	}
 
-	
+
 	output2 <- lapply(1:n, function(k) {
 		tmpfile <- tempfile()
 		suppressWarnings(download.file(addr[k], destfile = tmpfile, mode= "wb", quiet = TRUE))
-		
+
 		doc <- xmlTreeParse(tmpfile, encoding="UTF-8")
 		unlink(tmpfile)
-		
-		res <- xmlChildren(xmlRoot(doc)) 
-		
+
+		res <- xmlChildren(xmlRoot(doc))
+
 		if (length(res)==0) {
-			warning(paste("No results found for \"", q[k], "\".", sep="")) #if (n==1) 
+			warning(paste("No results found for \"", q[k], "\".", sep="")) #if (n==1)
 			return(NULL)
 		}
-		
+
 		idx <- if (return.first.only) 1 else 1:length(res)
-		
+
 		sn_names <- c("place_id", "osm_type", "osm_id", "place_rank", "display_name", "class", "type", "importance", "icon")
 		output <- lapply(idx, function(i) {
 			search_result <- xmlAttrs(res[[i]])
@@ -53,31 +54,31 @@ geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, details=FALS
 			search_result_id <- search_result[sn_names]
 			names(search_result_id) <- sn_names # in case of missings
 			Encoding(search_result_id) <- "UTF-8"
-			
+
 			search_result_loc <- as.numeric(search_result[c("lat", "lon")])
 			names(search_result_loc) <- c("lat", "lon")
-			
+
 			search_result_bb <- as.numeric(unlist(strsplit(search_result["boundingbox"], ",")))
-			
+
 			if (!project) {
 				names(search_result_bb) <- c("lat_min", "lat_max", "lon_min", "lon_max")
 				b <- bb(xlim=search_result_bb[3:4], ylim=search_result_bb[1:2])
-				
+
 				coords <- search_result_loc[c("lon", "lat")]
 				names(coords) <- c("x", "y")
-				
+
 			} else {
 				b <- bb(xlim=search_result_bb[3:4], ylim=search_result_bb[1:2], current.projection = .CRS_longlat, projection=projection)
-				
+
 				search_result_bb <- b[c(2,4,1,3)]
 				names(search_result_bb) <- c("y_min", "y_max", "x_min", "x_max")
-				
-				
+
+
 				p <- SpatialPoints(matrix(search_result_loc[2:1], nrow=1), proj4string=.CRS_longlat)
 				p <- set_projection(p, projection=projection)
 				coords <- as.vector(attr(p, "coords"))
 				names(coords) <- c("x", "y")
-				
+
 				search_result_loc <- as.list(coords)
 				names(search_result_loc) <- c("x", "y")
 			}
@@ -87,29 +88,29 @@ geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, details=FALS
 				  search_result_loc,
 				  search_result_bb)
 			} else {
-				c(list(query=q[k], 
+				c(list(query=q[k],
 					   coords=coords,
 					   bbox=b))
 			}
-			
+
 			if (details) res <- c(res, search_result_id)
 			if (as.data.frame) res <- as.data.frame(res, stringsAsFactors=FALSE)
 			res
 		})
 	})
-	
+
 	output3 <- do.call(c, output2)
-	
+
 	if (as.data.frame) {
 		df <- do.call(rbind, output3)
-		
+
 		if (as.SPDF) {
 			if (!project) {
-				spdf <- SpatialPointsDataFrame(df[, c("lon", "lat")], proj4string=.CRS_longlat, 
+				spdf <- SpatialPointsDataFrame(df[, c("lon", "lat")], proj4string=.CRS_longlat,
 											   data = df,
 											   match.ID = FALSE)
 			} else {
-				spdf <- SpatialPointsDataFrame(df[, c("x", "y")], proj4string=projection, 
+				spdf <- SpatialPointsDataFrame(df[, c("x", "y")], proj4string=projection,
 											   data = df,
 											   match.ID = FALSE)
 			}
@@ -126,9 +127,9 @@ geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, details=FALS
 
 
 #' Reverse geocodes a location using OpenStreetMap Nominatim
-#' 
+#'
 #' Reverse geocodes a location (based on spatial coordinates) to an address. It uses OpenStreetMap Nominatim. For processing large amount of queries, please read the usage policy (\url{http://wiki.openstreetmap.org/wiki/Nominatim_usage_policy}).
-#' 
+#'
 #' @param x x coordinate(s), or a \code{\link[sp:SpatialPoints]{SpatialPoints}} object
 #' @param y y coordinate(s)
 #' @param zoom zoom level
@@ -141,15 +142,15 @@ geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, details=FALS
 #' @example ./examples/rev_geocode_OSM.R
 #' @seealso \code{\link{geocode_OSM}}
 rev_geocode_OSM <- function(x, y=NULL, zoom=NULL, projection=NULL, as.data.frame=NA, server="http://nominatim.openstreetmap.org") {
-	
+
 	project <- !missing(projection)
-	
+
 	if (project) projection <- get_proj4(projection, as.CRS = TRUE)
-	
+
 	if (inherits(x, "SpatialPoints")) {
-		
+
 		isproj <- is.projected(x)
-		
+
 		if (is.na(isproj)) {
 			if (project) {
 				x <- set_projection(x, current.projection = projection, projection=.CRS_longlat)
@@ -183,9 +184,9 @@ rev_geocode_OSM <- function(x, y=NULL, zoom=NULL, projection=NULL, as.data.frame
 			lat <- coords[,2]
 		}
 	}
-	
+
 	if (is.na(as.data.frame)) as.data.frame <- (n>1)
-	
+
 	if (missing(zoom)) {
 		qzoom <- ""
 		strzoom <- ""
@@ -193,9 +194,9 @@ rev_geocode_OSM <- function(x, y=NULL, zoom=NULL, projection=NULL, as.data.frame
 		qzoom <- paste0("&zoom=", zoom)
 		strzoom <- paste0(", zoom = ", zoom)
 	}
-	
+
 	addr <- paste0(server, "/reverse?format=xml&lat=", lat, "&lon=", lon, qzoom, "&addressdetails=1")
-	
+
 
 	dfs <- lapply(1:n, function(i) {
 		# download query
@@ -203,14 +204,14 @@ rev_geocode_OSM <- function(x, y=NULL, zoom=NULL, projection=NULL, as.data.frame
 		suppressWarnings(download.file(addr[i], destfile = tmpfile, mode= "wb", quiet = TRUE))
 		doc <- xmlTreeParse(tmpfile, encoding="UTF-8")
 		unlink(tmpfile)
-		
+
 		# read xml document
-		res <- xmlChildren(xmlRoot(doc)) 
-		
+		res <- xmlChildren(xmlRoot(doc))
+
 		# get name
 		result_name <- xmlValue(res[[1]])
 		Encoding(result_name) <- "UTF-8"
-		
+
 		# get osm id, location, bbox
 		search_result <- xmlAttrs(res[[1]])
 		search_result_id <- search_result[c("place_id", "osm_type", "osm_id", "ref")]
@@ -220,12 +221,12 @@ rev_geocode_OSM <- function(x, y=NULL, zoom=NULL, projection=NULL, as.data.frame
 		names(search_result_ll) <- c("lat", "lon")
 		search_result_bb <- as.numeric(unlist(strsplit(search_result["boundingbox"], ",")))
 		names(search_result_bb) <- c("lat_min", "lat_max", "lon_min", "lon_max")
-		
+
 		# get address
 		addr_result <- xmlChildren(res[[2]])
 		dfnames <- names(addr_result)
 		dfvalues <- lapply(1:length(addr_result), function(j) {
-			v <- xmlValue(addr_result[[j]])	
+			v <- xmlValue(addr_result[[j]])
 			Encoding(v) <- "UTF-8"
 			v
 		})
@@ -239,16 +240,16 @@ rev_geocode_OSM <- function(x, y=NULL, zoom=NULL, projection=NULL, as.data.frame
 		  search_result_bb,
 		  dfvalues)
 	})
-	
+
 	# cast to data.frame
 	if (as.data.frame) {
 		addrnames <- sort(unique(unlist(lapply(dfs, function(df) {
 			names(df)[14:length(df)]
 		}))))
-		
+
 		addrlist <- lapply(addrnames, function(a) NA)
 		names(addrlist) <- addrnames
-		
+
 		do.call(rbind, c(lapply(dfs, function(df) {
 			sel <- 14:length(df)
 			addrlist[names(df)[sel]] <- df[sel]

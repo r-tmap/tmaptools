@@ -86,6 +86,9 @@ if (require(tmap)) {
     # shorter alternative: tm_shape(World, bbox="Italy") + tm_polygons()
 }
 }
+\references{
+Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}
+}
 \seealso{
 \code{\link{geocode_OSM}}
 }

@@ -13,6 +13,7 @@
 #' @importFrom geosphere distGeo
 #' @example ./examples/approx_distances.R
 #' @seealso \code{\link{projection_units}} and \code{\link{approx_areas}}
+#' @references Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}
 #' @export
 approx_distances <- function(x, y = NULL, projection = NULL, target="metric", orig=NA, to=NA, show.warnings=TRUE) {
     ## set metric and imperial to defaults: km and mi

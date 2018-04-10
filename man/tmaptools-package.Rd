@@ -76,6 +76,9 @@ This page provides a brief overview of all package functions.
 }
 }
 
+\references{
+Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}
+}
 \author{
 Martijn Tennekes \email{mtennekes@gmail.com}
 }

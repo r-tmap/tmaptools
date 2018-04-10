@@ -12,6 +12,7 @@
 #' @return vector of color values. It is silently returned when \code{plot=TRUE}.
 #' @example ./examples/get_brewer_pal.R
 #' @seealso \code{\link{palette_explorer}}
+#' @references Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}
 #' @import grid
 #' @export
 get_brewer_pal <- function(palette, n=5, contrast=NA, stretch=TRUE, plot=TRUE) {

@@ -9,6 +9,7 @@
 #' @importFrom rgdal readOGR ogrInfo
 #' @export
 #' @example ./examples/read_GPX.R
+#' @references Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}
 read_GPX <- function(file, layers=c("waypoints", "tracks", "routes", "track_points", "route_points"), as.sf=FALSE) {
 	if (!all(layers %in% c("waypoints", "tracks", "routes", "track_points", "route_points"))) stop("Incorrect layer(s)", call. = FALSE)
 

@@ -22,6 +22,7 @@
 #' @param ... other arguments passed on to \code{\link{calc_densities}} and \code{\link{approx_areas}}
 #' @export
 #' @example ./examples/sample_dots.R
+#' @references Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}
 #' @importFrom raster raster extent rasterize couldBeLonLat crop
 sample_dots <- function(shp, vars=NULL, convert2density=FALSE, nrow=NA, ncol=NA, N=250000, npop=NA, n=10000, w=NA, shp.id=NULL, var.name="class", var.labels=vars, target="metric", orig=NA, to=NA, randomize=TRUE, output = c("points", "grid"), ...) {
 	args <- list(...)

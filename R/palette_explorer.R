@@ -86,6 +86,7 @@ is_light <- function(col) {
 #' @example ./examples/palette_explorer.R
 #' @seealso \code{\link{get_brewer_pal}}, \code{\link[dichromat:dichromat]{dichromat}}, \code{\link[RColorBrewer:RColorBrewer]{RColorBrewer}}
 #' @references \url{http://www.color-blindness.com/types-of-color-blindness/}
+#' @references Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}
 palette_explorer <- function() {
     if (!requireNamespace("shiny")) stop("shiny package needed for this function to work. Please install it.", call. = FALSE)
     if (!requireNamespace("shinyjs")) stop("shinyjs package needed for this function to work. Please install it.", call. = FALSE)

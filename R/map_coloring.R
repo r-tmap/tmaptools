@@ -11,6 +11,7 @@
 #' @return If \code{palette} is defined, a vector of colors is returned, otherwise a vector of color indices.
 #' @importFrom spdep poly2nb
 #' @example ./examples/map_coloring.R
+#' @references Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}
 #' @export
 map_coloring <- function(x, algorithm="greedy", ncols=NA, minimize=FALSE, palette=NULL, contrast=1) {
     if (inherits(x, c("sf", "sfc"))) x <- as(x, "Spatial")

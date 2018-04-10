@@ -12,6 +12,7 @@
 #' @seealso \code{\link{bb}}
 #' @importFrom raster trim mask brick
 #' @example ./examples/crop_shape.R
+#' @references Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}
 #' @return cropped shape, in the same class as \code{x}
 crop_shape <- function(x, y, polygon = FALSE, ...) {
     is_sf <- inherits(x, c("sf", "sfc"))

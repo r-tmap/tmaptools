@@ -16,6 +16,7 @@
 #' @importFrom raster raster
 #' @export
 #' @example ./examples/read_osm.R
+#' @references Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}
 #' @return The output of \code{read_osm} is a \code{\link[sp:SpatialGridDataFrame]{SpatialGridDataFrame}} if \code{raster=TRUE}, and otherwise a named list of \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygonsDataFrame}}, \code{\link[sp:SpatialLinesDataFrame]{SpatialLinesDataFrame}}, and/or \code{\link[sp:SpatialPointsDataFrame]{SpatialPointsDataFrame}} objects. The names of this list are the names of arguments defined at \code{...}.
 read_osm <- function(x, raster=NA, zoom=NULL, type="osm", minNumTiles=NULL, mergeTiles=NULL, ...) {
 	if (!get(".internet", envir = .TMAPTOOLS_CACHE)) stop("No internet connection found.")

@@ -23,6 +23,7 @@
 #' @importFrom raster projectRaster
 #' @importFrom rgdal getPROJ4VersionInfo
 #' @return \code{set_projection} returns a (transformed) shape object with updated projection information. \code{get_projection} returns the \code{PROJ.4} character string of \code{shp}.
+#' @references Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}
 #' @export
 set_projection <- function(shp, projection=NA, current.projection=NA, overwrite.current.projection=FALSE) {
 	shp.name <- deparse(substitute(shp))

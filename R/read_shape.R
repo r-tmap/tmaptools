@@ -12,6 +12,7 @@
 #' @param ... other parameters, such as \code{stringsAsFactors}, are passed on to \code{\link[rgdal:readOGR]{readOGR}}
 #' @return shape object from class \code{\link[sp:Spatial]{Spatial}} or \code{sf} if \code{as.sf = TRUE}
 #' @importFrom rgdal readOGR
+#' @references Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}
 #' @import sp
 #' @export
 read_shape <- function(file, current.projection=NULL, as.sf=FALSE, ...){

@@ -12,6 +12,7 @@
 #' @param drop boolean that determines whether an one-column data-frame should be returned as a vector
 #' @keywords densities
 #' @return Vector or data.frame (depending on whether \code{length(var)==1} with density values. This can be appended directly to the shape file with \code{\link{append_data}} with \code{fixed.order=TRUE}.
+#' @references Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}
 #' @example ./examples/calc_densities.R
 #' @export
 calc_densities <- function(shp, var, target="metric", orig=NA, to=NA, total.area=NA, suffix=NA, drop=TRUE) {

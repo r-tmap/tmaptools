@@ -70,6 +70,7 @@ weighted.modal <- function(x, w, na.rm=FALSE) {
 #' @importFrom stats weighted.mean
 #' @return A shape object, in the same format as \code{shp}
 #' @example ./examples/aggregate_map.R
+#' @references Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}
 #' @export
 aggregate_map <- function(shp, by=NULL, fact=NULL, agg.fun=NULL, weights=NULL, na.rm=FALSE, ...) {
 	weighted.mean <- NULL

@@ -20,6 +20,7 @@
 #' @return Shape object with appended data. Tip: run \code{append_data} without assigning the result to check the coverage.
 #' @example ./examples/append_data.R
 #' @rdname append_data
+#' @references Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}
 #' @export
 append_data <- function(shp, data, key.shp = NULL, key.data = NULL, ignore.duplicates=FALSE, ignore.na=FALSE, fixed.order=is.null(key.data) && is.null(key.shp)) {
     is_sf <- inherits(shp, c("sf", "sfc"))

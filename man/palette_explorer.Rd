@@ -18,6 +18,8 @@ if (require(shiny) && require(shinyjs)) {
 }
 \references{
 \url{http://www.color-blindness.com/types-of-color-blindness/}
+
+Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}
 }
 \seealso{
 \code{\link{get_brewer_pal}}, \code{\link[dichromat:dichromat]{dichromat}}, \code{\link[RColorBrewer:RColorBrewer]{RColorBrewer}}

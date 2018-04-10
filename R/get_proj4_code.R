@@ -31,6 +31,7 @@
 #'	@importFrom rgdal CRSargs make_EPSG checkCRSArgs
 #'	@import sp
 #'	@seealso \url{http://en.wikipedia.org/wiki/List_of_map_projections} for a overview of projections. \url{http://trac.osgeo.org/proj/} for the \code{PROJ.4} project home page. An extensive list of \code{PROJ.4} codes can be created with rgdal's \code{\link[rgdal:make_EPSG]{make_EPSG}}.
+#' @references Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}
 #'	@export
 get_proj4 <- function(x, as.CRS=FALSE) {
 	if (is.null(x)) {

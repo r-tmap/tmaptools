@@ -74,6 +74,9 @@ if (require(tmap)) {
     approx_areas(NLD_muni \%>\% set_projection(projection="longlat")) \%>\% summary_areas()
 }
 }
+\references{
+Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}
+}
 \seealso{
 \code{\link{projection_units}} and \code{\link{approx_distances}}
 }

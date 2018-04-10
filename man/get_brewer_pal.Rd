@@ -41,6 +41,9 @@ get_brewer_pal("RdYlGn", n=11, contrast=c(.4, 1))
 get_brewer_pal("Set2", n = 12)
 get_brewer_pal("Set2", n = 12, stretch = FALSE)
 }
+\references{
+Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}
+}
 \seealso{
 \code{\link{palette_explorer}}
 }

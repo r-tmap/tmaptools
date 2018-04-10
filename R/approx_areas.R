@@ -25,6 +25,7 @@
 #' @seealso \code{\link{projection_units}} and \code{\link{approx_distances}}
 #' @importFrom rgeos gArea
 #' @importFrom geosphere areaPolygon
+#' @references Tennekes, M., 2018, {tmap}: Thematic Maps in {R}, Journal of Statistical Software, 84(6), 1-39, \href{https://doi.org/10.18637/jss.v084.i06}{DOI}
 #' @export
 approx_areas <- function(shp, target="metric", orig=NA, to=NA, total.area=NA, show.warnings=TRUE) {
 
