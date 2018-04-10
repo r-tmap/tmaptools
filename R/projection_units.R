@@ -8,7 +8,7 @@
 #' @param x A projection (see \code{\link{get_proj4}}) or a shape (from class \code{\link[sp:Spatial]{Spatial}}, \code{\link[raster:Raster-class]{Raster}}), or \code{sf}.
 #' @param target target unit, one of:  \code{"m"}, \code{"km"}, \code{"mi"}, and \code{"ft"}.
 #' @param orig units by the \code{x} is defined. Only needed if this information is missing from \code{x} and \code{x} is projected. Options:  \code{"m"}, \code{"km"}, \code{"mi"}, and \code{"ft"}.
-#' @param to multiplier used as follows: \code{orig * to = target}. Only needed when \code{orig} or \code{target} is unknown. For instance, if \code{target} is set to \code{"hm"} (hectometer), and \code{orig} is \code{"m"}, then \code{to} should be 100, meaning 1 hectameter equals 100 meters.
+#' @param to multiplier used as follows: \code{orig * to = target}. Only needed when \code{orig} or \code{target} is unknown. For instance, if \code{target} is set to \code{"hm"} (hectometer), and \code{orig} is \code{"m"}, then \code{to} should be 100, meaning 1 hectometer equals 100 meters.
 #' @param latitude latitude. Needed if the projection coordinates are in latitude longitude units. In that case the \code{orig} will be defined as longitude coordinates at latitude \code{latitude}.
 #' @param show.warnings should warnings be shown?
 #' @return list with the following items, \code{orig}, \code{target}, and \code{to} either according the specified argument, or determined determined. The value is \code{NA} for items that cannot be determined. The final item is \code{projected}, which is determined using \code{\link{is_projected}}

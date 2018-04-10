@@ -7,9 +7,9 @@
 #' @param projection projection code, needed in case \code{x} is a bounding box or when \code{x} and \code{y} are pairs of coordinates. See \code{\link{get_proj4}}
 #' @param target target unit, one of:  \code{"m"}, \code{"km"}, \code{"mi"}, and \code{"ft"}.
 #' @param orig original unit, i.e. by which \code{x} is defined. Only needed if this information is missing from \code{x} and \code{x} is projected. Options:  \code{"m"}, \code{"km"}, \code{"mi"}, and \code{"ft"}.
-#' @param to multiplier used as follows: \code{orig * to = target}. Only needed when \code{orig} or \code{target} is unknown. For instance, if \code{target} is set to \code{"hm"} (hectometer), and \code{orig} is \code{"m"}, then \code{to} should be 100, meaning 1 hectameter equals 100 meters.
+#' @param to multiplier used as follows: \code{orig * to = target}. Only needed when \code{orig} or \code{target} is unknown. For instance, if \code{target} is set to \code{"hm"} (hectometer), and \code{orig} is \code{"m"}, then \code{to} should be 100, meaning 1 hectometer equals 100 meters.
 #' @param show.warnings should warnings be shown?
-#' @return If \code{y} is specifyed, a list of two: unit and dist. Else, a list of three: unit, hdist (horizontal distance) and vdist (vertical distance).
+#' @return If \code{y} is specified, a list of two: unit and dist. Else, a list of three: unit, hdist (horizontal distance) and vdist (vertical distance).
 #' @importFrom geosphere distGeo
 #' @example ./examples/approx_distances.R
 #' @seealso \code{\link{projection_units}} and \code{\link{approx_areas}}
