@@ -93,22 +93,11 @@ is_light <- function(col) {
     apply(colrgb * c(.299, .587, .114), MARGIN=2, sum) >= 128
 }
 
-#' @name tmap.pal.info
-#' @rdname palette_explorer
-#' @export
-tmap.pal.info <- local({
-    br <- brewer.pal.info
-    br$origin <- factor("brewer", levels = c("brewer", "viridis"))
-
-    vr <- data.frame(maxcolors = rep.int(Inf, 5), category = factor("seq", levels = c("div", "qual", "seq")), origin = factor("viridis", levels = c("brewer", "viridis")), colorblind = c(FALSE, FALSE, FALSE, FALSE, TRUE), row.names = c("viridis", "magma", "plasma", "inferno", "cividis"))
-
-    rbind(br, vr)
-})
 
 
 #' Explore color palettes
 #'
-#' This interactive tool shows all Color Brewer and viridis palettes, where the number of colors can be adjusted as well as the constrast range. Categorical (qualitative) palettes can be stretched when the number of colors exceeds the number of palette colors. Output code needed to get the desired color values is generated. Finally, all colors can be tested for color blindness. The data.frame \code{tmap.pal.info} is similar to \code{\link[RColorBrewer:brewer.pal.info]{brewer.pal.info}}, but extended with the color palettes from viridis.
+#' \code{palette_explorer()} starts an interactive tool shows all Color Brewer and viridis palettes, where the number of colors can be adjusted as well as the constrast range. Categorical (qualitative) palettes can be stretched when the number of colors exceeds the number of palette colors. Output code needed to get the desired color values is generated. Finally, all colors can be tested for color blindness. The data.frame \code{tmap.pal.info} is similar to \code{\link[RColorBrewer:brewer.pal.info]{brewer.pal.info}}, but extended with the color palettes from viridis.
 #' @export
 #' @importFrom grDevices col2rgb
 #' @importFrom dichromat dichromat
@@ -205,31 +194,6 @@ palette_explorer <- function() {
                                       shiny::radioButtons("col_blind", "Color blindness simulator", choices = c("Normal" ="normal", "Deuteranopia" = "deutan", "Protanopia" = "protan", "Tritanopia" = "tritan"), selected = "normal", inline = FALSE)
                         )
                 ))
-#
-#
-#                          shiny::h4("Diverging"),
-#                           shiny::sliderInput("m_div", "Number of colors",
-#                                              min = 3, max = 20, value = 9),
-#                           shiny::strong("Contrast range"),
-#                           shiny::checkboxInput("auto_div", label = "Automatic", value = TRUE),
-#                           shiny::uiOutput("contrast_div_slider")
-#             ),
-#             shiny::column(3,
-#                           shiny::h4("Sequential"),
-#                           shiny::sliderInput("contrast_vir", "Contrast range",
-#                                              min = 0, max = 1, value = c(0, 1), step = .01)),
-#             shiny::column(6, shiny::h4(), shiny::plotOutput("plot_vir", height = "100px"),
-#                           shiny::h4(), shiny::plotOutput("plot_seq", height = "285px"),
-#                              shiny::uiOutput("code_seq"),
-#                              shiny::p(),
-#                           shiny::h4(), shiny::plotOutput("plot_cat", height = "131px"),
-#                           shiny::uiOutput("code_cat"),
-#                           shiny::p(),
-#                           shiny::plotOutput("plot_div", height = "147px"),
-#                           shiny::uiOutput("code_div"),
-#
-#
-#                     )
         )),
         server = function(input, output) {
 
@@ -351,6 +315,19 @@ palette_explorer <- function() {
         }
     )
 }
+
+#' @name tmap.pal.info
+#' @rdname palette_explorer
+#' @export
+tmap.pal.info <- local({
+    br <- brewer.pal.info
+    br$origin <- factor("brewer", levels = c("brewer", "viridis"))
+
+    vr <- data.frame(maxcolors = rep.int(Inf, 5), category = factor("seq", levels = c("div", "qual", "seq")), origin = factor("viridis", levels = c("brewer", "viridis")), colorblind = c(FALSE, FALSE, FALSE, FALSE, TRUE), row.names = c("viridis", "magma", "plasma", "inferno", "cividis"))
+
+    rbind(br, vr)
+})
+
 
 get_palette_code <- function(type, origin, m, contrast=NULL, auto=FALSE, tmap=FALSE) {
 
