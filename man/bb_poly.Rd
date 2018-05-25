@@ -33,13 +33,12 @@ Convert bounding box to a \code{\link[sp:SpatialPolygons]{SpatialPolygons}}. Use
 }
 \examples{
 if (require(tmap)) {
-    data(Europe)
+    data(NLD_muni)
 
     current.mode <- tmap_mode("view")
-    qtm(bb_poly(Europe))
+    qtm(bb_poly(NLD_muni))
 
     # restore mode
     tmap_mode(current.mode)
 }
-
 }

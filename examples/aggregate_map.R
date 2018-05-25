@@ -28,12 +28,15 @@ if (require(tmap)) {
         origin_non_west="mean", name="modal"), weights = "population")
 
     # see original provinces data
-    NLD_prov@data[, c("name", "population", "origin_native", "origin_west", "origin_non_west")]
+    as.data.frame(NLD_prov)[, c("name", "population", "origin_native",
+                                "origin_west", "origin_non_west")]
 
     # see aggregates data (the last column corresponds to the most populated municipalities)
-    NLD_prov2@data
+    as.data.frame(NLD_prov2)
 
     # largest municipalities in area per province
-    aggregate_map(NLD_muni, by="province",
-        agg.fun = list(name="modal"), weights = "AREA")@data
+    NLD_largest_muni <- aggregate_map(NLD_muni, by="province",
+        agg.fun = list(name="modal"), weights = "AREA")
+
+    as.data.frame(NLD_largest_muni)
 }

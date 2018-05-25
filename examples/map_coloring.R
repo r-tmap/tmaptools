@@ -14,6 +14,6 @@ if (require(tmap)) {
     tm_shape(NLD_prov) +
     	tm_borders(lwd=2) +
     	tm_text("name", shadow=TRUE) +
-    tm_format_NLD(title="Dutch provinces and\nmunicipalities", bg.color="white")
+    tm_format("NLD", title="Dutch provinces and\nmunicipalities", bg.color="white")
 }
 

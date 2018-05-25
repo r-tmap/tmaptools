@@ -26,16 +26,16 @@ This function is similar to \code{\link[raster:crop]{crop}} from the \code{raste
 }
 \examples{
 if (require(tmap)) {
-    data(Europe, land, metro)
+    data(NLD_muni, land, metro)
 
-    land_europe <- crop_shape(land, Europe)
+    land_NLD <- crop_shape(land, NLD_muni)
 
-    qtm(land_europe, raster="trees", style="natural")
+    qtm(land_NLD, raster="trees", style="natural")
 
-    metro_europe <- crop_shape(metro, Europe, polygon = TRUE)
+    metro_NLD <- crop_shape(metro, NLD_muni, polygon = TRUE)
 
-    qtm(Europe) +
-    tm_shape(metro_europe) +
+    qtm(NLD_muni) +
+    tm_shape(metro_NLD) +
     	tm_bubbles("pop2010", col="red", title.size="European cities") +
     	tm_legend(frame=TRUE)
 }

@@ -24,6 +24,7 @@ Imports:
     magrittr,
     osmar,
     RColorBrewer,
+    viridisLite,
     rmapshaper,
     stats,
     dichromat,

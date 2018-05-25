@@ -17,6 +17,6 @@ if (require(tmap)) {
     	tm_raster() +
     tm_shape(NLD_prov) +
     	tm_borders() +
-    tm_format_NLD() + tm_style_grey()
+    tm_format("NLD") + tm_style_grey()
 }
 }

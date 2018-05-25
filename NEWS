@@ -1,5 +1,7 @@
 version 2.0 (in development)
 - tmaptools migrated from sp to sf
+- bb now returns a vector instead of a matrix, similar to sf::st_bbox
+- palette_explorer expanded with viridis palettes
 
 version 1.2-2
 - improved smooth_map

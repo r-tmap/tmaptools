@@ -1,6 +1,6 @@
 \dontrun{
 if (require(tmap)) {
-    data(Europe)
+    data(World)
 
     f <- tempfile()
     download.file("http://kejser.org/wp-content/uploads/2014/06/Country.csv", destfile = f)
@@ -10,18 +10,21 @@ if (require(tmap)) {
     domain_codes <- subset(domain_codes, select = c("Alpha3Code", "TopLevelDomain"))
     domain_codes$Alpha3Code <- toupper(domain_codes$Alpha3Code)
 
-    Europe <- append_data(Europe, domain_codes, key.shp = "iso_a3", key.data = "Alpha3Code",
-    					  ignore.na = TRUE)
+    World <- append_data(World, domain_codes, key.shp = "iso_a3", key.data = "Alpha3Code",
+    					 ignore.na = TRUE)
 
     # codes in the data, but not in Europe:
     oc <- over_coverage()
     oc$value
 
-    # European countries without appended data:
+    # Countries without appended data:
     uc <- under_coverage()
-    qtm(Europe[uc$id,], text="name")
+
+    current_mode <- tmap_mode("view")
+    qtm(World[uc$id,], text="name")
 
     # plot the result
-    qtm(Europe, text="TopLevelDomain")
+    qtm(World, text="TopLevelDomain")
+    tmap_mode(current_mode)
 }
 }
