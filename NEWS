@@ -2,6 +2,7 @@ version 2.0 (in development)
 - tmaptools migrated from sp to sf
 - bb now returns a vector instead of a matrix, similar to sf::st_bbox
 - palette_explorer expanded with viridis palettes
+- read_osm doens't support vector OSM data anymore, since the osmdata package is a better alternative
 
 version 1.2-2
 - improved smooth_map

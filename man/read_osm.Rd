@@ -2,24 +2,13 @@
 % Please edit documentation in R/read_osm.R
 \name{read_osm}
 \alias{read_osm}
-\alias{osm_poly}
-\alias{osm_line}
-\alias{osm_point}
 \title{Read Open Street Map data}
 \usage{
-read_osm(x, raster = NA, zoom = NULL, type = "osm", minNumTiles = NULL,
-  mergeTiles = NULL, ...)
-
-osm_poly(query)
-
-osm_line(query)
-
-osm_point(query)
+read_osm(x, zoom = NULL, type = "osm", minNumTiles = NULL,
+  mergeTiles = NULL, raster, ...)
 }
 \arguments{
 \item{x}{object that can be coerced to a bounding box with \code{\link{bb}} (e.g. an existing bounding box or a shape), or an \code{\link[osmar:osmar]{osmar}} object. In the first case, other arguments can be passed on to \code{\link{bb}} (see \code{...}). If an existing bounding box is specified in projected coordinates, plesae specify \code{current.projection}.}
-
-\item{raster}{logical that determines whether a raster or vector shapes are returned. In the latter case, specify the vector selections (see argument \code{...}). By default, \code{raster=TRUE} if no vector selections are made, and \code{raster=FALSE} otherwise.}
 
 \item{zoom}{passed on to \code{\link[OpenStreetMap:openmap]{openmap}}. Only applicable when \code{raster=TRUE}.}
 
@@ -29,15 +18,18 @@ osm_point(query)
 
 \item{mergeTiles}{passed on to \code{\link[OpenStreetMap:openmap]{openmap}} Only applicable when \code{raster=TRUE}.}
 
-\item{...}{arguments passed on to \code{\link{bb}}, or arguments that specify polygons, lines, and/or points queries, created with \code{osm_poly}, \code{osm_line}, and \code{osm_point} respectively.}
+\item{raster}{deprecated}
 
-\item{query}{query to select polygons, lines, or points. Currently, two formats are supported: 1) key, 2) key=value. See \url{http://wiki.openstreetmap.org/wiki/Map_Features} for Open Street Map keys and values.}
+\item{...}{arguments passed on to \code{\link{bb}}.}
 }
 \value{
 The output of \code{read_osm} is a \code{\link[sp:SpatialGridDataFrame]{SpatialGridDataFrame}} if \code{raster=TRUE}, and otherwise a named list of \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygonsDataFrame}}, \code{\link[sp:SpatialLinesDataFrame]{SpatialLinesDataFrame}}, and/or \code{\link[sp:SpatialPointsDataFrame]{SpatialPointsDataFrame}} objects. The names of this list are the names of arguments defined at \code{...}.
 }
 \description{
-Read Open Street Map data. Either OSM tiles are read and returned as a spatial raster, or vectorized OSM data are queried and returned as spatial polygons, lines, and/or points.
+Read Open Street Map data. OSM tiles are read and returned as a spatial raster. Vectorized OSM data is not supported anymore (see details).
+}
+\details{
+As of version 2.0, \code{read_osm} cannot be used to read vectorized OSM data anymore. The reason is that the package that was used under the hood, \code{osmar}, has some limitations and is not actively maintained anymore. Therefore, we recommend the package \code{osmdata}. Since this package is very user-friendly, there was no reason to use \code{read_osm} as a wrapper for reading vectorized OSM data.
 }
 \examples{
 \dontrun{

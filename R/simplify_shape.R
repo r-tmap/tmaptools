@@ -10,43 +10,44 @@
 #' @param keep.subunits d
 #' @param ... other arguments passed on to the underlying function \code{\link[rmapshaper:ms_simplify]{ms_simplify}} (except for the arguments \code{input}, \code{keep}, \code{keep_shapes} and \code{explode})
 #' @example ./examples/simplify_shape.R
-#' @importFrom rmapshaper ms_simplify
-#' @importFrom rgeos gIsValid gBuffer
 #' @return shape in the smae class as \code{shp}
 #' @export
 simplify_shape <- function(shp, fact = 0.1, keep.units=FALSE, keep.subunits=FALSE, ...) {
-    is_sf <- inherits(shp, c("sf", "sfc"))
-
-    if (is_sf) shp <- as(shp, "Spatial")
-    if (!inherits(shp, c("SpatialLines", "SpatialPolygons"))) stop("shp is not a SpatialPolygons or SpatialLines object")
-
-    hasData <- "data" %in% names(attributes(shp))
-
-    if (!hasData) {
-        if (inherits(shp, "SpatialLines")) shp <- SpatialLinesDataFrame(shp, data.frame(UNIT__NR = 1L:length(shp)), match.ID = FALSE)
-        if (inherits(shp, "SpatialPolygons")) shp <- SpatialPolygonsDataFrame(shp, data.frame(UNIT__NR = 1L:length(shp)), match.ID = FALSE)
+    if (!requireNamespace("rmapshaper", quietly = TRUE)) {
+        stop("rmapshaper package is needed for simplify_shape", call. = FALSE)
     } else {
+        is_sp <- inherits(shp, "Spatial")
+
+        if (is_sp) shp <- as(shp, "sf")
+        #if (!inherits(shp, c("SpatialLines", "SpatialPolygons"))) stop("shp is not a SpatialPolygons or SpatialLines object")
+
+        #hasData <- "data" %in% names(attributes(shp))
+
         # shape names are stored, because ms_simplify does not differentiate between upper- and lowercase
-        dataNames <- names(shp)
-        names(shp) <- paste(dataNames, 1L:length(dataNames), sep ="__")
+        sfcol <- attr(shp, "sf_column")
 
-        shp$UNIT__NR <- 1L:length(shp)
+        dataNames <- setdiff(names(shp), sfcol)
+
+        dataNames_new <- paste(dataNames, 1L:length(dataNames), sep ="__")
+
+        names(shp)[match(dataNames, names(shp))] <- dataNames_new
+        shp$UNIT__NR <- 1L:nrow(shp)
+
+        keep_shapes <- keep.units
+        explode <- keep_shapes && keep.subunits
+        x <- suppressWarnings(rmapshaper::ms_simplify(shp, keep=fact, keep_shapes=keep_shapes, explode=explode, ...))
+        if (explode) x <- aggregate_map(x, by="UNIT__NR", agg.fun = first)
+
+        x[, c("rmapshaperid", "UNIT__NR")] <- list()
+        names(x)[match(dataNames_new, names(x))] <- dataNames
+
+        if (!all(sf::st_is_valid(x))) {
+            if (!requireNamespace("lwgeom", quietly = TRUE)) {
+                stop("simplified shape is not valid and needs to be fixed; please install the lwgeom package and rerun this function", call. = FALSE)
+            }
+            lwgeom::st_make_valid(x)
+        } else {
+            x
+        }
     }
-
-    keep_shapes <- keep.units
-    explode <- keep_shapes && keep.subunits
-    x <- rmapshaper::ms_simplify(shp, keep=fact, keep_shapes=keep_shapes, explode=explode, ...)
-    if (explode) x <- aggregate_map(x, by="UNIT__NR", agg.fun = first)
-
-    if (hasData) {
-        x@data[, c("rmapshaperid", "UNIT__NR")] <- list()
-        names(x) <- dataNames
-    } else {
-        if (inherits(x, "SpatialLinesDataFrame")) x <- as(x, "SpatialLines")
-        if (inherits(x, "SpatialPolygonsDataFrame")) x <- as(x, "SpatialPolygons")
-    }
-    x2 <- if (suppressWarnings(!rgeos::gIsValid(x))) {
-        suppressWarnings(rgeos::gBuffer(x, byid = TRUE, width = 0))
-    } else x
-    if (is_sf) as(x2, "sf") else x2
 }

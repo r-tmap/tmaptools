@@ -7,7 +7,7 @@ Description: Set of tools for reading and processing spatial data. The aim is to
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Date: 2017-11-24
+Date: 2018-06-06
 Depends:
     R (>= 3.0),
     methods
@@ -22,15 +22,15 @@ Imports:
     classInt,
     KernSmooth,
     magrittr,
-    osmar,
     RColorBrewer,
     viridisLite,
-    rmapshaper,
     stats,
     dichromat,
     XML
 Suggests:
     tmap (>= 1.8-1),
+    rmapshaper,
+    osmdata,
     lwgeom (>= 0.1-2),
     OpenStreetMap,
     png,
