@@ -18,7 +18,7 @@ get_asp_ratio <- function(x, is.projected = NA, width=700, height=700, res=100) 
 	if (inherits(x, "tmap")) {
 		tmp <- tempfile(fileext = ".png")
 		png(tmp, width=width, height=height, res = res)
-		asp <- print(x, return.asp = TRUE)
+		asp <- print(x, return.asp = TRUE, mode = "plot")
 		dev.off()
 	} else {
 	    if (inherits(x, c("Spatial", "Raster", "sf", "sfc"))) {

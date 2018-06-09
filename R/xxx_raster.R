@@ -2,12 +2,8 @@ get_RasterLayer_data_vector <- function(r) {
 	values <- r@data@values
 	if (r@data@isfactor) {
 		dt <- r@data@attributes[[1]]
-		if ("levels" %in% names(dt)) {
-			factor(values, levels=dt$ID, labels=dt$levels)
-		} else {
-			warning("No 'levels' column found in data@attributes.", call. = FALSE)
-			values
-		}
+		levelsID <- ncol(dt)
+		factor(values, levels=dt$ID, labels=dt[[levelsID]])
 	} else {
 		values
 	}
@@ -18,11 +14,8 @@ get_RasterLayer_data_vector <- function(r) {
 get_RasterLayer_levels <- function(r) {
 	if (r@data@isfactor) {
 		dt <- r@data@attributes[[1]]
-		if ("levels" %in% names(dt)) {
-			dt$levels
-		} else {
-			NULL
-		}
+		levelsID <- ncol(dt)
+		as.character(dt[[levelsID]])
 	} else {
 		NULL
 	}
@@ -30,7 +23,7 @@ get_RasterLayer_levels <- function(r) {
 
 raster_colors <- function(x) {
 	n <- nrow(x)
-
+	
 	# get alpha transparency
 	if (ncol(x)==4) {
 		a <- x[,4]
@@ -38,13 +31,13 @@ raster_colors <- function(x) {
 	} else {
 		a <- NULL
 	}
-
+	
 	storage.mode(x) <- "integer"
 	v <- x[, 1] * 1e6L + x[, 2] * 1e3L + x[, 3]
-
+	
 	isna <- is.na(v)
 	if (!is.null(a)) isna <- isna & (a==255)
-
+	
 	v <- v[!isna]
 	u <- unique(v)
 	nu <- length(u)
@@ -53,34 +46,34 @@ raster_colors <- function(x) {
 	ta <- tabulate(m, nbins = nu)
 	mo <- order(ta, decreasing = TRUE)
 	ids <- mo[1:nc]
-
+	
 	r <- floor(u/1e6L)
 	g <- floor((u-r*1e6L)/1e3L)
 	b <- (u - r * 1e6L - g * 1e3L)
 	rs <- r[ids]
 	gs <- g[ids]
 	bs <- b[ids]
-
+	
 	RGB <- cbind(r, g, b)
 	RGBs <- cbind(rs, gs, bs)
-
-
+	
+	
 	dists <- apply(RGBs, MARGIN = 1, function(rw) {
 		sqrt((rw[1]-RGB[,1])^2 + (rw[2]-RGB[,2])^2 + (rw[3]-RGB[,3])^2)
 	})
-
+	
 	ids2 <- apply(dists, MARGIN = 1, which.min)
-
+	
 	m2 <- ids2[m]
-
+	
 	ind <- integer(length=n)
-
-
+	
+	
 	ind[!isna] <- m2
 	ind[isna] <- NA
-
+	
 	cols <- rgb(rs, gs, bs, maxColorValue = 255)
-
+	
 	factor(ind, labels=cols)
 }
 
@@ -113,7 +106,7 @@ get_raster_data <- function(shp) {
 		if (is.null(dimnames(shp@data@values)))	names(data) <- get_raster_names(shp)
 
 		atb <- shp@data@attributes
-		atb <- atb[sapply(atb, length)!=0]
+		atb <- atb[vapply(atb, length, integer(1))!=0]
 
 		stopifnot(sum(isfactor)==length(atb))
 
@@ -128,7 +121,7 @@ get_raster_data <- function(shp) {
 }
 
 set_raster_levels <- function(shp, lvls) {
-	isf <- !sapply(lvls, is.null)
+	isf <- !vapply(lvls, is.null, logical(1))
 	cls <- class(shp)
 	if (any(isf)) {
 		shp@data@isfactor <- isf
@@ -162,7 +155,7 @@ get_raster_levels <- function(shp, layerIDs) {
 			lvls <- lapply(shpnames, function(sn) NULL)
 		} else {
 			atb <- shp@data@attributes
-			atb <- atb[sapply(atb, length)!=0]
+			atb <- atb[vapply(atb, length, integer(1))!=0]
 			stopifnot(sum(isfactor)==length(atb))
 			isfactor2 <- isfactor[layerIDs]
 
@@ -197,12 +190,12 @@ get_data_frame_levels <- function(data) {
 preprocess_raster_data <- function(data, sel) {
 	if (is.na(sel)[1] || !any(sel %in% names(data))) sel <- names(data)[1]
 	sel <- intersect(sel, names(data))
-
+	
 	data <- data[, sel, drop=FALSE]
-
-	notNumCat <- sapply(data, function(x){
+	
+	notNumCat <- vapply(data, function(x){
 		!is.numeric(x) && !is.factor(x)
-	})
+	}, logical(1))
 	if (any(notNumCat)) {
 		data[, notNumCat] <- lapply(data[, notNumCat, drop=FALSE], function(x) {
 			if (is.logical(x)) factor(x, levels=c(FALSE, TRUE)) else factor(x)
