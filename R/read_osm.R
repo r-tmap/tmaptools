@@ -32,7 +32,6 @@ read_osm <- function(x, zoom=NULL, type="osm", minNumTiles=NULL, mergeTiles=NULL
 
 	args_bb <- args[intersect(names(args), c("ext", "cx", "cy", "width", "height", "xlim", "ylim", "relative"))]
 	args_other <- args[setdiff(names(args), names(args_bb))]
-	if (is.na(raster)) raster <- (length(args_other)==0)
 	if (!(inherits(x,  "osmar"))) x <- do.call("bb", c(list(x=x, projection = .crs_longlat), args_bb))
 
 	if (!requireNamespace("OpenStreetMap", quietly = TRUE)) {
@@ -45,12 +44,10 @@ read_osm <- function(x, zoom=NULL, type="osm", minNumTiles=NULL, mergeTiles=NULL
 		optionalArgs <- list(zoom=zoom, type=type, minNumTiles=minNumTiles, mergeTiles=mergeTiles)
 		optionalArgs <- optionalArgs[!sapply(optionalArgs, is.null)]
 		om <- suppressWarnings({do.call("openmap", args = c(list(upperLeft=x[c(4,1)], lowerRight=x[c(2,3)]), optionalArgs))})
-		omr <- raster(om)
-		oms <- as(omr, "SpatialGridDataFrame")
-		oms@data <- data.frame(PIXEL__COLOR = raster_colors(as.matrix(oms@data)))
-		attr(oms, "leaflet.provider") <- unname(OSM2LP[type])
-		attr(oms, "is.OSM") <- TRUE
-		return(oms)
+		omr <- raster::raster(om)
+		attr(omr, "leaflet.provider") <- unname(OSM2LP[type])
+		attr(omr, "is.OSM") <- TRUE
+		return(omr)
 	}
 }
 
