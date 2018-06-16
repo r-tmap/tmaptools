@@ -7,5 +7,5 @@ LICENSE
 README
 .Rprofile
 .travis.yml
+tic.R
 appveyor.yml
-

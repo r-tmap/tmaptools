@@ -9,6 +9,7 @@
 #' @param type tile provider, by default \code{"osm"}, which corresponds to OpenStreetMap Mapnik. See \code{\link[OpenStreetMap:openmap]{openmap}} for options. Only applicable when \code{raster=TRUE}.
 #' @param minNumTiles passed on to \code{\link[OpenStreetMap:openmap]{openmap}} Only applicable when \code{raster=TRUE}.
 #' @param mergeTiles passed on to \code{\link[OpenStreetMap:openmap]{openmap}} Only applicable when \code{raster=TRUE}.
+#' @param use.colortable should the colors of the returned raster object be stored in a \code{\link[raster:colortable]{colortable}}? If \code{FALSE}, a RasterStack is returned with three layers that correspond to the red, green and blue values betweeen 0 and 255.
 #' @param raster deprecated
 #' @param ... arguments passed on to \code{\link{bb}}.
 #' @name read_osm
@@ -17,8 +18,8 @@
 #' @importFrom raster raster
 #' @export
 #' @example ./examples/read_osm.R
-#' @return The output of \code{read_osm} is a \code{\link[sp:SpatialGridDataFrame]{SpatialGridDataFrame}} if \code{raster=TRUE}, and otherwise a named list of \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygonsDataFrame}}, \code{\link[sp:SpatialLinesDataFrame]{SpatialLinesDataFrame}}, and/or \code{\link[sp:SpatialPointsDataFrame]{SpatialPointsDataFrame}} objects. The names of this list are the names of arguments defined at \code{...}.
-read_osm <- function(x, zoom=NULL, type="osm", minNumTiles=NULL, mergeTiles=NULL, raster, ...) {
+#' @return The output of \code{read_osm} is a \code{\link[raster:raster]{raster}} object.
+read_osm <- function(x, zoom=NULL, type="osm", minNumTiles=NULL, mergeTiles=NULL, use.colortable = TRUE, raster, ...) {
 	if (!get(".internet", envir = .TMAPTOOLS_CACHE)) stop("No internet connection found.")
 
     if (!missing(raster)) {
@@ -45,6 +46,14 @@ read_osm <- function(x, zoom=NULL, type="osm", minNumTiles=NULL, mergeTiles=NULL
 		optionalArgs <- optionalArgs[!sapply(optionalArgs, is.null)]
 		om <- suppressWarnings({do.call("openmap", args = c(list(upperLeft=x[c(4,1)], lowerRight=x[c(2,3)]), optionalArgs))})
 		omr <- raster::raster(om)
+
+		if (use.colortable) {
+		    tab <- raster_colors(raster::values(omr))
+		    omr <- raster::raster(omr)
+		    omr <- raster::setValues(omr, as.integer(tab) - 1L)
+		    raster::colortable(omr) <- levels(tab)
+		}
+
 		attr(omr, "leaflet.provider") <- unname(OSM2LP[type])
 		attr(omr, "is.OSM") <- TRUE
 		return(omr)

@@ -5,7 +5,7 @@
 \title{Read Open Street Map data}
 \usage{
 read_osm(x, zoom = NULL, type = "osm", minNumTiles = NULL,
-  mergeTiles = NULL, raster, ...)
+  mergeTiles = NULL, use.colortable = TRUE, raster, ...)
 }
 \arguments{
 \item{x}{object that can be coerced to a bounding box with \code{\link{bb}} (e.g. an existing bounding box or a shape), or an \code{\link[osmar:osmar]{osmar}} object. In the first case, other arguments can be passed on to \code{\link{bb}} (see \code{...}). If an existing bounding box is specified in projected coordinates, plesae specify \code{current.projection}.}
@@ -18,12 +18,14 @@ read_osm(x, zoom = NULL, type = "osm", minNumTiles = NULL,
 
 \item{mergeTiles}{passed on to \code{\link[OpenStreetMap:openmap]{openmap}} Only applicable when \code{raster=TRUE}.}
 
+\item{use.colortable}{should the colors of the returned raster object be stored in a \code{\link[raster:colortable]{colortable}}? If \code{FALSE}, a RasterStack is returned with three layers that correspond to the red, green and blue values betweeen 0 and 255.}
+
 \item{raster}{deprecated}
 
 \item{...}{arguments passed on to \code{\link{bb}}.}
 }
 \value{
-The output of \code{read_osm} is a \code{\link[sp:SpatialGridDataFrame]{SpatialGridDataFrame}} if \code{raster=TRUE}, and otherwise a named list of \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygonsDataFrame}}, \code{\link[sp:SpatialLinesDataFrame]{SpatialLinesDataFrame}}, and/or \code{\link[sp:SpatialPointsDataFrame]{SpatialPointsDataFrame}} objects. The names of this list are the names of arguments defined at \code{...}.
+The output of \code{read_osm} is a \code{\link[raster:raster]{raster}} object.
 }
 \description{
 Read Open Street Map data. OSM tiles are read and returned as a spatial raster. Vectorized OSM data is not supported anymore (see details).
@@ -44,7 +46,7 @@ if (require(tmap)) {
 
     # plot with regular tmap functions
     tm_shape(osm_NLD) +
-    	tm_raster() +
+    	tm_rgb() +
     tm_shape(NLD_muni) +
     	tm_polygons("population", convert2density=TRUE, style="kmeans", alpha=.7, palette="Purples")
 
@@ -61,28 +63,6 @@ if (require(tmap)) {
     qtm(CBS_osm1)
     qtm(CBS_osm2)
 
-    # read vectorized OSM data
-    CBS_osm3 <- read_osm(CBS_bb,
-        roads=osm_line("highway"),
-        parking=osm_poly("amenity=parking"),
-        building=osm_poly("building"),
-        park=osm_poly("leisure=park"),
-        railway_area=osm_poly("landuse=railway"),
-        railway=osm_line("railway"),
-        forest=osm_poly("landuse=forest"),
-        grass=osm_poly("landuse=grass"),
-        bicycle=osm_line("highway=cycleway"))
-
-    # plot vectorized OSM data
-    tm_shape(CBS_osm3$grass, bbox=CBS_bb) + tm_polygons("darkolivegreen3") +
-        tm_shape(CBS_osm3$forest) + tm_fill("forestgreen") +
-        tm_shape(CBS_osm3$railway_area) + tm_fill(col="grey70") +
-        tm_shape(CBS_osm3$parking) + tm_polygons("gold") +
-        tm_shape(CBS_osm3$building) + tm_polygons("grey50") +
-        tm_shape(CBS_osm3$roads, bbox=CBS_bb) + tm_lines(col="gold", lwd=3) +
-        tm_shape(CBS_osm3$bicycle) + tm_lines(col="blue", lwd=3) +
-        tm_shape(CBS_osm3$railway) + tm_lines(col="grey20", lwd=3, lty="dashed") +
-        tm_layout(bg.color="grey90")
 }
 }
 }

@@ -145,6 +145,84 @@ set_projection <- function(shp, projection=NA, current.projection=NA, overwrite.
 }
 
 
+
+set_raster_levels <- function(shp, lvls) {
+	isf <- !vapply(lvls, is.null, logical(1))
+	cls <- class(shp)
+	if (any(isf)) {
+		shp@data@isfactor <- isf
+		dfs <- mapply(function(nm, lv) {
+			df <- data.frame(ID=1:length(lv), levels=factor(lv, levels=lv))
+			if (cls=="RasterBrick") names(df)[2] <- nm
+			df
+		}, names(which(isf)), lvls[isf], SIMPLIFY=FALSE)
+		shp@data@attributes <- dfs
+	}
+	shp
+}
+
+get_RasterLayer_levels <- function(r) {
+	if (r@data@isfactor) {
+		dt <- r@data@attributes[[1]]
+		levelsID <- ncol(dt)
+		as.character(dt[[levelsID]])
+	} else {
+		NULL
+	}
+}
+
+get_raster_names <- function(shp) {
+    nms <- names(shp)
+
+    # overwrite unknown first names with FILE__VALUES
+    if (inherits(shp, "RasterStack")) {
+        if (shp@layers[[1]]@data@names[1]=="") nms[1] <- "FILE__VALUES"
+    } else {
+        if (shp@data@names[1]=="") nms[1] <- "FILE__VALUES"
+    }
+    nms
+}
+
+get_raster_levels <- function(shp, layerIDs) {
+	if (missing(layerIDs)) layerIDs <- 1L:nlayers(shp)
+
+	if (inherits(shp, "Spatial")) {
+		return(lapply(attr(shp, "data")[,layerIDs], levels))
+	}
+
+	shpnames <- get_raster_names(shp)[layerIDs]
+	if (inherits(shp, "RasterLayer")) {
+		lvls <- list(get_RasterLayer_levels(shp))
+	} else if (inherits(shp, "RasterStack")) {
+		lvls <- lapply(shp@layers[layerIDs], get_RasterLayer_levels)
+	} else if (inherits(shp, "RasterBrick")) {
+		isfactor <- shp@data@isfactor
+		if (all(!isfactor)) {
+			lvls <- lapply(shpnames, function(sn) NULL)
+		} else {
+			atb <- shp@data@attributes
+			atb <- atb[vapply(atb, length, integer(1))!=0]
+			stopifnot(sum(isfactor)==length(atb))
+			isfactor2 <- isfactor[layerIDs]
+
+			lvls <- rep(list(NULL), length(layerIDs))
+			if (any(isfactor2)) {
+				atb2 <- atb[match(layerIDs[isfactor2], which(isfactor))]
+
+				lvls[isfactor2] <- lapply(atb2, function(a) {
+					if (class(a)=="list") a <- a[[1]]
+					levelsID <- ncol(a) # levels is always the last column of the attributes data.frame (?)
+					as.character(a[[levelsID]])
+				})
+			}
+		}
+	}
+	names(lvls) <- shpnames
+	lvls
+}
+
+
+
 #' @name get_projection
 #' @rdname set_projection
 #' @export
