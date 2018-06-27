@@ -155,6 +155,8 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 			cover <- cover_list$polygons
 		}
 	} else {
+	    if (inherits(cover, c("sf", "sfc"))) cover <- as(cover, "Spatial")
+
 		cover <- gUnaryUnion(cover)
 		cover <- spTransform(cover, CRS(prj))
 		cover_r <- poly_to_raster(cover, nrow = nrow, ncol = ncol, to.Raster = TRUE)
