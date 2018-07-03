@@ -71,7 +71,6 @@ geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, details=FALS
 
 				search_result_bb <- b[c(2,4,1,3)]
 				names(search_result_bb) <- c("y_min", "y_max", "x_min", "x_max")
-browser()
 
                 p <- st_sf(st_sfc(st_point(search_result_loc[2:1]), crs = .crs_longlat))
 

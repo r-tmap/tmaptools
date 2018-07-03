@@ -32,10 +32,10 @@ if (require(tmap)) {
     # Distance between Maastricht and Groningen
     p_maastricht <- geocode_OSM("Maastricht")$coords
     p_groningen <- geocode_OSM("Groningen")$coords
-    approx_distances(p_maastricht, p_groningen)
+    approx_distances(p_maastricht, p_groningen, projection = "longlat", target = "km")
 
     # Check distances in several projections
-    sapply(c("wintri", "utm31", "laea_Eur", "rd", "longlat"), function(projection) {
+    sapply(c("eck4", "utm31", "laea_Eur", "rd", "longlat"), function(projection) {
         p_maastricht <- geocode_OSM("Maastricht", projection = projection)$coords
         p_groningen <- geocode_OSM("Groningen", projection = projection)$coords
         approx_distances(p_maastricht, p_groningen, projection = projection)

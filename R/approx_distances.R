@@ -21,19 +21,30 @@ approx_distances <- function(x, y = NULL, projection = NULL, target = NULL) {
         if (is_imperial) target <- "mi"
     }
 
-    if (missing(y)) {
-        if (!inherits(x, c("sf", "Spatial", "raster"))) {
-            if (missing(projection)) {
-                projection <- st_crs(NA)
-                #stop("Please specify projection")
-            } else {
-                projection <- get_proj4(projection, output = "crs")
-            }
-        } else {
-            projection <- get_projection(x, output = "crs")
-        }
 
-        bbx <- bb(x)
+    if (!inherits(x, c("sf", "Spatial", "raster"))) {
+        if (missing(projection)) {
+            projection <- st_crs(NA)
+            #stop("Please specify projection")
+        } else {
+            projection <- get_proj4(projection, output = "crs")
+        }
+    } else {
+        projection <- get_projection(x, output = "crs")
+    }
+
+    if (is.na(projection)) {
+        warning("unknown projection", call. = FALSE)
+    }
+
+
+    if (missing(y)) {
+
+        tryCatch({
+            bbx <- bb(x)
+        }, error = function(e) {
+            stop("x cannot be coerced to a bounding box with bb", call. = FALSE)
+        })
 
         pW <- st_sfc(st_point(c(bbx[1], (bbx[2]+bbx[4])/2)), crs=projection)
         pE <- st_sfc(st_point(c(bbx[3], (bbx[2]+bbx[4])/2)), crs=projection)
@@ -49,10 +60,13 @@ approx_distances <- function(x, y = NULL, projection = NULL, target = NULL) {
         }
 
     } else {
-        if (missing(target)) {
-            st_distance(x, y)
+        p1 <- st_sfc(st_point(x), crs=projection)
+        p2 <- st_sfc(st_point(y), crs=projection)
+
+        if (missing(target) || is.na(projection)) {
+            st_distance(p1, p2)[1,1]
         } else {
-            set_units(st_distance(x, y), target, mode = "standard")
+            set_units(st_distance(p1, p2), target, mode = "standard")[1,1]
         }
 
     }

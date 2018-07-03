@@ -1,6 +1,6 @@
 #' Convert bounding box to a spatial polygon
 #'
-#' Convert bounding box to a \code{\link[sp:SpatialPolygons]{SpatialPolygons}}. Useful for plotting (see example). The function \code{bb_earth} returns a spatial polygon of the 'boundaries' of the earth, which can also be done in other projections (if a feasible solution exists).
+#' Convert bounding box to a spatial (\code{\link[sf:st_sfc]{sfc}}) object . Useful for plotting (see example). The function \code{bb_earth} returns a spatial polygon of the 'boundaries' of the earth, which can also be done in other projections (if a feasible solution exists).
 #'
 #' @param x object that can be coerced to a bounding box with \code{\link{bb}}
 #' @param projection projection in which the coordinates of \code{x} are provided, see \code{\link{get_proj4}}. For \code{bb_earth}, \code{projection} is the projection in which the bounding box is returned (if possible).
@@ -9,7 +9,7 @@
 #' @param earth.datum Geodetic datum to determine the earth boundary. By default \code{"WGS84"}, other frequently used datums are \code{"NAD83"} and \code{"NAD27"}. Any other \code{PROJ.4} character string can be used. See \code{\link{get_proj4}}.
 #' @param bbx boundig box of the earth in a vector of 4 values: min longitude, max longitude, min latitude, max latitude. By default \code{c(-180, 180, -90, 90)}. If for some \code{projection}, a feasible solution does not exist, it may be wise to choose a smaller bbx, e.g. \code{c(-180, 180, -88, 88)}. However, this is also automatically done with the next argument, \code{buffer}.
 #' @param buffer In order to determine feasible earth bounding boxes in other projections, a buffer is used to decrease the bounding box by a small margin (default \code{1e-06}). This value is subtracted from each the bounding box coordinates. If it still does not result in a feasible bounding box, this procedure is repeated 5 times, where each time the buffer is multiplied by 10. Set \code{buffer=0} to disable this procedure.
-#' @return \code{\link[sp:SpatialPolygons]{SpatialPolygons}}
+#' @return \code{\link[sf:st_sfc]{sfc}} object
 #' @example ./examples/bb_poly.R
 #' @name bb_poly
 #' @rdname bb_poly

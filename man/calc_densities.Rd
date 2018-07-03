@@ -8,7 +8,7 @@ calc_densities(shp, var, target = "metric", total.area = NULL,
   suffix = NA, drop = TRUE)
 }
 \arguments{
-\item{shp}{a shape object, i.e., a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}, or a \code{sf} object that can be coerced as such.}
+\item{shp}{a shape object, i.e., an \code{sf} object or a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}}
 
 \item{var}{name(s) of a qualtity variable name contained in the \code{shp} data}
 

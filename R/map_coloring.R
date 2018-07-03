@@ -2,7 +2,7 @@
 #'
 #' Color the polygons of a map such that adjacent polygons have different colors
 #'
-#' @param x Either a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}} or an adjacency list. Also \code{sf} objects are supported if they can be coerced to \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}s.
+#' @param x Either a shape (i.e. a \code{sf} or \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}} object), or an adjacency list.
 #' @param algorithm currently, only "greedy" is implemented.
 #' @param ncols number of colors. By default it is 8 when \code{palette} is undefined. Else, it is set to the length of \code{palette}
 #' @param minimize logical that determines whether \code{algorithm} will search for a minimal number of colors. If \code{FALSE}, the \code{ncols} colors will be picked by a random procedure.

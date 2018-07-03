@@ -7,11 +7,10 @@
 approx_areas(shp, target = "metric", total.area = NULL)
 }
 \arguments{
-\item{shp}{shape object, i.e., a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}, or an \code{sf} object that can be coerced as such.}
+\item{shp}{shape object, i.e., an \code{sf} or \code{sp} object.}
 
 \item{target}{target unit, one of
 \describe{
-    \item{\code{"abs"}:}{Absolute numbers based on polygon coordinates.}
     \item{\code{"prop"}:}{Proportional numbers. In other words, the sum of the area sizes equals one.}
     \item{\code{"norm"}:}{Normalized numbers. All area sizes are normalized to the largest area, of which the area size equals one.}
     \item{\code{"metric"} (default):}{Output area sizes will be either \code{"km"} (kilometer) or \code{"m"} (meter) depending on the map scale}
@@ -22,15 +21,15 @@ These units are the output units. See \code{orig} for the coordinate units used 
 \item{total.area}{total area size of \code{shp} in number of target units (defined by \code{target}). Useful if the total area of the \code{shp} differs from a reference total area value. For \code{"metric"} and \code{"imperial"} units, please provide the total area in squared kilometers respectively miles.}
 }
 \value{
-Numeric vector of area sizes. An attribute called unit is added to specify the used target units, which is especially useful when units were set to metric or imperial.
+Numeric vector of area sizes (class \code{\link[units:units]{units}}).
 }
 \description{
-Approximate the area sizes of the polygons in real-world area units (such as sq km or sq mi), absolute numbers based on the polygon coordinates, proportional numbers, or normalized numbers.
+Approximate the area sizes of the polygons in real-world area units (such as sq km or sq mi), proportional numbers, or normalized numbers. Also, the areas can be calibrated to a prespecified area total.
 }
 \details{
-Note that this method is an approximation, since it depends on the used projection and the level of detail of the shape object. Projections with equal-area property are highly recommended. See \url{https://en.wikipedia.org/wiki/List_of_map_projections} for equal area world map projections.
+This function is a convenient wrapper around \code{\link[sf:st_area]{st_area}}.
 
-For projected shapes, \code{\link[rgeos:gArea]{gArea}} is used, and for unprojected shapes, \code{\link[geosphere:areaPolygon]{areaPolygon}}.
+Note that the method of determining areas is an approximation, since it depends on the used projection and the level of detail of the shape object. Projections with equal-area property are highly recommended. See \url{https://en.wikipedia.org/wiki/List_of_map_projections} for equal area world map projections.
 }
 \examples{
 if (require(tmap)) {
