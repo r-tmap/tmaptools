@@ -47,8 +47,14 @@ sample_dots(shp, vars = NULL, convert2density = FALSE, nrow = NA,
 
 \item{...}{other arguments passed on to \code{\link{calc_densities}} and \code{\link{approx_areas}}}
 }
+\value{
+A shape object, in the same format as \code{shp}
+}
 \description{
-Sample dots from spatial polygons according to a spatial distribution of a population. The population may consist of classes. The output, a SpatialPointsDataFrame, can be used to create a dot map (see \code{\link[tmap:tm_dots]{tm_dots}}), where the dots are colored according to the classes.
+Sample dots from spatial polygons according to a spatial distribution of a population. The population may consist of classes. The output, an sf object containing spatial points, can be used to create a dot map (see \code{\link[tmap:tm_dots]{tm_dots}}), where the dots are colored according to the classes. Note that this function supports \code{sf} objects, but still uses sp-based methods (see details).
+}
+\details{
+This function supports \code{sf} objects, but still uses sp-based methods, from the packages sp, rgeos, and/or rgdal. Alternatively,  \code{\link[sf:st_sample]{st_sample}} can be used.
 }
 \examples{
 \dontrun{

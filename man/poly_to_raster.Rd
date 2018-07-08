@@ -5,7 +5,7 @@
 \title{Convert spatial polygons to a raster}
 \usage{
 poly_to_raster(shp, r = NULL, nrow = NA, ncol = NA, N = 250000,
-  use.cover = FALSE, copy.data = FALSE, to.Raster = !copy.data, ...)
+  use.cover = FALSE, copy.data = FALSE, to.Raster = NULL, ...)
 }
 \arguments{
 \item{shp}{shape object. A \code{\link[sp:SpatialPointsDataFrame]{SpatialPoints(DataFrame)}}, a \code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}}, or an \code{sf} object that can be coerced as such.}
@@ -22,12 +22,12 @@ poly_to_raster(shp, r = NULL, nrow = NA, ncol = NA, N = 250000,
 
 \item{copy.data}{should the polygon data be appended to the raster? Only recommended when \code{N} is small.}
 
-\item{to.Raster}{logical; should the output be a \code{\link[raster:Raster-class]{Raster}} object (\code{TRUE}), or a \code{\link[sp:SpatialGridDataFrame]{SpatialGridDataFrame}} (\code{FALSE}). If \code{TRUE}, a \code{RasterBrick} is returned when \code{by} is specified, and a \code{RasterLayer} when \code{by} is unspecified. For very large rasters, use \code{TRUE}, since large \code{\link[raster:Raster-class]{Raster}} objects are accessed from disk.}
+\item{to.Raster}{not used anymore, since the "raster" output is always a \code{\link[raster:Raster-class]{RasterLayer}} as of version 2.0}
 
 \item{...}{arguments passed on to \code{\link[raster:rasterize]{rasterize}}}
 }
 \value{
-A \code{\link[sp:SpatialGridDataFrame]{SpatialGridDataFrame}}, or a \code{\link[raster:Raster-class]{Raster}} object when (\code{to.Raster=TRUE})
+a \code{RasterBrick} is returned when \code{by} is specified, and a \code{RasterLayer} when \code{by} is unspecified
 }
 \description{
 Convert spatial polygons to a raster. The value of each raster cell will be the polygon ID number. Alternatively, if \code{copy.data}, the polygon data is appended to each raster cell.

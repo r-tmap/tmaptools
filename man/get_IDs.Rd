@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_IDs.R
 \name{get_IDs}
 \alias{get_IDs}
-\title{Get ID's of the shape items}
+\title{Get ID's of the shape items of sp objects}
 \usage{
 get_IDs(shp)
 }
@@ -18,5 +18,5 @@ get_IDs(shp)
 vector of ID's
 }
 \description{
-Get ID's of the shape items. For polygons and lines, the ID attribute is used. For points, the coordinates are used.
+Get ID's of the shape items of sp objects. For polygons and lines, the ID attribute is used. For points, the coordinates are used.
 }

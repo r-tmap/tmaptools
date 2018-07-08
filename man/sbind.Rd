@@ -2,7 +2,7 @@
 % Please edit documentation in R/sbind.R
 \name{sbind}
 \alias{sbind}
-\title{Combine shape objects}
+\title{Combine shape objects (from sp)}
 \usage{
 sbind(...)
 }
@@ -18,5 +18,5 @@ sbind(...)
 shape object
 }
 \description{
-Combine shape objects into one shape object. It works analogous to \code{\link{rbind}}.
+Combine shape objects from sp into one shape object. It works analogous to \code{\link{rbind}}.
 }

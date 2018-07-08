@@ -24,11 +24,9 @@ These units are the output units. See \code{orig} for the coordinate units used 
 Numeric vector of area sizes (class \code{\link[units:units]{units}}).
 }
 \description{
-Approximate the area sizes of the polygons in real-world area units (such as sq km or sq mi), proportional numbers, or normalized numbers. Also, the areas can be calibrated to a prespecified area total.
+Approximate the area sizes of the polygons in real-world area units (such as sq km or sq mi), proportional numbers, or normalized numbers. Also, the areas can be calibrated to a prespecified area total. This function is a convenient wrapper around \code{\link[sf:st_area]{st_area}}.
 }
 \details{
-This function is a convenient wrapper around \code{\link[sf:st_area]{st_area}}.
-
 Note that the method of determining areas is an approximation, since it depends on the used projection and the level of detail of the shape object. Projections with equal-area property are highly recommended. See \url{https://en.wikipedia.org/wiki/List_of_map_projections} for equal area world map projections.
 }
 \examples{

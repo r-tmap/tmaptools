@@ -1,6 +1,8 @@
 #' Append data to a shape object
 #'
-#' Data, in the format of a data.frame, is appended to a shape object. This is either done by a left join where keys are specified for both shape and data, or by fixed order. Under coverage (shape items that do not correspond to data records), over coverage (data records that do not correspond to shape items respectively) as well as the existence of duplicated key values are automatically checked and reported via console messages. With \code{under_coverage} and \code{over_coverage} the under and over coverage key values from the last \code{append_data} call can be retrieved. Tip: run \code{append_data} without assigning the result to check the coverage.
+#' Data, in the format of a data.frame, is appended to a shape object. This is either done by a left join where keys are specified for both shape and data, or by fixed order. Under coverage (shape items that do not correspond to data records), over coverage (data records that do not correspond to shape items respectively) as well as the existence of duplicated key values are automatically checked and reported via console messages. With \code{under_coverage} and \code{over_coverage} the under and over coverage key values from the last \code{append_data} call can be retrieved. Tip: run \code{append_data} without assigning the result to check the coverage. Note that this function supports \code{sf} objects, but still uses sp-based methods (see details).
+#'
+#' This function supports \code{sf} objects, but still uses sp-based methods, from the packages sp, rgeos, and/or rgdal. Alternatively, the \code{\link[sf:tidyverse]{tidyverse}} method \code{left_join} can be used.
 #'
 #' @param shp shape object, which is one of
 #' \enumerate{

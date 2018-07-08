@@ -1,21 +1,26 @@
 #' Bin spatial points to a raster
 #'
-#' Bin spatial points to a raster. For each raster cell, the number of points are counted. Optionally, a factor variable can be specified by which the points are counts are split.
+#' Bin spatial points to a raster. For each raster cell, the number of points are counted. Optionally, a factor variable can be specified by which the points are counts are split. Note that this function supports \code{sf} objects, but still uses sp-based methods (see details).
 #'
 #' This function is a wrapper around \code{\link[raster:rasterize]{rasterize}}.
+#'
+#' This function supports \code{sf} objects, but still uses sp-based methods, from the packages sp, rgeos, and/or rgdal.
 #'
 #' @param shp shape object. a \code{\link[sp:SpatialPointsDataFrame]{SpatialPoints(DataFrame)}}, a \code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}}, or an \code{sf} object that can be coerced as such.
 #' @param nrow number of raster rows. If \code{NA}, it is automatically determined by \code{N} and the aspect ratio of \code{shp}.
 #' @param ncol number of raster columns. If \code{NA}, it is automatically determined by \code{N} and the aspect ratio of \code{shp}.
 #' @param N preferred number of raster cells.
 #' @param by name of a data variable which should be a factor. The points are split and counted according to the levels of this factor.
-#' @param to.Raster logical; should the output be a \code{\link[raster:Raster-class]{Raster}} object (\code{TRUE}), or a \code{\link[sp:SpatialGridDataFrame]{SpatialGridDataFrame}} (\code{FALSE}). If \code{TRUE}, a \code{RasterBrick} is returned when \code{by} is specified, and a \code{RasterLayer} when \code{by} is unspecified.
-#' @return A \code{\link[sp:SpatialGridDataFrame]{SpatialGridDataFrame}}, or a \code{\link[raster:Raster-class]{Raster}} object when (\code{to.Raster=TRUE})
+#' @param to.Raster not used anymore, since the output is always a \code{\link[raster:Raster-class]{raster}} as of version 2.0
+#' @return a \code{RasterBrick} is returned when \code{by} is specified, and a \code{RasterLayer} when \code{by} is unspecified.
 #' @export
 #' @importFrom raster raster extent rasterize
 #' @example  ./examples/points_to_raster.R
 #' @seealso \code{\link{poly_to_raster}}
-points_to_raster <- function(shp, nrow=NA, ncol=NA, N=250000, by=NULL, to.Raster=FALSE) {
+points_to_raster <- function(shp, nrow=NA, ncol=NA, N=250000, by=NULL, to.Raster=NULL) {
+    if (!missing(to.Raster)) warning("to.Raster is not used anymore, since the output is always a raster object as of version 2.0")
+
+
     if (inherits(shp, c("sf", "sfc"))) shp <- as(shp, "Spatial")
 
 	if (!inherits(shp, "SpatialPoints")) stop("shp should be a SpatialPoints/Pixels(DataFrame)")
@@ -67,13 +72,11 @@ points_to_raster <- function(shp, nrow=NA, ncol=NA, N=250000, by=NULL, to.Raster
 	rshp <- SpatialGridDataFrame(as(r, "SpatialGrid"), data=res)
 
 	# return Raster object or SGDF
-	if (to.Raster) {
-		if (ncol(rshp@data)==1) {
-			as(rshp, "RasterLayer")
-		} else {
-			as(rshp, "RasterBrick")
-		}
-	} else rshp
+	if (ncol(rshp@data)==1) {
+		as(rshp, "RasterLayer")
+	} else {
+		as(rshp, "RasterBrick")
+	}
 }
 
 #' Convert spatial polygons to a raster
@@ -87,14 +90,16 @@ points_to_raster <- function(shp, nrow=NA, ncol=NA, N=250000, by=NULL, to.Raster
 #' @param N preferred number of raster cells.
 #' @param use.cover logical; should the cover method be used? This method determines per raster cell which polygon has the highest cover fraction. This method is better, but very slow, since N times the number of polygons combinations are processed (using the \code{getCover} argument of \code{\link[raster:rasterize]{rasterize}}). By default, when a raster cell is covered by multiple polygons, the last polygon is taken (see \code{fun} argment of \code{\link[raster:rasterize]{rasterize}}))
 #' @param copy.data should the polygon data be appended to the raster? Only recommended when \code{N} is small.
-#' @param to.Raster logical; should the output be a \code{\link[raster:Raster-class]{Raster}} object (\code{TRUE}), or a \code{\link[sp:SpatialGridDataFrame]{SpatialGridDataFrame}} (\code{FALSE}). If \code{TRUE}, a \code{RasterBrick} is returned when \code{by} is specified, and a \code{RasterLayer} when \code{by} is unspecified. For very large rasters, use \code{TRUE}, since large \code{\link[raster:Raster-class]{Raster}} objects are accessed from disk.
+#' @param to.Raster not used anymore, since the "raster" output is always a \code{\link[raster:Raster-class]{RasterLayer}} as of version 2.0
 #' @param ... arguments passed on to \code{\link[raster:rasterize]{rasterize}}
-#' @return A \code{\link[sp:SpatialGridDataFrame]{SpatialGridDataFrame}}, or a \code{\link[raster:Raster-class]{Raster}} object when (\code{to.Raster=TRUE})
+#' @return a \code{RasterBrick} is returned when \code{by} is specified, and a \code{RasterLayer} when \code{by} is unspecified
 #' @export
 #' @importFrom raster raster extent rasterize getValues
 #' @example  ./examples/poly_to_raster.R
 #' @seealso \code{\link{points_to_raster}}
-poly_to_raster <- function(shp, r=NULL, nrow=NA, ncol=NA, N=250000, use.cover=FALSE, copy.data=FALSE,  to.Raster=!copy.data, ...) {
+poly_to_raster <- function(shp, r=NULL, nrow=NA, ncol=NA, N=250000, use.cover=FALSE, copy.data=FALSE,  to.Raster=NULL, ...) {
+    if (!missing(to.Raster)) warning("to.Raster is not used anymore, since the output is always a raster object as of version 2.0")
+
     if (inherits(shp, c("sf", "sfc"))) shp <- as(shp, "Spatial")
 
 	if (!inherits(shp, "SpatialPolygons")) stop("shp should be a SpatialPolygons(DataFrame)")

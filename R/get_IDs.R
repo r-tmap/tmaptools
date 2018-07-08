@@ -1,6 +1,6 @@
-#' Get ID's of the shape items
-#' 
-#' Get ID's of the shape items. For polygons and lines, the ID attribute is used. For points, the coordinates are used.
+#' Get ID's of the shape items of sp objects
+#'
+#' Get ID's of the shape items of sp objects. For polygons and lines, the ID attribute is used. For points, the coordinates are used.
 #'
 #' @param shp shape object, which is one of
 #' \enumerate{

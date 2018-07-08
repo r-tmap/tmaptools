@@ -10,7 +10,7 @@
 #' @param keep.subunits d
 #' @param ... other arguments passed on to the underlying function \code{\link[rmapshaper:ms_simplify]{ms_simplify}} (except for the arguments \code{input}, \code{keep}, \code{keep_shapes} and \code{explode})
 #' @example ./examples/simplify_shape.R
-#' @return shape in the smae class as \code{shp}
+#' @return \code{sf} object
 #' @export
 simplify_shape <- function(shp, fact = 0.1, keep.units=FALSE, keep.subunits=FALSE, ...) {
     if (!requireNamespace("rmapshaper", quietly = TRUE)) {

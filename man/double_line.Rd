@@ -18,8 +18,14 @@ double_line(shp, width, sides = "both")
 
 \item{sides}{character value that specifies which sides are selected: \code{"both"}, \code{"left"}, or \code{"right"}. The default is \code{"both"}. For the other two options, see also the shortcut function \code{offset_line}.}
 }
+\value{
+A shape object, in the same format as \code{shp}
+}
 \description{
-Create a double line or offset line. The double line can be useful for visualizing two-way tracks or emulating objects such as railway tracks. The offset line can be useful to prevent overlapping of spatial lines.
+Create a double line or offset line. The double line can be useful for visualizing two-way tracks or emulating objects such as railway tracks. The offset line can be useful to prevent overlapping of spatial lines. Note that this function supports \code{sf} objects, but still uses sp-based methods (see details).
+}
+\details{
+This function supports \code{sf} objects, but still uses sp-based methods, from the packages sp, rgeos, and/or rgdal.
 }
 \examples{
 \dontrun{

@@ -1,6 +1,6 @@
-#' Combine shape objects
+#' Combine shape objects (from sp)
 #'
-#' Combine shape objects into one shape object. It works analogous to \code{\link{rbind}}.
+#' Combine shape objects from sp into one shape object. It works analogous to \code{\link{rbind}}.
 #'
 #' @param ... shape objects. Each shape object is one of
 #' \enumerate{

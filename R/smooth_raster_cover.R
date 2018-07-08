@@ -1,8 +1,10 @@
 #' Get a smoothed cover of a raster object
 #'
-#' Get a smoothed cover of a raster object. From all non-missing values of a raster object, a 2D kernal density is applied. The output is a SpatialPolygons object. Used by \code{\link{smooth_map}}.
+#' Get a smoothed cover of a raster object. From all non-missing values of a raster object, a 2D kernal density is applied. The output is a \code{sf} object of spatial polygons. Used by \code{\link{smooth_map}}. Note that this function supports \code{sf} objects, but still uses sp-based methods (see details). Note that this function supports \code{sf} objects, but still uses sp-based methods (see details).
 #'
 #' For the estimation of the 2D kernal density, code is borrowed from \code{\link[KernSmooth:bkde2D]{bkde2D}}. This implemention is slightly different: \code{\link[KernSmooth:bkde2D]{bkde2D}} takes point coordinates and applies linear binning, whereas in this function, the data is already binned, with values 1 if the values of \code{var} are not missing and 0 if values of \code{var} are missing.
+#'
+#' This function supports \code{sf} objects, but still uses sp-based methods, from the packages sp, rgeos, and/or rgdal.
 #'
 #' @param shp raster object, from either \code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}} or \code{\link[raster:Raster-class]{Raster}} class.
 #' @param var name of the variable from which missing values are flagged. If unspecified, the first variable will be taken.

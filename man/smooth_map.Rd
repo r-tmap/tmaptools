@@ -9,7 +9,7 @@ smooth_map(shp, var = NULL, nrow = NA, ncol = NA, N = 250000,
   style = ifelse(is.null(breaks), "pretty", "fixed"), breaks = NULL,
   bandwidth = NA, threshold = 0, cover.type = NA, cover = NULL,
   cover.threshold = 0.6, weight = 1, extracting.method = "full",
-  buffer.width = NA, to.Raster = FALSE)
+  buffer.width = NA, to.Raster = NULL)
 }
 \arguments{
 \item{shp}{shape object of class \code{\link[sp:Spatial]{Spatial}}, \code{\link[raster:Raster-class]{Raster}}, or \code{sf}. Spatial points, polygons, and grids are supported. Spatial lines are not.}
@@ -50,24 +50,26 @@ smooth_map(shp, var = NULL, nrow = NA, ncol = NA, N = 250000,
 
 \item{buffer.width}{Buffer width of the iso lines to cut kernel density polygons. Should be small enough to let the polygons touch each other without space in between. However, too low values may cause geometric errors.}
 
-\item{to.Raster}{should the "raster" output (see \code{output}) be a \code{\link[raster:Raster-class]{RasterLayer}}? By default, it is returned as a \code{\link[sp:SpatialGridDataFrame]{SpatialGridDataFrame}}}
+\item{to.Raster}{not used anymore, since the "raster" output is always a \code{\link[raster:Raster-class]{RasterLayer}} as of version 2.0}
 }
 \value{
 List with the following items:
 \describe{
 \item{\code{"raster"}}{A smooth raster, which is either a \code{\link[sp:SpatialGridDataFrame]{SpatialGridDataFrame}} or a \code{\link[raster:Raster-class]{RasterLayer}} (see \code{to.Raster})}
-\item{\code{"iso"}}{Contour lines, which is a \code{\link[sp:SpatialLinesDataFrame]{SpatialLinesDataFrame}} (or an \code{sf} object if \code{shp} is an \code{sf})}
-\item{\code{"polygons"}}{Kernel density polygons, which is a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygonsDataFrame}} (or an \code{sf} object if \code{shp} is an \code{sf})}
+\item{\code{"iso"}}{Contour lines, which is an \code{sf} object of spatial lines.}
+\item{\code{"polygons"}}{Kernel density polygons, which is an \code{sf} object of spatial polygons}
 \item{\code{"bbox"}}{Bounding box of the used raster}
 \item{\code{"ncol"}}{Number of rows in the raster}
 \item{\code{"nrow"}}{Number of columns in the raster}
 }
 }
 \description{
-Create a smooth map from a shape object. A 2D kernel density estimator is applied to the shape, which can be a spatial points, polygons, or raster object. Various format are returned: a smooth raster, contour lines, and polygons. The covered area can be specified, i.e., the area outside of it is extracted from the output.
+Create a smooth map from a shape object. A 2D kernel density estimator is applied to the shape, which can be a spatial points, polygons, or raster object. Various format are returned: a smooth raster, contour lines, and polygons. The covered area can be specified, i.e., the area outside of it is extracted from the output. Note that this function supports \code{sf} objects, but still uses sp-based methods (see details).
 }
 \details{
 For the estimation of the 2D kernal density, code is borrowed from \code{\link[KernSmooth:bkde2D]{bkde2D}}. This implemention is slightly different: \code{\link[KernSmooth:bkde2D]{bkde2D}} takes point coordinates and applies linear binning, whereas in this function, the data is already binned, with values 1 if the values of \code{var} are not missing and 0 if values of \code{var} are missing.
+
+This function supports \code{sf} objects, but still uses sp-based methods, from the packages sp, rgeos, and/or rgdal.
 }
 \examples{
 \dontrun{

@@ -9,7 +9,9 @@ offset_line <- function(shp, offset) {
 
 #' Create a double line or offset line
 #'
-#' Create a double line or offset line. The double line can be useful for visualizing two-way tracks or emulating objects such as railway tracks. The offset line can be useful to prevent overlapping of spatial lines.
+#' Create a double line or offset line. The double line can be useful for visualizing two-way tracks or emulating objects such as railway tracks. The offset line can be useful to prevent overlapping of spatial lines. Note that this function supports \code{sf} objects, but still uses sp-based methods (see details).
+#'
+#' This function supports \code{sf} objects, but still uses sp-based methods, from the packages sp, rgeos, and/or rgdal.
 #'
 #' @param shp SpatialLines(DataFrame)
 #' @param width width between the left and righthand side
@@ -17,10 +19,14 @@ offset_line <- function(shp, offset) {
 #' @name double_line
 #' @rdname double_line
 #' @export
+#' @return A shape object, in the same format as \code{shp}
 #' @import sp
 #' @example ./examples/double_line.R
 #' @importFrom rgeos gBuffer gIntersection
 double_line <- function(shp, width, sides="both") {
+    is_sf <- inherits(shp, c("sf", "sfc"))
+    if (is_sf) shp <- as(shp, "Spatial")
+
 	ns <- length(shp)
 	hasData <- ("data" %in% slotNames(shp))
 
@@ -129,6 +135,7 @@ double_line <- function(shp, width, sides="both") {
 		SpatialLinesDataFrame(shp8, data=shp@data[Lns_sel,], match.ID = FALSE)
 	} else shp8
 
+	if (is_sf) as(shp9, "sf") else shp9
 }
 
 
