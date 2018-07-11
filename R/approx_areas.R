@@ -19,6 +19,7 @@
 #' @seealso \code{\link{approx_distances}}
 #' @importFrom rgeos gArea
 #' @importFrom units set_units as_units
+#' @importFrom lwgeom st_transform_proj st_geod_area
 #' @export
 approx_areas <- function(shp, target="metric", total.area=NULL) {
     is_metric <- target=="metric"
@@ -32,7 +33,10 @@ approx_areas <- function(shp, target="metric", total.area=NULL) {
 
     if (inherits(shp, "Spatial")) shp <- as(shp, "sf")
 
-    areas <- sf::st_area(shp)
+    areas <- tryCatch(sf::st_area(shp),
+                  error = function(e) {
+                      lwgeom::st_geod_area(lwgeom::st_transform_proj(shp, crs = 4326))
+                  })
 
     if (target == "prop") {
         areas <- areas / sum(areas)

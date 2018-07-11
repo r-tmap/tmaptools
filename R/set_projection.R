@@ -126,7 +126,7 @@ set_projection <- function(shp, projection=NA, current.projection=NA, overwrite.
 			# shp@data@attributes <- dfs
 		} else {
 			shp <- tryCatch({
-				st_transform(shp, proj.crs)
+			    lwgeom::st_transform_proj(shp, proj.crs)
 			}, error=function(e) {
 				stop("Unable to set the projection to ", proj.crs$proj4string, ".", call.=FALSE)
 			}, warning=function(w){

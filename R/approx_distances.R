@@ -52,11 +52,11 @@ approx_distances <- function(x, y = NULL, projection = NULL, target = NULL) {
         pN <- st_sfc(st_point(c((bbx[1]+bbx[3])/2, bbx[4])), crs=projection)
 
         if (missing(target)) {
-            list(hdist = st_distance(pW, pE)[1,1],
-                 vdist = st_distance(pS, pN)[1,1])
+            list(hdist = get_distance(pW, pE),       #st_distance(pW, pE)[1,1],
+                 vdist = get_distance(pS, pN))       #st_distance(pS, pN)[1,1])
         } else {
-            list(hdist = set_units(st_distance(pW, pE)[1,1], target, mode = "standard"),
-                 vdist = set_units(st_distance(pS, pN)[1,1], target, mode = "standard"))
+            list(hdist = set_units(get_distance(pW, pE), target, mode = "standard"),  #st_distance(pW, pE)[1,1]
+                 vdist = set_units(get_distance(pS, pN), target, mode = "standard"))  #st_distance(pS, pN)[1,1]
         }
 
     } else {
@@ -71,6 +71,18 @@ approx_distances <- function(x, y = NULL, projection = NULL, target = NULL) {
 
     }
 }
+
+
+get_distance <- function(p1, p2) {
+    tryCatch(st_distance(p1, p2)[1,1], error = function(e) {
+        p1ll <- lwgeom::st_transform_proj(p1, crs = 4326)
+        p2ll <- lwgeom::st_transform_proj(p2, crs = 4326)
+        lwgeom::st_geod_distance(p1ll, p2ll)[1,1]
+    })
+}
+
+
+
 #'
 #'
 # approx_distances <- function(x, y = NULL, projection = NULL, target="metric", orig=NA, to=NA, show.warnings=TRUE) {

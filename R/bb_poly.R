@@ -77,7 +77,7 @@ bb_earth <- function(projection=NULL, stepsize=1, earth.datum=4326, bbx=c(-180, 
         res <- if (is.na(projection)) {
             world_bb_sf
         } else {
-			sf::st_transform(world_bb_sf, crs=projection)
+			lwgeom::st_transform_proj(world_bb_sf, crs=projection)
         }
         if (!is.na(sf::st_is_valid(res))) break
     }

@@ -48,7 +48,7 @@ get_proj4 <- function(x, output = c("crs", "character", "epsg", "CRS")) {
 		stop("x is not a character, crs object, CRS object, nor a number", call.=FALSE)
 	} else {
 		if (x %in% names(.proj_sc)) {
-			sf::st_crs(unname(.proj_sc[x]))
+		    create_crs(unname(.proj_sc[x]))
 		} else if (is_num_string(x)) {
 		    sf::st_crs(x)
 		} else if (substr(x, 1, 3)=="utm") {
@@ -64,6 +64,10 @@ get_proj4 <- function(x, output = c("crs", "character", "epsg", "CRS")) {
 	       crs = y,
 	       epsg = y$epsg,
 	       CRS = CRS(ifelse(is.na(y$proj4string), "", y$proj4string)))
+}
+
+create_crs <- function(string) {
+    structure(list(epsg = as.integer(NA), proj4string = string), class = "crs")
 }
 
 is_num_string <- function(x) {

@@ -26,12 +26,12 @@ Imports:
     viridisLite,
     stats,
     dichromat,
-    XML
+    XML,
+    lwgeom (>= 0.1-2)
 Suggests:
     tmap (>= 1.8-1),
     rmapshaper,
     osmdata,
-    lwgeom (>= 0.1-2),
     OpenStreetMap,
     png,
     shiny,
