@@ -32,11 +32,11 @@ if (require(tmap)) {
                                 "origin_west", "origin_non_west")]
 
     # see aggregates data (the last column corresponds to the most populated municipalities)
-    as.data.frame(NLD_prov2)
+    sf::st_set_geometry(NLD_prov2, NULL)
 
     # largest municipalities in area per province
     NLD_largest_muni <- aggregate_map(NLD_muni, by="province",
         agg.fun = list(name="modal"), weights = "AREA")
 
-    as.data.frame(NLD_largest_muni)
+    sf::st_set_geometry(NLD_largest_muni, NULL)
 }
