@@ -1,17 +1,18 @@
 #' Set and get the map projection
 #'
 #' The function \code{set_projection} sets the projection of a shape file. It is
-#' a convenient wrapper of \code{\link[sp:spTransform]{spTransform}} and
+#' a convenient wrapper of \code{\link[sf:st_transform]{st_transform}} (or \code{\link[lwgeom:st_transform_proj]{st_transform_proj}}, see details) and
 #' \code{\link[raster:projectRaster]{projectRaster}} with shortcuts for commonly
 #' used projections. The projection can also be set directly in the plot call
 #' with \code{\link[tmap:tm_shape]{tm_shape}}. This function is also used to set the current
 #' projection information if this is missing. The function \code{get_projection}
 #' is used to get the projection information.
 #'
+#' For \code{sf} objects, \code{set_projection} first tries to use \code{\link[sf:st_transform]{sf::st_transform}}, which uses the GDAL API. For some projections, most notably Winkel Tripel (\code{"wintri"}), is doesn't work. In these cases, \code{set_projection} will use \code{\link[lwgeom:st_transform_proj]{lwgeom::st_transform_proj}}, which uses the PROJ.4 API.
+#'
 #' For raster objects, the projection method is based on the type of data. For numeric layers, the bilinear method is used, and for categorical layers the nearest neighbor. See \code{\link[raster:projectRaster]{projectRaster}} for details.
 #'
-#' @param shp shape object of class \code{\link[sp:Spatial]{Spatial}},
-#'   \code{\link[raster:Raster-class]{Raster}}, or \code{sf} (see details).
+#' @param shp shape object, which is an object from a class defined by the \code{\link[sf:sf]{sf}}, \code{\link[sp:sp]{sp}}, or \code{\link[raster:raster-package]{raster}} package.
 #' @param projection new projection. See \code{\link{get_proj4}} for options. This argument is only used to transform the \code{shp}. Use \code{current.projection} to specify the current projection of \code{shp}.
 #' @param current.projection the current projection of \code{shp}. See \code{\link{get_proj4}} for possible options. Only use this if the current projection is missing or wrong.
 #' @param overwrite.current.projection logical that determines whether the current projection is overwritten if it already has a projection that is different.
@@ -28,8 +29,6 @@ set_projection <- function(shp, projection=NA, current.projection=NA, overwrite.
 	shp.name <- deparse(substitute(shp))
 
 	cls <- class(shp)
-
-
 	is_sp <- inherits(shp, "Spatial")
 	is_sp_raster <- inherits(shp, c("SpatialGrid", "SpatialPixels"))
 	if (is_sp) shp <- (if (is_sp_raster) brick(shp) else as(shp, "sf"))
@@ -125,13 +124,7 @@ set_projection <- function(shp, projection=NA, current.projection=NA, overwrite.
 			# }, names(which(!isnum)), lvls[!isnum], SIMPLIFY=FALSE)
 			# shp@data@attributes <- dfs
 		} else {
-			shp <- tryCatch({
-			    lwgeom::st_transform_proj(shp, proj.crs)
-			}, error=function(e) {
-				stop("Unable to set the projection to ", proj.crs$proj4string, ".", call.=FALSE)
-			}, warning=function(w){
-				NULL
-			})
+			shp <- st_transform2(shp, proj.crs)
 		}
 		if (is_sp_raster) {
 			shp <- as(shp, cls)
@@ -144,6 +137,19 @@ set_projection <- function(shp, projection=NA, current.projection=NA, overwrite.
 	#if (is_sp && !is_sp_raster) as(shp, cls) else shp
 }
 
+st_transform2 <- function(x, crs, ...) {
+    args <- list(...)
+    y <- tryCatch(do.call(sf::st_transform, c(list(x=x, crs=crs), args)),
+             error = function(e) NULL,
+             warning = function(w) NULL)
+    if (is.null(y)) {
+        y <- tryCatch(do.call(lwgeom::st_transform_proj, c(list(x=x, crs=crs), args)),
+                 error = function(e) {
+                      stop("Unable to set the projection to ", crs$proj4string, ".", call. = FALSE)
+                 } )
+    }
+    y
+}
 
 
 set_raster_levels <- function(shp, lvls) {

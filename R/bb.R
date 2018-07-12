@@ -164,7 +164,7 @@ bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=N
 
 	    # STEP 3: Reproject SpatialPoints object
 	    tryCatch({
-	        sf_pnts2_prj <- lwgeom::st_transform_proj(sf_pnts, crs=projection)
+	        sf_pnts2_prj <- st_transform2(sf_pnts, crs=projection)
 	    }, error=function(e) {
 	        stop("Something went wrong with the bounding box. Please check the projection.", call.=FALSE)
 	    })

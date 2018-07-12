@@ -12,8 +12,7 @@ get_projection(shp, guess.longlat = FALSE, output = c("character", "crs",
   "epsg", "CRS"))
 }
 \arguments{
-\item{shp}{shape object of class \code{\link[sp:Spatial]{Spatial}},
-\code{\link[raster:Raster-class]{Raster}}, or \code{sf} (see details).}
+\item{shp}{shape object, which is an object from a class defined by the \code{\link[sf:sf]{sf}}, \code{\link[sp:sp]{sp}}, or \code{\link[raster:raster-package]{raster}} package.}
 
 \item{projection}{new projection. See \code{\link{get_proj4}} for options. This argument is only used to transform the \code{shp}. Use \code{current.projection} to specify the current projection of \code{shp}.}
 
@@ -30,7 +29,7 @@ get_projection(shp, guess.longlat = FALSE, output = c("character", "crs",
 }
 \description{
 The function \code{set_projection} sets the projection of a shape file. It is
-a convenient wrapper of \code{\link[sp:spTransform]{spTransform}} and
+a convenient wrapper of \code{\link[sf:st_transform]{st_transform}} (or \code{\link[lwgeom:st_transform_proj]{st_transform_proj}}, see details) and
 \code{\link[raster:projectRaster]{projectRaster}} with shortcuts for commonly
 used projections. The projection can also be set directly in the plot call
 with \code{\link[tmap:tm_shape]{tm_shape}}. This function is also used to set the current
@@ -38,5 +37,7 @@ projection information if this is missing. The function \code{get_projection}
 is used to get the projection information.
 }
 \details{
+For \code{sf} objects, \code{set_projection} first tries to use \code{\link[sf:st_transform]{sf::st_transform}}, which uses the GDAL API. For some projections, most notably Winkel Tripel (\code{"wintri"}), is doesn't work. In these cases, \code{set_projection} will use \code{\link[lwgeom:st_transform_proj]{lwgeom::st_transform_proj}}, which uses the PROJ.4 API.
+
 For raster objects, the projection method is based on the type of data. For numeric layers, the bilinear method is used, and for categorical layers the nearest neighbor. See \code{\link[raster:projectRaster]{projectRaster}} for details.
 }
