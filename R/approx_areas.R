@@ -4,7 +4,7 @@
 #'
 #' Note that the method of determining areas is an approximation, since it depends on the used projection and the level of detail of the shape object. Projections with equal-area property are highly recommended. See \url{https://en.wikipedia.org/wiki/List_of_map_projections} for equal area world map projections.
 #'
-#' @param shp shape object, i.e., an \code{sf} or \code{sp} object.
+#' @param shp shape object, i.e., an \code{\link[sf:sf]{sf}} or \code{\link[sp:sp]{sp}} object.
 #' @param target target unit, one of
 #' \describe{
 #' 	\item{\code{"prop"}:}{Proportional numbers. In other words, the sum of the area sizes equals one.}

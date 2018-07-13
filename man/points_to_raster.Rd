@@ -8,7 +8,7 @@ points_to_raster(shp, nrow = NA, ncol = NA, N = 250000, by = NULL,
   to.Raster = NULL)
 }
 \arguments{
-\item{shp}{shape object. a \code{\link[sp:SpatialPointsDataFrame]{SpatialPoints(DataFrame)}}, a \code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}}, or an \code{sf} object that can be coerced as such.}
+\item{shp}{shape object. a \code{\link[sp:SpatialPointsDataFrame]{SpatialPoints(DataFrame)}}, a \code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}}, or an \code{\link[sf:sf]{sf}} object that can be coerced as such.}
 
 \item{nrow}{number of raster rows. If \code{NA}, it is automatically determined by \code{N} and the aspect ratio of \code{shp}.}
 
@@ -29,7 +29,7 @@ Bin spatial points to a raster. For each raster cell, the number of points are c
 \details{
 This function is a wrapper around \code{\link[raster:rasterize]{rasterize}}.
 
-This function supports \code{sf} objects, but still uses sp-based methods, from the packages sp, rgeos, and/or rgdal.
+This function supports \code{\link[sf:sf]{sf}} objects, but still uses sp-based methods, from the packages sp, rgeos, and/or rgdal.
 }
 \examples{
 \dontrun{

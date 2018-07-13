@@ -11,7 +11,7 @@
 #'  \item{\code{\link[sp:SpatialLinesDataFrame]{SpatialLines(DataFrame)}}}
 #'  \item{\code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}}}
 #'  \item{\code{\link[sp:SpatialPixelsDataFrame]{SpatialPixels(DataFrame)}}}
-#'  \item{\code{sf} object that can be coerced as one above}
+#'  \item{\code{\link[sf:sf]{sf}} object that can be coerced as one above}
 #' }
 #' @param data data.frame
 #' @param key.shp variable name of \code{shp} map data to be matched with \code{key.data}. If not specified, and \code{fixed.order} is \code{FALSE}, the ID's of the polygons/lines/points are taken.

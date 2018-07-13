@@ -14,6 +14,7 @@ Depends:
 Imports:
     sp,
     sf (>= 0.6-0),
+    lwgeom (>= 0.1-4),
     units (>= 0.5-1),
     grid,
     raster (>= 2.5-2),
@@ -26,8 +27,7 @@ Imports:
     viridisLite,
     stats,
     dichromat,
-    XML,
-    lwgeom (>= 0.1-2)
+    XML
 Suggests:
     tmap (>= 1.8-1),
     rmapshaper,

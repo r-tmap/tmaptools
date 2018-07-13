@@ -4,9 +4,9 @@
 #'
 #' This function is a wrapper around \code{\link[raster:rasterize]{rasterize}}.
 #'
-#' This function supports \code{sf} objects, but still uses sp-based methods, from the packages sp, rgeos, and/or rgdal.
+#' This function supports \code{\link[sf:sf]{sf}} objects, but still uses sp-based methods, from the packages sp, rgeos, and/or rgdal.
 #'
-#' @param shp shape object. a \code{\link[sp:SpatialPointsDataFrame]{SpatialPoints(DataFrame)}}, a \code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}}, or an \code{sf} object that can be coerced as such.
+#' @param shp shape object. a \code{\link[sp:SpatialPointsDataFrame]{SpatialPoints(DataFrame)}}, a \code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}}, or an \code{\link[sf:sf]{sf}} object that can be coerced as such.
 #' @param nrow number of raster rows. If \code{NA}, it is automatically determined by \code{N} and the aspect ratio of \code{shp}.
 #' @param ncol number of raster columns. If \code{NA}, it is automatically determined by \code{N} and the aspect ratio of \code{shp}.
 #' @param N preferred number of raster cells.

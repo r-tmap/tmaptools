@@ -7,7 +7,7 @@
 approx_areas(shp, target = "metric", total.area = NULL)
 }
 \arguments{
-\item{shp}{shape object, i.e., an \code{sf} or \code{sp} object.}
+\item{shp}{shape object, i.e., an \code{\link[sf:sf]{sf}} or \code{\link[sp:sp]{sp}} object.}
 
 \item{target}{target unit, one of
 \describe{

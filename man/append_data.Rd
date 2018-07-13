@@ -22,7 +22,7 @@ over_coverage()
  \item{\code{\link[sp:SpatialLinesDataFrame]{SpatialLines(DataFrame)}}}
  \item{\code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}}}
  \item{\code{\link[sp:SpatialPixelsDataFrame]{SpatialPixels(DataFrame)}}}
- \item{\code{sf} object that can be coerced as one above}
+ \item{\code{\link[sf:sf]{sf}} object that can be coerced as one above}
 }}
 
 \item{data}{data.frame}

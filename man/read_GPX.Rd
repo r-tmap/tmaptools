@@ -12,7 +12,7 @@ read_GPX(file, layers = c("waypoints", "tracks", "routes", "track_points",
 
 \item{layers}{vector of GPX layers. Possible options are \code{"waypoints"}, \code{"tracks"}, \code{"routes"}, \code{"track_points"}, \code{"route_points"}. By dedault, all those layers are read.}
 
-\item{as.sf}{should \code{sf} objects be returned? By default \code{TRUE}}
+\item{as.sf}{should \code{\link[sf:sf]{sf}} objects be returned? By default \code{TRUE}}
 }
 \value{
 for each defiend layer, a shape is returned (only if the layer has any features). If only one layer is defined, the corresponding shape is returned. If more than one layer is defined, a list of shape objects, one for each layer, is returned.
@@ -21,7 +21,7 @@ for each defiend layer, a shape is returned (only if the layer has any features)
 Read a GPX file. By default, it reads all possible GPX layers, and only returns shapes for layers that have any features.
 }
 \details{
-Note that this function returns \code{sf} objects, but still uses methods from sp and rgdal internally.
+Note that this function returns \code{\link[sf:sf]{sf}} objects, but still uses methods from sp and rgdal internally.
 }
 \examples{
 \dontrun{

@@ -25,7 +25,7 @@ A shape object, in the same format as \code{shp}
 Create a double line or offset line. The double line can be useful for visualizing two-way tracks or emulating objects such as railway tracks. The offset line can be useful to prevent overlapping of spatial lines. Note that this function supports \code{sf} objects, but still uses sp-based methods (see details).
 }
 \details{
-This function supports \code{sf} objects, but still uses sp-based methods, from the packages sp, rgeos, and/or rgdal.
+This function supports \code{\link[sf:sf]{sf}} objects, but still uses sp-based methods, from the packages sp, rgeos, and/or rgdal.
 }
 \examples{
 \dontrun{

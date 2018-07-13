@@ -19,7 +19,7 @@ geocode_OSM(q, projection = NULL, return.first.only = TRUE,
 
 \item{as.data.frame}{Return the output as a \code{data.frame}. If \code{FALSE}, a list is returned with at least two items: \code{"coords"}, a vector containing the coordinates, and \code{"bbox"}, the corresponding bounding box. By default false, unless \code{q} contains multiple queries}
 
-\item{as.sf}{Return the output as \code{sf} object. If \code{TRUE}, \code{return.first.only} will be set to \code{TRUE}.}
+\item{as.sf}{Return the output as \code{\link[sf:sf]{sf}} object. If \code{TRUE}, \code{return.first.only} will be set to \code{TRUE}.}
 
 \item{server}{OpenStreetMap Nominatim server name. Could also be a local OSM Nominatim server.}
 }

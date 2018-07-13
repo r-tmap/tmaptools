@@ -8,7 +8,7 @@
 #' projection information if this is missing. The function \code{get_projection}
 #' is used to get the projection information.
 #'
-#' For \code{sf} objects, \code{set_projection} first tries to use \code{\link[sf:st_transform]{sf::st_transform}}, which uses the GDAL API. For some projections, most notably Winkel Tripel (\code{"wintri"}), is doesn't work. In these cases, \code{set_projection} will use \code{\link[lwgeom:st_transform_proj]{lwgeom::st_transform_proj}}, which uses the PROJ.4 API.
+#' For \code{\link[sf:sf]{sf}} objects, \code{set_projection} first tries to use \code{\link[sf:st_transform]{sf::st_transform}}, which uses the GDAL API. For some projections, most notably Winkel Tripel (\code{"wintri"}), is doesn't work. In these cases, \code{set_projection} will use \code{\link[lwgeom:st_transform_proj]{lwgeom::st_transform_proj}}, which uses the PROJ.4 API.
 #'
 #' For raster objects, the projection method is based on the type of data. For numeric layers, the bilinear method is used, and for categorical layers the nearest neighbor. See \code{\link[raster:projectRaster]{projectRaster}} for details.
 #'

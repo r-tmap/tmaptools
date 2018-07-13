@@ -12,7 +12,7 @@ smooth_map(shp, var = NULL, nrow = NA, ncol = NA, N = 250000,
   buffer.width = NA, to.Raster = NULL)
 }
 \arguments{
-\item{shp}{shape object of class \code{\link[sp:Spatial]{Spatial}}, \code{\link[raster:Raster-class]{Raster}}, or \code{sf}. Spatial points, polygons, and grids are supported. Spatial lines are not.}
+\item{shp}{shape object of class \code{\link[sp:Spatial]{Spatial}}, \code{\link[raster:Raster-class]{Raster}}, or \code{\link[sf:sf]{sf}}. Spatial points, polygons, and grids are supported. Spatial lines are not.}
 
 \item{var}{variable name. Not needed for \code{\link[sp:SpatialPoints]{SpatialPoints}}. If missing, the first variable name is taken. For polygons, the variable should contain densities, not absolute numbers.}
 
@@ -56,8 +56,8 @@ smooth_map(shp, var = NULL, nrow = NA, ncol = NA, N = 250000,
 List with the following items:
 \describe{
 \item{\code{"raster"}}{A smooth raster, which is either a \code{\link[sp:SpatialGridDataFrame]{SpatialGridDataFrame}} or a \code{\link[raster:Raster-class]{RasterLayer}} (see \code{to.Raster})}
-\item{\code{"iso"}}{Contour lines, which is an \code{sf} object of spatial lines.}
-\item{\code{"polygons"}}{Kernel density polygons, which is an \code{sf} object of spatial polygons}
+\item{\code{"iso"}}{Contour lines, which is an \code{\link[sf:sf]{sf}} object of spatial lines.}
+\item{\code{"polygons"}}{Kernel density polygons, which is an \code{\link[sf:sf]{sf}} object of spatial polygons}
 \item{\code{"bbox"}}{Bounding box of the used raster}
 \item{\code{"ncol"}}{Number of rows in the raster}
 \item{\code{"nrow"}}{Number of columns in the raster}
@@ -69,7 +69,7 @@ Create a smooth map from a shape object. A 2D kernel density estimator is applie
 \details{
 For the estimation of the 2D kernal density, code is borrowed from \code{\link[KernSmooth:bkde2D]{bkde2D}}. This implemention is slightly different: \code{\link[KernSmooth:bkde2D]{bkde2D}} takes point coordinates and applies linear binning, whereas in this function, the data is already binned, with values 1 if the values of \code{var} are not missing and 0 if values of \code{var} are missing.
 
-This function supports \code{sf} objects, but still uses sp-based methods, from the packages sp, rgeos, and/or rgdal.
+This function supports \code{\link[sf:sf]{sf}} objects, but still uses sp-based methods, from the packages sp, rgeos, and/or rgdal.
 }
 \examples{
 \dontrun{

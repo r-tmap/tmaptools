@@ -11,12 +11,12 @@ read_shape(file, current.projection = NULL, as.sf = TRUE, ...)
 
 \item{current.projection}{the current projection of the shape object, if it is missing in the shape file. See \code{\link{get_proj4}} for options. Use \code{\link{set_projection}} to reproject the shape object.}
 
-\item{as.sf}{should the shape be returned as an \code{sf} object?}
+\item{as.sf}{should the shape be returned as an \code{\link[sf:sf]{sf}} object?}
 
 \item{...}{other parameters, such as \code{stringsAsFactors}, are passed on to \code{\link[rgdal:readOGR]{readOGR}}}
 }
 \value{
-shape object from class \code{\link[sp:Spatial]{Spatial}} or \code{sf} if \code{as.sf = TRUE}
+shape object from class \code{\link[sp:Spatial]{Spatial}} or \code{\link[sf:sf]{sf}} if \code{as.sf = TRUE}
 }
 \description{
 Read an ESRI shape file. Optionally, set the current projection if it is missing.

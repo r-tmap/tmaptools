@@ -7,11 +7,11 @@
 is_projected(x)
 }
 \arguments{
-\item{x}{shape (from class \code{\link[sp:Spatial]{Spatial}}, \code{\link[raster:Raster-class]{Raster}}, or \code{sf}), or projection (see \code{\link{get_proj4}} for options)}
+\item{x}{shape (from class \code{\link[sp:Spatial]{Spatial}}, \code{\link[raster:Raster-class]{Raster}}, or \code{\link[sf:sf]{sf}}), or projection (see \code{\link{get_proj4}} for options)}
 }
 \value{
 logical: \code{TRUE} if the shape is projected and \code{FALSE} otherwise.
 }
 \description{
-Checks whether the shape is projected. Applicable to \code{Spatial}, \code{Raster} and \code{sf} objects. In case the projection is missing, it checks whether the coordinates are within -180/180 and -90/90 (if so, it returns \code{FALSE}).
+Checks whether the shape is projected. Applicable to \code{Spatial}, \code{Raster} and \code{\link[sf:sf]{sf}} objects. In case the projection is missing, it checks whether the coordinates are within -180/180 and -90/90 (if so, it returns \code{FALSE}).
 }

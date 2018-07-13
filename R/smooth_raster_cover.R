@@ -4,13 +4,13 @@
 #'
 #' For the estimation of the 2D kernal density, code is borrowed from \code{\link[KernSmooth:bkde2D]{bkde2D}}. This implemention is slightly different: \code{\link[KernSmooth:bkde2D]{bkde2D}} takes point coordinates and applies linear binning, whereas in this function, the data is already binned, with values 1 if the values of \code{var} are not missing and 0 if values of \code{var} are missing.
 #'
-#' This function supports \code{sf} objects, but still uses sp-based methods, from the packages sp, rgeos, and/or rgdal.
+#' This function supports \code{\link[sf:sf]{sf}} objects, but still uses sp-based methods, from the packages sp, rgeos, and/or rgdal.
 #'
 #' @param shp raster object, from either \code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}} or \code{\link[raster:Raster-class]{Raster}} class.
 #' @param var name of the variable from which missing values are flagged. If unspecified, the first variable will be taken.
 #' @param bandwidth single numeric value or vector of two numeric values that specifiy the bandwidth of the kernal density estimator. See details.
 #' @param threshold numeric value between 0 and 1 that determines which part of the estimated 2D kernal density is returned as cover.
-#' @param output class of the returned object. One of: \code{polygons} (\code{sf} object), \code{lines} (\code{sf} object), or a \code{\link[raster:Raster-class]{raster}}. A vector of class names results in a list of output objects.
+#' @param output class of the returned object. One of: \code{polygons} (\code{\link[sf:sf]{sf}} object), \code{lines} (\code{sf} object), or a \code{\link[raster:Raster-class]{raster}}. A vector of class names results in a list of output objects.
 #' @importFrom raster raster extent
 #' @importMethodsFrom raster as.matrix
 #' @export

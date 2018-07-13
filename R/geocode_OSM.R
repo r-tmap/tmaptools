@@ -7,7 +7,7 @@
 #' @param return.first.only Only return the first result
 #' @param details provide output details, other than the point coordinates and bounding box
 #' @param as.data.frame Return the output as a \code{data.frame}. If \code{FALSE}, a list is returned with at least two items: \code{"coords"}, a vector containing the coordinates, and \code{"bbox"}, the corresponding bounding box. By default false, unless \code{q} contains multiple queries
-#' @param as.sf Return the output as \code{sf} object. If \code{TRUE}, \code{return.first.only} will be set to \code{TRUE}.
+#' @param as.sf Return the output as \code{\link[sf:sf]{sf}} object. If \code{TRUE}, \code{return.first.only} will be set to \code{TRUE}.
 #' @param server OpenStreetMap Nominatim server name. Could also be a local OSM Nominatim server.
 #' @return If \code{as.SPDF} then a \code{\link[sp:SpatialPointsDataFrame]{SpatialPointsDataFrame}} is returned. Else, if \code{as.data.frame}, then a \code{data.frame} is returned, else a list.
 #' @export

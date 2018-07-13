@@ -2,9 +2,9 @@
 #'
 #' Sample dots from spatial polygons according to a spatial distribution of a population. The population may consist of classes. The output, an sf object containing spatial points, can be used to create a dot map (see \code{\link[tmap:tm_dots]{tm_dots}}), where the dots are colored according to the classes. Note that this function supports \code{sf} objects, but still uses sp-based methods (see details).
 #'
-#' This function supports \code{sf} objects, but still uses sp-based methods, from the packages sp, rgeos, and/or rgdal. Alternatively,  \code{\link[sf:st_sample]{st_sample}} can be used.
+#' This function supports \code{\link[sf:sf]{sf}} objects, but still uses sp-based methods, from the packages sp, rgeos, and/or rgdal. Alternatively,  \code{\link[sf:st_sample]{st_sample}} can be used.
 #'
-#' @param shp A shape object, more specifically, a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygonsDataFrame}} or an \code{sf} object that can be coerced as such.
+#' @param shp A shape object, more specifically, a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygonsDataFrame}} or an \code{\link[sf:sf]{sf}} object that can be coerced as such.
 #' @param vars Names of one or more variables that are contained in \code{shp}. If \code{vars} is not provided, the dots are sampled uniformly. If \code{vars} consists of one variable name, the dots are sampled according to the distribution of the corresponding variable. If \code{vars} consist of more than one variable names, then the dots are sampled according to the distributions of those variables. A categorical variable is added that contains the distrubtion classes (see \code{var.name}).
 #' @param convert2density Should the variables be converted to density values? Density values are used for the sampling algorithm, so use \code{TRUE} when the values are absolute counts.
 #' @param nrow Number of grid rows

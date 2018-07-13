@@ -2,7 +2,7 @@
 #'
 #' Color the polygons of a map such that adjacent polygons have different colors
 #'
-#' @param x Either a shape (i.e. a \code{sf} or \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}} object), or an adjacency list.
+#' @param x Either a shape (i.e. a \code{\link[sf:sf]{sf}} or \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}} object), or an adjacency list.
 #' @param algorithm currently, only "greedy" is implemented.
 #' @param ncols number of colors. By default it is 8 when \code{palette} is undefined. Else, it is set to the length of \code{palette}
 #' @param minimize logical that determines whether \code{algorithm} will search for a minimal number of colors. If \code{FALSE}, the \code{ncols} colors will be picked by a random procedure.
@@ -76,7 +76,7 @@ map_coloring <- function(x, algorithm="greedy", ncols=NA, minimize=FALSE, palett
 #'
 #' Get neighbours list from spatial objects. The output is similar to the function \code{poly2nb} of the \code{spdep} package, but uses \code{sf} instead of \code{sp}.
 #'
-#' @param x a shape object, i.e., a \code{sf} object or a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}.
+#' @param x a shape object, i.e., a \code{\link[sf:sf]{sf}} object or a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}.
 #' @return A list where the items correspond to the features. Each item is a vector of neighbours.
 #' @export
 get_neighbours <- function(x) {

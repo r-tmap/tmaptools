@@ -5,7 +5,7 @@
 #' #' @importFrom geosphere distGeo
 #' #' @import sp
 #' #' @export
-#' #' @param x A projection (see \code{\link{get_proj4}}) or a shape (from class \code{\link[sf:sf]{sf}}, \code{\link[raster:Raster-class]{Raster}}, or \code{Spatial}).
+#' #' @param x A projection (see \code{\link{get_proj4}}) or a shape (from class \code{\link[sf:sf]{sf}}, \code{\link[raster:Raster-class]{Raster}}, or \code{\link[sp:sp]{sp}}).
 #' #' @param target target unit, one of:  \code{"m"}, \code{"km"}, \code{"mi"}, and \code{"ft"}.
 #' #' @param orig units by the \code{x} is defined. Only needed if this information is missing from \code{x} and \code{x} is projected. Options:  \code{"m"}, \code{"km"}, \code{"mi"}, and \code{"ft"}.
 #' #' @param to multiplier used as follows: \code{orig * to = target}. Only needed when \code{orig} or \code{target} is unknown. For instance, if \code{target} is set to \code{"hm"} (hectameter), and \code{orig} is \code{"m"}, then \code{to} should be 100, meaning 1 hectameter equals 100 meters.

@@ -16,7 +16,7 @@ smooth_raster_cover(shp, var = NULL, bandwidth = NA, threshold = 0.6,
 
 \item{threshold}{numeric value between 0 and 1 that determines which part of the estimated 2D kernal density is returned as cover.}
 
-\item{output}{class of the returned object. One of: \code{polygons} (\code{sf} object), \code{lines} (\code{sf} object), or a \code{\link[raster:Raster-class]{raster}}. A vector of class names results in a list of output objects.}
+\item{output}{class of the returned object. One of: \code{polygons} (\code{\link[sf:sf]{sf}} object), \code{lines} (\code{sf} object), or a \code{\link[raster:Raster-class]{raster}}. A vector of class names results in a list of output objects.}
 }
 \description{
 Get a smoothed cover of a raster object. From all non-missing values of a raster object, a 2D kernal density is applied. The output is a \code{sf} object of spatial polygons. Used by \code{\link{smooth_map}}. Note that this function supports \code{sf} objects, but still uses sp-based methods (see details). Note that this function supports \code{sf} objects, but still uses sp-based methods (see details).
@@ -24,5 +24,5 @@ Get a smoothed cover of a raster object. From all non-missing values of a raster
 \details{
 For the estimation of the 2D kernal density, code is borrowed from \code{\link[KernSmooth:bkde2D]{bkde2D}}. This implemention is slightly different: \code{\link[KernSmooth:bkde2D]{bkde2D}} takes point coordinates and applies linear binning, whereas in this function, the data is already binned, with values 1 if the values of \code{var} are not missing and 0 if values of \code{var} are missing.
 
-This function supports \code{sf} objects, but still uses sp-based methods, from the packages sp, rgeos, and/or rgdal.
+This function supports \code{\link[sf:sf]{sf}} objects, but still uses sp-based methods, from the packages sp, rgeos, and/or rgdal.
 }

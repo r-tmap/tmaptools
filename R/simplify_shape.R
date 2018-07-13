@@ -2,15 +2,15 @@
 #'
 #' Simplify a shape consisting of polygons or lines. This can be useful for shapes that are too detailed for visualization, especially along natural borders such as coastlines and rivers. The number of coordinates is reduced.
 #'
-#' This function is a wrapper of \code{\link[rmapshaper:ms_simplify]{ms_simplify}}. In addition, the data is preserved. Also \code{sf} objects are supported.
+#' This function is a wrapper of \code{\link[rmapshaper:ms_simplify]{ms_simplify}}. In addition, the data is preserved. Also \code{\link[sf:sf]{sf}} objects are supported.
 #'
-#' @param shp a \code{\link[sp:SpatialPolygons]{SpatialPolygons(DataFrame)}} or a \code{\link[sp:SpatialLines]{SpatialLines(DataFrame)}}, or an \code{sf} object that can be coerced to one of them.
+#' @param shp a \code{\link[sp:SpatialPolygons]{SpatialPolygons(DataFrame)}} or a \code{\link[sp:SpatialLines]{SpatialLines(DataFrame)}}, or an \code{\link[sf:sf]{sf}} object that can be coerced to one of them.
 #' @param fact simplification factor, number between 0 and 1 (default is 0.1)
 #' @param keep.units d
 #' @param keep.subunits d
 #' @param ... other arguments passed on to the underlying function \code{\link[rmapshaper:ms_simplify]{ms_simplify}} (except for the arguments \code{input}, \code{keep}, \code{keep_shapes} and \code{explode})
 #' @example ./examples/simplify_shape.R
-#' @return \code{sf} object
+#' @return \code{\link[sf:sf]{sf}} object
 #' @export
 simplify_shape <- function(shp, fact = 0.1, keep.units=FALSE, keep.subunits=FALSE, ...) {
     if (!requireNamespace("rmapshaper", quietly = TRUE)) {

@@ -15,7 +15,7 @@ aggregate_map(shp, by = NULL, fact = NULL, agg.fun = NULL,
  \item{\code{\link[sp:SpatialGridDataFrame]{SpatialGrid(DataFrame)}}}
  \item{\code{\link[sp:SpatialPixelsDataFrame]{SpatialPixels(DataFrame)}}}
  \item{\code{\link[raster:Raster-class]{RasterLayer, RasterStack, or RasterBrick}}}
- \item{\code{sf} object if it can be coerced to a \code{Spatial} object}
+ \item{\code{\link[sf:sf]{sf}} object if it can be coerced to an \code{\link[sp:sp]{sp}} object}
 }}
 
 \item{by}{variable by which polygons or lines are merged. Does not apply to raster objects.}
@@ -47,9 +47,9 @@ This function is similar to \code{\link[raster:aggregate]{aggregate}} from the \
 
 By default, the data is not aggregated. In this case, this function is similar to \code{unionSpatialPolygons} from the \code{maptools} package. The only difference is way the aggregate-by variable is specified. When using \code{unionSpatialPolygons}, the values have to be assigned to \code{IDs} whereas when using \code{aggregate_map} the data variable name can be assigned to \code{by}.
 
-The underlying functions of \code{aggregate_map} for \code{Spatial} objects are \code{\link[rgeos:gUnaryUnion]{gUnaryUnion}}, \code{\link[rgeos:gUnionCascaded]{gUnionCascaded}}, and \code{\link[rgeos:gLineMerge]{gLineMerge}}. For \code{Raster} objects, the \code{\link[raster:aggregate]{aggregate}} is used.
+The underlying functions of \code{aggregate_map} for \code{\link[sp:sp]{sp}} objects are \code{\link[rgeos:gUnaryUnion]{gUnaryUnion}}, \code{\link[rgeos:gUnionCascaded]{gUnionCascaded}}, and \code{\link[rgeos:gLineMerge]{gLineMerge}}. For \code{Raster} objects, the \code{\link[raster:aggregate]{aggregate}} is used.
 
-This function supports \code{sf} objects, but still uses sp-based methods, from the packages sp, rgeos, and/or rgdal. Alternatively, the \code{\link[sf:tidyverse]{tidyverse}} methods \code{group_by} and \code{summarize} can be used.
+This function supports \code{\link[sf:sf]{sf}} objects, but still uses sp-based methods, from the packages sp, rgeos, and/or rgdal. Alternatively, the \code{\link[sf:tidyverse]{tidyverse}} methods \code{group_by} and \code{summarize} can be used.
 }
 \examples{
 if (require(tmap)) {
