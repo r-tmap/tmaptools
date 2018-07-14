@@ -1,14 +1,14 @@
 if (require(tmap)) {
-    data(NLD_muni, land, metro)
+    data(World, NLD_muni, land, metro)
 
     land_NLD <- crop_shape(land, NLD_muni)
 
     qtm(land_NLD, raster="trees", style="natural")
 
-    metro_NLD <- crop_shape(metro, NLD_muni, polygon = TRUE)
+    metro_Europe <- crop_shape(metro, World[World$continent == "Europe", ], polygon = TRUE)
 
-    qtm(NLD_muni) +
-    tm_shape(metro_NLD) +
+    qtm(World) +
+    tm_shape(metro_Europe) +
     	tm_bubbles("pop2010", col="red", title.size="European cities") +
     	tm_legend(frame=TRUE)
 }
