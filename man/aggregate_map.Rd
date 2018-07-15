@@ -52,7 +52,7 @@ The underlying functions of \code{aggregate_map} for \code{\link[sp:sp]{sp}} obj
 This function supports \code{\link[sf:sf]{sf}} objects, but still uses sp-based methods, from the packages sp, rgeos, and/or rgdal. Alternatively, the \code{\link[sf:tidyverse]{tidyverse}} methods \code{group_by} and \code{summarize} can be used.
 }
 \examples{
-if (require(tmap)) {
+if (require(tmap) && packageVersion("tmap") >= "2.0") {
     data(land)
 
     # original map

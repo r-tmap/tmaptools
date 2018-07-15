@@ -1,4 +1,4 @@
-if (require(tmap)) {
+if (require(tmap) && packageVersion("tmap") >= "2.0") {
     data(NLD_muni)
 
     NLD_muni_pop_per_km2 <- calc_densities(NLD_muni,

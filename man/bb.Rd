@@ -65,7 +65,7 @@ A new bounding box can be created from scratch as follows:
 }
 }
 \examples{
-if (require(tmap)) {
+if (require(tmap) && packageVersion("tmap") >= "2.0") {
 
     ## load shapes
     data(NLD_muni)
@@ -85,12 +85,16 @@ if (require(tmap)) {
     bb(NLD_muni, width=2, relative = TRUE)
     bb(NLD_muni, xlim=c(.25, .75), ylim=c(.25, .75), relative = TRUE)
 
+}
+
+\dontrun{
+if (require(tmap)) {
     bb("Limburg", projection = "rd")
     bb_italy <- bb("Italy", projection = "eck4")
 
     tm_shape(World, bbox=bb_italy) + tm_polygons()
     # shorter alternative: tm_shape(World, bbox="Italy") + tm_polygons()
-}
+}}
 }
 \seealso{
 \code{\link{geocode_OSM}}

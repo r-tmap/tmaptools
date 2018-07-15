@@ -32,7 +32,7 @@ bb_earth(projection = NULL, stepsize = 1, earth.datum = 4326,
 Convert bounding box to a spatial (\code{\link[sf:st_sfc]{sfc}}) object . Useful for plotting (see example). The function \code{bb_earth} returns a spatial polygon of the 'boundaries' of the earth, which can also be done in other projections (if a feasible solution exists).
 }
 \examples{
-if (require(tmap)) {
+if (require(tmap) && packageVersion("tmap") >= "2.0") {
     data(NLD_muni)
 
     current.mode <- tmap_mode("view")

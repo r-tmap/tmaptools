@@ -27,7 +27,7 @@ Vector or data.frame (depending on whether \code{length(var)==1} with density va
 Transpose quantitative variables to densitiy variables, which are often needed for choroplets. For example, the colors of a population density map should correspond population density counts rather than absolute population numbers.
 }
 \examples{
-if (require(tmap)) {
+if (require(tmap) && packageVersion("tmap") >= "2.0") {
     data(NLD_muni)
 
     NLD_muni_pop_per_km2 <- calc_densities(NLD_muni,

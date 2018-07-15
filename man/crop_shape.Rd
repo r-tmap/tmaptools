@@ -25,7 +25,7 @@ Crop a shape object (from class \code{\link[sp:Spatial]{Spatial}}, \code{\link[r
 This function is similar to \code{\link[raster:crop]{crop}} from the \code{raster} package. The main difference is that \code{crop_shape} also allows to crop using a polygon instead of a rectangle.
 }
 \examples{
-if (require(tmap)) {
+if (require(tmap) && packageVersion("tmap") >= "2.0") {
     data(World, NLD_muni, land, metro)
 
     land_NLD <- crop_shape(land, NLD_muni)

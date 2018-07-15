@@ -1,4 +1,4 @@
-if (require(tmap)) {
+if (require(tmap) && packageVersion("tmap") >= "2.0") {
     data(land)
 
     # original map

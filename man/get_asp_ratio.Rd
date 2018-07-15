@@ -28,7 +28,7 @@ Get the aspect ratio of a shape object, a \code{\link[tmap:tmap-element]{tmap}} 
 The arguments \code{width}, \code{height}, and \code{res} are passed on to \code{\link[grDevices:png]{png}}. If \code{x} is a tmap object, a temporarily png image is created to calculate the aspect ratio of a tmap object. The default size of this image is 700 by 700 pixels at 100 dpi.
 }
 \examples{
-if (require(tmap)) {
+if (require(tmap) && packageVersion("tmap") >= "2.0") {
     data(World)
 
     get_asp_ratio(World)

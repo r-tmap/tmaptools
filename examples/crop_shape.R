@@ -1,4 +1,4 @@
-if (require(tmap)) {
+if (require(tmap) && packageVersion("tmap") >= "2.0") {
     data(World, NLD_muni, land, metro)
 
     land_NLD <- crop_shape(land, NLD_muni)

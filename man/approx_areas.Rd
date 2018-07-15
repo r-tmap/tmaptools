@@ -30,7 +30,7 @@ Approximate the area sizes of the polygons in real-world area units (such as sq 
 Note that the method of determining areas is an approximation, since it depends on the used projection and the level of detail of the shape object. Projections with equal-area property are highly recommended. See \url{https://en.wikipedia.org/wiki/List_of_map_projections} for equal area world map projections.
 }
 \examples{
-if (require(tmap)) {
+if (require(tmap) && packageVersion("tmap") >= "2.0") {
     data(NLD_muni)
 
     NLD_muni$area <- approx_areas(NLD_muni, total.area = 33893)
