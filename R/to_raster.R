@@ -149,11 +149,7 @@ poly_to_raster <- function(shp, r=NULL, nrow=NA, ncol=NA, N=250000, use.cover=FA
 	}
 
 	if (!copy.data) {
-	  if (to.Raster) {
-	    return(rst)
-	  } else {
-	    return(as(rst, "SpatialGridDataFrame"))
-	  }
+        return(rst)
 	}
 
 

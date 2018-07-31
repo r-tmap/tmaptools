@@ -1,3 +1,6 @@
+version 2.0-1
+- fixed bug in poly_to_raster
+
 version 2.0
 - tmaptools migrated from sp to sf, all functions support sf, but some still rely on sp
 - bb now returns a vector instead of a matrix, similar to sf::st_bbox
