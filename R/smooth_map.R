@@ -147,7 +147,7 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 				}
 				if (!gIsValid(cover)) cover <- gBuffer(cover, width=0)
 				cover@bbox <- matrix(bbx, ncol=2)
-				cover_r <- poly_to_raster(cover, nrow = nrow, ncol = ncol, to.Raster = TRUE)
+				cover_r <- poly_to_raster(cover, nrow = nrow, ncol = ncol)
 			}
 		}  else if (cover.type=="smooth") {
 			if (!inherits(shp, "Raster")) stop("Raster shape required when cover.type=\"smooth\"")
@@ -161,7 +161,7 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 
 		cover <- gUnaryUnion(cover)
 		cover <- spTransform(cover, CRS(prj))
-		cover_r <- poly_to_raster(cover, nrow = nrow, ncol = ncol, to.Raster = TRUE)
+		cover_r <- poly_to_raster(cover, nrow = nrow, ncol = ncol)
 		bbc <- as.vector(bb(cover))
 		bbx[1:2] <- pmin(bbx[1:2], bbc[1:2])
 		bbx[3:4] <- pmin(bbx[3:4], bbc[3:4])
@@ -179,7 +179,7 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 		# otherwise, the shape is converted to a raster (if it isn't already)
 		if (inherits(shp, "SpatialPolygons")){
 			shp@data <- shp@data[,var, drop=FALSE]
-			shp <- poly_to_raster(shp, nrow = nrow, ncol=ncol, copy.data = TRUE, to.Raster = TRUE)
+			shp <- poly_to_raster(shp, nrow = nrow, ncol=ncol, copy.data = TRUE)
 		}
 		# get raster with selected variable
 		# shpr <- raster(shp, layer=var)
