@@ -7,6 +7,8 @@ if (require(tmap) && packageVersion("tmap") >= "2.0") {
 
     tm <- qtm(World)
     get_asp_ratio(tm)
+}
 
+\dontrun{
     get_asp_ratio("Germany") #note: bb("Germany") uses geocode_OSM("Germany")
 }
