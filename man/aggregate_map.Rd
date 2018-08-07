@@ -52,17 +52,16 @@ The underlying functions of \code{aggregate_map} for \code{\link[sp:sp]{sp}} obj
 This function supports \code{\link[sf:sf]{sf}} objects, but still uses sp-based methods, from the packages sp, rgeos, and/or rgdal. Alternatively, the \code{\link[sf:tidyverse]{tidyverse}} methods \code{group_by} and \code{summarize} can be used.
 }
 \examples{
+\dontrun{
 if (require(tmap) && packageVersion("tmap") >= "2.0") {
     data(land)
 
     # original map
     qtm(land, raster="cover_cls")
 
-    \dontrun{
     # map decreased by factor 4 for each dimension
     land4 <- aggregate_map(land, fact=4, agg.fun="modal")
     qtm(land4, raster="cover_cls")
-    }
 
     # map decreased by factor 8, where the variable trees is
     # aggregated with mean, min, and max
@@ -93,5 +92,6 @@ if (require(tmap) && packageVersion("tmap") >= "2.0") {
         agg.fun = list(name="modal"), weights = "AREA")
 
     sf::st_set_geometry(NLD_largest_muni, NULL)
+}
 }
 }
