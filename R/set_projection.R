@@ -132,6 +132,10 @@ set_projection <- function(shp, projection=NA, current.projection=NA, overwrite.
 		}
 	}
 
+	if (is_sp && inherits(shp, "sf") ) {
+	    shp <- as(shp,"Spatial")
+	}
+
 	shp
 
 	#if (is_sp && !is_sp_raster) as(shp, cls) else shp
