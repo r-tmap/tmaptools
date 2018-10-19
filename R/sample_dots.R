@@ -47,6 +47,7 @@ sample_dots <- function(shp, vars=NULL, convert2density=FALSE, nrow=NA, ncol=NA,
 	message("Please wait...")
 	data <- shp@data[, vars, drop=FALSE]
 	data <- as.data.frame(lapply(data, function(d) {
+	    if (inherits(d, "units")) d <- as.numeric(d)
 		if (any(is.na(d))) {
 			message("Shape data contains missing values. Replaced with 0.")
 			d[is.na(d)] <- 0
@@ -54,7 +55,6 @@ sample_dots <- function(shp, vars=NULL, convert2density=FALSE, nrow=NA, ncol=NA,
 		if (any(is.nan(d)) || any(is.infinite(d)) || any(d<0)) stop("Shape data contains NaN, infinite, or negative values")
 		d
 	}))
-
 
 	## find total population number, and convert data to density values
 	if (convert2density) {

@@ -129,13 +129,13 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 
 		if (cover.type=="rect") {
 			cover <- as(extent(bbx[c(1,3,2,4)]), "SpatialPolygons")
-			if (!is.na(prj)) cover <- set_projection(cover, current.projection = prj)
+			if (!is.na(prj)) cover <- as(set_projection(cover, current.projection = prj), "Spatial")
 			cover_r[] <- TRUE
 		} else if (cover.type=="original") {
 			if (inherits(shp, "Raster")) {
 				warning("cover.type=\"original\" only applied to raster output")
 				cover <- as(extent(bbx[c(1,3,2,4)]), "SpatialPolygons")
-				if (!is.na(prj)) cover <- set_projection(cover, current.projection = prj)
+				if (!is.na(prj)) cover <- as(set_projection(cover, current.projection = prj), "Spatial")
 
 				cover_r <- shp
 
@@ -145,7 +145,7 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 				} else if (inherits(shp, "SpatialPolygons")) {
 					cover <- gUnaryUnion(shp)
 				}
-				if (!gIsValid(cover)) cover <- gBuffer(cover, width=0)
+				cover <- checknfix_sp(cover)
 				cover@bbox <- matrix(bbx, ncol=2)
 				cover_r <- poly_to_raster(cover, nrow = nrow, ncol = ncol)
 			}
@@ -154,13 +154,16 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 			cover_list <- smooth_raster_cover(shp, var=var, bandwidth = bandwidth*unit.size, threshold = cover.threshold, output=c("raster", "polygons"))
 			cover_r <- cover_list$raster
 			cover_r[!cover_r[]] <- NA
-			cover <- cover_list$polygons
+			cover <- as(cover_list$polygons, "Spatial")
 		}
 	} else {
 	    if (inherits(cover, c("sf", "sfc"))) cover <- as(cover, "Spatial")
 
 		cover <- gUnaryUnion(cover)
 		cover <- spTransform(cover, CRS(prj))
+
+		cover <- checknfix_sp(cover)
+
 		cover_r <- poly_to_raster(cover, nrow = nrow, ncol = ncol)
 		bbc <- as.vector(bb(cover))
 		bbx[1:2] <- pmin(bbx[1:2], bbc[1:2])
@@ -267,6 +270,8 @@ smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", uni
 	}
 	setTxtProgressBar(pb, .7)
 
+
+
 	# make sure lines are inside poly
 	cp <- suppressWarnings(lines2polygons(ply = cover, lns = cl2, rst = r, lvls=lvls, extracting.method="full", buffer.width = buffer.width))
 	if (thresLevel) {
@@ -354,6 +359,9 @@ lines2polygons <- function(ply, lns, rst=NULL, lvls, extracting.method="full", b
 	# cut the poly with isolines
 	dpi <- if (is.null(lns)) ply else gDifference(ply, blpi)
 
+	dpi <- checknfix_sp(dpi)
+
+
 	if (missing(rst)) {
 		dpi
 	} else {
@@ -437,3 +445,8 @@ lines2polygons <- function(ply, lns, rst=NULL, lvls, extracting.method="full", b
 		x <- do.call("sbind", res)
 	}
 }
+
+checknfix_sp <- function(x) {
+    if (!suppressWarnings(gIsValid(x))) gBuffer(x, width = 0) else x
+}
+

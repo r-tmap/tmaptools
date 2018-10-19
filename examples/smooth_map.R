@@ -57,17 +57,19 @@ if (require(tmap)) {
     	World$pop_est_dens_non_metro <- (World$pop_est - World$pop_metro) / World$area
 
     	# generate dots for metropolitan areas (1 dot = 1mln people)
-    	metro_dots <- do.call("sbind", lapply(1:length(metro_eck), function(i) {
-    		m <- metro_eck[i,]
-    		m[rep(1, max(1, m$pop2010 %/% 1e6)),]
-    	}))
+    	repeats <- pmax(1, metro_eck$pop2010 %/% 1e6)
+    	ids <- unlist(mapply(rep, 1:nrow(metro_eck), repeats, SIMPLIFY = FALSE))
+
+    	metro_dots <- metro_eck[ids, ]
+
 
     	# sample population dots from non-metropolitan areas (1 dot = 1mln people)
     	World_pop <- sample_dots(World, vars="pop_est_dens_non_metro", w = 1e6,
-    							 npop = 7.3e9 - length(metro_dots)*1e6)
+    							 npop = 7.3e9 - nrow(metro_dots)*1e6)
 
     	# combine
-    	sbind(as(World_pop, "SpatialPoints"), as(metro_dots, "SpatialPoints"))
+
+    	c(st_geometry(World_pop), st_geometry(metro_dots))
     }
 
     World_1mln_dots <- create_dot_per_1mln_people()

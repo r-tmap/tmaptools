@@ -56,7 +56,7 @@ smooth_raster_cover <- function(shp, var=NULL, bandwidth=NA, threshold=.6, outpu
 
 
 	rect <- as(extent(bbx[c(1,3,2,4)]), "SpatialPolygons")
-	rect <- set_projection(rect, current.projection = prj)
+	rect <- as(set_projection(rect, current.projection = prj), "Spatial")
 
 	cp_nna <- lines2polygons(ply = rect, lns = cl2_nna, rst = raster(shp, "NNA__VALUES"), lvls = threshold)[2,]
 

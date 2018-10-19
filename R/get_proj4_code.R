@@ -47,7 +47,9 @@ get_proj4 <- function(x, output = c("crs", "character", "epsg", "CRS")) {
 	} else if (!is.numeric(x) && !is.character(x)) {
 		stop("x is not a character, crs object, CRS object, nor a number", call.=FALSE)
 	} else {
-		if (x %in% names(.proj_sc)) {
+		if (x %in% names(.proj_epsg)) {
+		    create_crs(unname(.proj_epsg[x]))
+		} else if (x %in% names(.proj_sc)) {
 		    create_crs(unname(.proj_sc[x]))
 		} else if (is_num_string(x)) {
 		    sf::st_crs(x)
@@ -66,29 +68,39 @@ get_proj4 <- function(x, output = c("crs", "character", "epsg", "CRS")) {
 	       CRS = CRS(ifelse(is.na(y$proj4string), "", y$proj4string)))
 }
 
-create_crs <- function(string) {
-    structure(list(epsg = as.integer(NA), proj4string = string), class = "crs")
+create_crs <- function(x) {
+    if (is.numeric(x)) {
+        sf::st_crs(x)
+    } else {
+        structure(list(epsg = as.integer(NA), proj4string = string), class = "crs")
+    }
 }
 
 is_num_string <- function(x) {
     suppressWarnings(!is.na(as.numeric(x)))
 }
 
-.proj_sc <- c(longlat="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0",
-			  latlong="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0",
-			  WGS84="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0",
-			  NAD83="+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs +towgs84=0,0,0",
-			  NAD27="+proj=longlat +ellps=clrk66 +datum=NAD27 +no_defs +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat",
-			  wintri="+proj=wintri +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0",
+.proj_epsg <- c(longlat = 4326,
+                latlong = 4326,
+                WGS84 = 4326,
+                NAD83 = 4269,
+                NAD27 = 4267,
+                merc = 3857,
+                laea_Eur = 3035,
+                laea_NA = 2163,
+                rd = 28992)
+
+.proj_sc <- c(wintri="+proj=wintri +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0",
 			  robin="+proj=robin +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0",
 			  eck4="+proj=eck4 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0",
 			  hd="+proj=cea +lat_ts=37.5 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0",
 			  gall="+proj=cea +lon_0=0 +lat_ts=45 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0",
-			  merc="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs",
 			  mill="+proj=mill +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +R_A +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0",
 			  eqc0="+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0",
 			  eqc30="+proj=eqc +lat_ts=30 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0",
-			  eqc45="+proj=eqc +lat_ts=45 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0",
-			  laea_Eur="+init=epsg:3035 +proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs",
-			  laea_NA="+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs +towgs84=0,0,0",
-			  rd="+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,-0.398957388243134,0.343987817378283,-1.87740163998045,4.0725 +units=m +no_defs")
+			  eqc45="+proj=eqc +lat_ts=45 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0")
+
+# many shapefiles of the Netherlands have one of these projections, which cause problems since the +towgs84 attribute is missing (this is automatically corrected in read_shape)
+.wrong_rd_projections <- c("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.999908 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs",
+                           "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs",
+                           "+proj=sterea +lat_0=52.156161 +lon_0=5.387639 +k=0.999908 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs")
