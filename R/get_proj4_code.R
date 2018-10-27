@@ -72,7 +72,7 @@ create_crs <- function(x) {
     if (is.numeric(x)) {
         sf::st_crs(x)
     } else {
-        structure(list(epsg = as.integer(NA), proj4string = string), class = "crs")
+        structure(list(epsg = as.integer(NA), proj4string = x), class = "crs")
     }
 }
 
