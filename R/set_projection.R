@@ -39,7 +39,7 @@ set_projection <- function(shp, projection=NA, current.projection=NA, overwrite.
 
 	if (is.na(shp.crs)) {
 		if (is.na(current.crs)) {
-			stop("Currect projection of shape object unknown. Please specify the argument current.projection. The value \"longlat\", which stands for Longitude-latitude (WGS84), is most commonly used.")
+			stop("Current projection of shape object unknown. Please specify the argument current.projection. The value \"longlat\", which stands for Longitude-latitude (WGS84), is most commonly used.")
 		} else {
 			if (inherits(shp, "sf")) {
 				st_crs(shp) <- current.crs
