@@ -19,7 +19,7 @@
 #' @export
 #' @example ./examples/read_osm.R
 #' @return The output of \code{read_osm} is a \code{\link[raster:raster]{raster}} object.
-read_osm <- function(x, zoom=NULL, type="osm", minNumTiles=NULL, mergeTiles=NULL, use.colortable = TRUE, raster, ...) {
+read_osm <- function(x, zoom=NULL, type="osm", minNumTiles=NULL, mergeTiles=NULL, use.colortable = FALSE, raster, ...) {
 	if (!get(".internet", envir = .TMAPTOOLS_CACHE)) stop("No internet connection found.")
 
     if (!missing(raster)) {
@@ -48,7 +48,7 @@ read_osm <- function(x, zoom=NULL, type="osm", minNumTiles=NULL, mergeTiles=NULL
 		omr <- raster::raster(om)
 
 		if (use.colortable) {
-		    tab <- raster_colors(raster::values(omr))
+		    tab <- raster_colors(raster::values(omr), use.colortable = TRUE)
 		    omr <- raster::raster(omr)
 		    omr <- raster::setValues(omr, as.integer(tab) - 1L)
 		    raster::colortable(omr) <- levels(tab)
