@@ -8,8 +8,8 @@
 set_projection(shp, projection = NA, current.projection = NA,
   overwrite.current.projection = FALSE)
 
-get_projection(shp, guess.longlat = FALSE, output = c("character", "crs",
-  "epsg", "CRS"))
+get_projection(shp, guess.longlat = FALSE, output = c("character",
+  "crs", "epsg", "CRS"))
 }
 \arguments{
 \item{shp}{shape object, which is an object from a class defined by the \code{\link[sf:sf]{sf}}, \code{\link[sp:sp]{sp}}, or \code{\link[raster:raster-package]{raster}} package.}

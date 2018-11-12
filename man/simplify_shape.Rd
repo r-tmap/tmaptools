@@ -4,8 +4,8 @@
 \alias{simplify_shape}
 \title{Simplify shape}
 \usage{
-simplify_shape(shp, fact = 0.1, keep.units = FALSE, keep.subunits = FALSE,
-  ...)
+simplify_shape(shp, fact = 0.1, keep.units = FALSE,
+  keep.subunits = FALSE, ...)
 }
 \arguments{
 \item{shp}{a \code{\link[sp:SpatialPolygons]{SpatialPolygons(DataFrame)}} or a \code{\link[sp:SpatialLines]{SpatialLines(DataFrame)}}, or an \code{\link[sf:sf]{sf}} object that can be coerced to one of them.}

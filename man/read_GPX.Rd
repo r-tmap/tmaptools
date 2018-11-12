@@ -4,8 +4,8 @@
 \alias{read_GPX}
 \title{Read GPX file}
 \usage{
-read_GPX(file, layers = c("waypoints", "tracks", "routes", "track_points",
-  "route_points"), as.sf = TRUE)
+read_GPX(file, layers = c("waypoints", "tracks", "routes",
+  "track_points", "route_points"), as.sf = TRUE)
 }
 \arguments{
 \item{file}{a GPX filename (including directory)}
