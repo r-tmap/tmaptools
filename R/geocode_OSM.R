@@ -174,6 +174,7 @@ rev_geocode_OSM <- function(x, y=NULL, zoom=NULL, projection=NULL, as.data.frame
 		lon <- x <- co[,1]
 		lat <- y <- co[,2]
 	} else {
+	    n <- 1
 		if (length(x) > 1 || length(y) > 1) {
 			n <- max(length(x), length(y))
 			x <- rep(x, length.out=n)
