@@ -133,7 +133,7 @@ geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, details=FALS
 #'
 #' Reverse geocodes a location (based on spatial coordinates) to an address. It uses OpenStreetMap Nominatim. For processing large amount of queries, please read the usage policy (\url{http://wiki.openstreetmap.org/wiki/Nominatim_usage_policy}).
 #'
-#' @param x x coordinate(s), or a \code{\link[sp:SpatialPoints]{SpatialPoints}} object
+#' @param x x coordinate(s), or a spatial points object (\code{\link[sf:sf]{sf}} or \code{\link[sp:SpatialPoints]{SpatialPoints}})
 #' @param y y coordinate(s)
 #' @param zoom zoom level
 #' @param projection projection in which the coordinates \code{x} and \code{y} are provided. Either a \code{\link[sp:CRS]{CRS}} object or a character value. If it is a character, it can either be a \code{PROJ.4} character string or a shortcut. See \code{\link{get_proj4}} for a list of shortcut values. By default latitude longitude coordinates.
@@ -150,24 +150,27 @@ rev_geocode_OSM <- function(x, y=NULL, zoom=NULL, projection=NULL, as.data.frame
 
 	if (project) projection <- get_proj4(projection, output = "CRS")
 
-	if (inherits(x, "SpatialPoints")) {
+	if (inherits(x, "Spatial")) x <- as(x, "sf")
 
-		isproj <- is.projected(x)
+	if (inherits(x, "sf")) {
+	    if (!all(st_geometry_type(x) == "POINT")) stop("sf object should only contain POINT geometries")
+
+		isproj <- is_projected(x)
 
 		if (is.na(isproj)) {
 			if (project) {
-				x <- set_projection(x, current.projection = projection, projection=.CRS_longlat)
+				x <- set_projection(x, current.projection = projection, projection=.crs_longlat)
 			} else {
-				ll <- maybe_longlat(attr(x, "bbox"))
+				ll <- maybe_longlat(st_bbox(x))
 				if (!ll) stop("Projection of x unknown. Please specify projection.")
 				warning("Projection of SpatialPoints object unknown. Assuming longitude latitude coordinates.")
-				x <- set_projection(x, current.projection = .CRS_longlat)
+				x <- set_projection(x, current.projection = .crs_longlat)
 			}
 		} else {
-			if (isproj) x <- set_projection(x, projection = .CRS_longlat)
+			if (isproj) x <- set_projection(x, projection = .crs_longlat)
 		}
-		n <- length(x)
-		co <- coordinates(x)
+		n <- nrow(x)
+		co <- st_coordinates(x)
 		lon <- x <- co[,1]
 		lat <- y <- co[,2]
 	} else {

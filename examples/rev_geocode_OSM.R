@@ -13,7 +13,7 @@ if (require(tmap)) {
     # change to interactive mode
     current.mode <- tmap_mode("view")
     tm_shape(five_cities) +
-    	tm_markers(text="city")
+    	tm_markers(text="name")
 
     # restore current mode
     tmap_mode(current.mode)

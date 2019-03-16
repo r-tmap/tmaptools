@@ -1,6 +1,7 @@
 version 2.0-1
 - fixed bug in poly_to_raster
 - fixed smooth_map bugs related to sp/sf conversions
+- fixed bug in rev_geocode_OSM
 
 version 2.0
 - tmaptools migrated from sp to sf, all functions support sf, but some still rely on sp
