@@ -1,4 +1,4 @@
-#' Sample dots from spatial polygons
+#' Sample dots from spatial polygons (deprecated)
 #'
 #' Sample dots from spatial polygons according to a spatial distribution of a population. The population may consist of classes. The output, an sf object containing spatial points, can be used to create a dot map (see \code{\link[tmap:tm_dots]{tm_dots}}), where the dots are colored according to the classes. Note that this function supports \code{sf} objects, but still uses sp-based methods (see details).
 #'
@@ -27,6 +27,9 @@
 #' @example ./examples/sample_dots.R
 #' @importFrom raster raster extent rasterize couldBeLonLat crop
 sample_dots <- function(shp, vars=NULL, convert2density=FALSE, nrow=NA, ncol=NA, N=250000, npop=NA, n=10000, w=NA, shp.id=NULL, var.name="class", var.labels=vars, target="metric", randomize=TRUE, output = c("points", "grid"), orig=NULL, to=NULL, ...) {
+
+    .Deprecated("st_sample", package = "sf", msg = "This function is deprecated and has been migrated to github.com/mtennekes/oldtmaptools")
+
 	args <- list(...)
 
 	if (!missing(orig) || !missing(to)) warning("The arguments orig and to are not used anymore as of tmaptools version 2.0")
@@ -65,7 +68,7 @@ sample_dots <- function(shp, vars=NULL, convert2density=FALSE, nrow=NA, ncol=NA,
 		# calculate densities
 		dens_args <- args[names(args) %in% c("total.area", "suffix")]
 		dens_args$suffix <- "" # overwrite suffix (to maintain vars)
-		data <- do.call("calc_densities", args = c(list(shp=shp, var=vars, target=target, orig=orig, to=to, drop=FALSE), dens_args))
+		data <- do.call("calc_densities", args = c(list(shp=shp, var=vars, target=target, drop=FALSE), dens_args))
 		data[is.na(data)] <- 0
 	} else {
 		# calculate absolute values

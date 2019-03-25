@@ -2,7 +2,7 @@
 % Please edit documentation in R/sbind.R
 \name{sbind}
 \alias{sbind}
-\title{Combine shape objects (from sp)}
+\title{Combine shape objects (from sp) (deprecated)}
 \usage{
 sbind(...)
 }

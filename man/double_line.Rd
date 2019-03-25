@@ -3,7 +3,7 @@
 \name{offset_line}
 \alias{offset_line}
 \alias{double_line}
-\title{Create a double line or offset line}
+\title{Create a double line or offset line (deprecated)}
 \usage{
 offset_line(shp, offset)
 

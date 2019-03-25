@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_shape.R
 \name{read_shape}
 \alias{read_shape}
-\title{Read shape file}
+\title{Read shape file (deprecated)}
 \usage{
 read_shape(file, current.projection = NULL, as.sf = TRUE, ...)
 }

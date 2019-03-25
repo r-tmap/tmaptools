@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_shape.R
 \name{write_shape}
 \alias{write_shape}
-\title{Write shape file}
+\title{Write shape file (deprecated)}
 \usage{
 write_shape(shp, file)
 }

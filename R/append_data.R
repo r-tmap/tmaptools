@@ -1,4 +1,4 @@
-#' Append data to a shape object
+#' Append data to a shape object (deprecated)
 #'
 #' Data, in the format of a data.frame, is appended to a shape object. This is either done by a left join where keys are specified for both shape and data, or by fixed order. Under coverage (shape items that do not correspond to data records), over coverage (data records that do not correspond to shape items respectively) as well as the existence of duplicated key values are automatically checked and reported via console messages. With \code{under_coverage} and \code{over_coverage} the under and over coverage key values from the last \code{append_data} call can be retrieved. Tip: run \code{append_data} without assigning the result to check the coverage. Note that this function supports \code{sf} objects, but still uses sp-based methods (see details).
 #'
@@ -24,6 +24,8 @@
 #' @rdname append_data
 #' @export
 append_data <- function(shp, data, key.shp = NULL, key.data = NULL, ignore.duplicates=FALSE, ignore.na=FALSE, fixed.order=is.null(key.data) && is.null(key.shp)) {
+    .Deprecated("left_join", package = "dplyr", msg = "This function is deprecated and has been migrated to github.com/mtennekes/oldtmaptools")
+
     is_sf <- inherits(shp, c("sf", "sfc"))
     if (is_sf) shp <- as(shp, "Spatial")
 
@@ -177,6 +179,7 @@ append_data <- function(shp, data, key.shp = NULL, key.data = NULL, ignore.dupli
 #' @rdname append_data
 #' @export
 under_coverage <- function() {
+    .Deprecated("left_join", package = "dplyr", msg = "This function is deprecated and has been migrated to github.com/mtennekes/oldtmaptools")
 	res <- get(".underCoverage", envir = .TMAPTOOLS_CACHE)
 	if (is.null(res)) {
 		message("Function append_data not called yet.")
@@ -190,6 +193,7 @@ under_coverage <- function() {
 #' @export
 #' @rdname append_data
 over_coverage <- function() {
+    .Deprecated("left_join", package = "dplyr", msg = "This function is deprecated and has been migrated to github.com/mtennekes/oldtmaptools")
 	res <- get(".overCoverage", envir = .TMAPTOOLS_CACHE)
 	if (is.null(res)) {
 		message("Function append_data not called yet.")

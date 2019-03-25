@@ -1,3 +1,8 @@
+version 2.0-2
+- sp-based functions marked as deprecated
+- fixed bug in rev_geocode_OSM
+- fixed bug in poly_to_raster
+
 version 2.0-1
 - fixed bug in poly_to_raster
 - fixed smooth_map bugs related to sp/sf conversions

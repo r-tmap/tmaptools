@@ -1,4 +1,4 @@
-#' Create a smooth map
+#' Create a smooth map (deprecated)
 #'
 #' Create a smooth map from a shape object. A 2D kernel density estimator is applied to the shape, which can be a spatial points, polygons, or raster object. Various format are returned: a smooth raster, contour lines, and polygons. The covered area can be specified, i.e., the area outside of it is extracted from the output. Note that this function supports \code{sf} objects, but still uses sp-based methods (see details).
 #'
@@ -48,6 +48,8 @@
 #' @example ./examples/smooth_map.R
 #' @export
 smooth_map <- function(shp, var=NULL, nrow=NA, ncol=NA, N=250000, unit="km", unit.size=1000, smooth.raster=TRUE, nlevels=5, style = ifelse(is.null(breaks), "pretty", "fixed"), breaks = NULL, bandwidth=NA, threshold=0, cover.type=NA, cover=NULL, cover.threshold=.6, weight=1, extracting.method="full", buffer.width=NA, to.Raster=NULL) {
+    .Deprecated("", package = "", msg = "This function is deprecated and has been migrated to github.com/mtennekes/oldtmaptools")
+
     if (!missing(to.Raster)) warning("to.Raster is not used anymore, since the \"raster\" output is always a raster object as of version 2.0")
 
     is_sf <- inherits(shp, c("sf", "sfc"))

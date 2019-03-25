@@ -4,7 +4,7 @@
 \alias{append_data}
 \alias{under_coverage}
 \alias{over_coverage}
-\title{Append data to a shape object}
+\title{Append data to a shape object (deprecated)}
 \usage{
 append_data(shp, data, key.shp = NULL, key.data = NULL,
   ignore.duplicates = FALSE, ignore.na = FALSE,

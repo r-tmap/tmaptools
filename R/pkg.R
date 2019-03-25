@@ -65,6 +65,17 @@
 #' @keywords GIS, thematic maps, spatial data
 NULL
 
+#' Deprecated functions in \code{tmaptools}
+#'
+#' These functions are based on the \code{sp} package and are not supported anymore. They have been migrated to \url{https://github.com/mtennekes/oldtmaptools}
+#'
+#' \code{\link{append_data}}, \code{\link{aggregate_map}}, \code{\link{double_line}}, \code{\link{points_to_raster}}, \code{\link{poly_to_raster}}, \code{\link{sample_dots}}, \code{\link{sbind}}, \code{\link{smooth_map}}, \code{\link{smooth_raster_cover}}, \code{\link{read_shape}}, \code{\link{write_shape}}
+#'
+#' @docType package
+#' @name tmaptools-deprecated
+#' @rdname tmaptools-deprecated
+NULL
+
 #' Pipe operator
 #'
 #' The pipe operator from magrittr, \code{\%>\%}, can also be used in functions from \code{tmaptools}.

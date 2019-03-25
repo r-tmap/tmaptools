@@ -7,7 +7,7 @@ offset_line <- function(shp, offset) {
 }
 
 
-#' Create a double line or offset line
+#' Create a double line or offset line (deprecated)
 #'
 #' Create a double line or offset line. The double line can be useful for visualizing two-way tracks or emulating objects such as railway tracks. The offset line can be useful to prevent overlapping of spatial lines. Note that this function supports \code{sf} objects, but still uses sp-based methods (see details).
 #'
@@ -24,6 +24,8 @@ offset_line <- function(shp, offset) {
 #' @example ./examples/double_line.R
 #' @importFrom rgeos gBuffer gIntersection
 double_line <- function(shp, width, sides="both") {
+    .Deprecated("", package = "", msg = "This function is deprecated and has been migrated to github.com/mtennekes/oldtmaptools")
+
     is_sf <- inherits(shp, c("sf", "sfc"))
     if (is_sf) shp <- as(shp, "Spatial")
 

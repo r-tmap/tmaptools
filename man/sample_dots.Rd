@@ -2,7 +2,7 @@
 % Please edit documentation in R/sample_dots.R
 \name{sample_dots}
 \alias{sample_dots}
-\title{Sample dots from spatial polygons}
+\title{Sample dots from spatial polygons (deprecated)}
 \usage{
 sample_dots(shp, vars = NULL, convert2density = FALSE, nrow = NA,
   ncol = NA, N = 250000, npop = NA, n = 10000, w = NA,

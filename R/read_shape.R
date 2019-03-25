@@ -1,4 +1,4 @@
-#' Read shape file
+#' Read shape file (deprecated)
 #'
 #' Read an ESRI shape file. Optionally, set the current projection if it is missing.
 #'
@@ -15,6 +15,7 @@
 #' @import sp
 #' @export
 read_shape <- function(file, current.projection=NULL, as.sf=TRUE, ...){
+    .Deprecated("st_read", package = "sf", msg = "This function is deprecated and has been migrated to github.com/mtennekes/oldtmaptools")
 
 	# determine region ID
 	if (file.exists(file)) {
@@ -53,7 +54,7 @@ read_shape <- function(file, current.projection=NULL, as.sf=TRUE, ...){
 
 
 
-#' Write shape file
+#' Write shape file (deprecated)
 #'
 #' Write a shape object to an ESRI shape file.
 #'
@@ -65,6 +66,8 @@ read_shape <- function(file, current.projection=NULL, as.sf=TRUE, ...){
 #' @importFrom rgdal writeOGR
 #' @export
 write_shape <- function(shp, file) {
+    .Deprecated("st_write", package = "sf", msg = "This function is deprecated and has been migrated to github.com/mtennekes/oldtmaptools")
+
 	shpname <- deparse(substitute(shp))
 	dir <- dirname(file)
 	base <- basename(file)

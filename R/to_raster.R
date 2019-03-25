@@ -1,4 +1,4 @@
-#' Bin spatial points to a raster
+#' Bin spatial points to a raster (deprecated)
 #'
 #' Bin spatial points to a raster. For each raster cell, the number of points are counted. Optionally, a factor variable can be specified by which the points are counts are split. Note that this function supports \code{sf} objects, but still uses sp-based methods (see details).
 #'
@@ -18,12 +18,21 @@
 #' @example  ./examples/points_to_raster.R
 #' @seealso \code{\link{poly_to_raster}}
 points_to_raster <- function(shp, nrow=NA, ncol=NA, N=250000, by=NULL, to.Raster=NULL) {
+
+    .Deprecated("rasterize", package = "raster", msg = "This function is deprecated and has been migrated to github.com/mtennekes/oldtmaptools")
+
+
     if (!missing(to.Raster)) warning("to.Raster is not used anymore, since the output is always a raster object as of version 2.0")
 
 
     if (inherits(shp, c("sf", "sfc"))) shp <- as(shp, "Spatial")
 
 	if (!inherits(shp, "SpatialPoints")) stop("shp should be a SpatialPoints/Pixels(DataFrame)")
+
+    if (inherits(shp, "SpatialPointsDataFrame") && length(names(shp)) == 0) {
+        shp <- as(shp, "SpatialPoints")
+    }
+
 
 	# get shp metadata
 	bbx <- bb(shp)
@@ -45,7 +54,7 @@ points_to_raster <- function(shp, nrow=NA, ncol=NA, N=250000, by=NULL, to.Raster
 	N <- nrow * ncol
 
 	# create empty raster
-	r <- raster(extent(bbx), nrows=nrow, ncols=ncol, crs=prj)
+	r <- raster(extent(bbx[c(1,3,2,4)]), nrows=nrow, ncols=ncol, crs=prj)
 
 	# process by variable
 	if (missing(by)) {
@@ -79,7 +88,7 @@ points_to_raster <- function(shp, nrow=NA, ncol=NA, N=250000, by=NULL, to.Raster
 	}
 }
 
-#' Convert spatial polygons to a raster
+#' Convert spatial polygons to a raster (deprecated)
 #'
 #' Convert spatial polygons to a raster. The value of each raster cell will be the polygon ID number. Alternatively, if \code{copy.data}, the polygon data is appended to each raster cell.
 #'
@@ -98,6 +107,8 @@ points_to_raster <- function(shp, nrow=NA, ncol=NA, N=250000, by=NULL, to.Raster
 #' @example  ./examples/poly_to_raster.R
 #' @seealso \code{\link{points_to_raster}}
 poly_to_raster <- function(shp, r=NULL, nrow=NA, ncol=NA, N=250000, use.cover=FALSE, copy.data=FALSE,  to.Raster=NULL, ...) {
+    .Deprecated("rasterize", package = "raster", msg = "This function is deprecated and has been migrated to github.com/mtennekes/oldtmaptools")
+
     if (!missing(to.Raster)) warning("to.Raster is not used anymore, since the output is always a raster object as of version 2.0")
 
     if (inherits(shp, c("sf", "sfc"))) shp <- as(shp, "Spatial")
@@ -147,6 +158,8 @@ poly_to_raster <- function(shp, r=NULL, nrow=NA, ncol=NA, N=250000, use.cover=FA
 		})
 		if (copy.data) IDs <- getValues(rst)
 	}
+
+	rst@crs@projargs <- shp@proj4string@projargs
 
 	if (!copy.data) {
         return(rst)

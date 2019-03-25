@@ -2,7 +2,7 @@
 % Please edit documentation in R/aggregate_map.R
 \name{aggregate_map}
 \alias{aggregate_map}
-\title{Aggregate map}
+\title{Aggregate map (deprecated)}
 \usage{
 aggregate_map(shp, by = NULL, fact = NULL, agg.fun = NULL,
   weights = NULL, na.rm = FALSE, ...)

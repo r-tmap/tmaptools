@@ -8,7 +8,7 @@ rev_geocode_OSM(x, y = NULL, zoom = NULL, projection = NULL,
   as.data.frame = NA, server = "http://nominatim.openstreetmap.org")
 }
 \arguments{
-\item{x}{x coordinate(s), or a \code{\link[sp:SpatialPoints]{SpatialPoints}} object}
+\item{x}{x coordinate(s), or a spatial points object (\code{\link[sf:sf]{sf}} or \code{\link[sp:SpatialPoints]{SpatialPoints}})}
 
 \item{y}{y coordinate(s)}
 
@@ -21,7 +21,7 @@ rev_geocode_OSM(x, y = NULL, zoom = NULL, projection = NULL,
 \item{server}{OpenStreetMap Nominatim server name. Could also be a local OSM Nominatim server.}
 }
 \value{
-A data frmame with all atributes that are contained in the search result
+A data frmame or a list with all atributes that are contained in the search result
 }
 \description{
 Reverse geocodes a location (based on spatial coordinates) to an address. It uses OpenStreetMap Nominatim. For processing large amount of queries, please read the usage policy (\url{http://wiki.openstreetmap.org/wiki/Nominatim_usage_policy}).
@@ -42,7 +42,7 @@ if (require(tmap)) {
     # change to interactive mode
     current.mode <- tmap_mode("view")
     tm_shape(five_cities) +
-    	tm_markers(text="city")
+    	tm_markers(text="name")
 
     # restore current mode
     tmap_mode(current.mode)

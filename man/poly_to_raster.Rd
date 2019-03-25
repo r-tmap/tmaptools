@@ -2,7 +2,7 @@
 % Please edit documentation in R/to_raster.R
 \name{poly_to_raster}
 \alias{poly_to_raster}
-\title{Convert spatial polygons to a raster}
+\title{Convert spatial polygons to a raster (deprecated)}
 \usage{
 poly_to_raster(shp, r = NULL, nrow = NA, ncol = NA, N = 250000,
   use.cover = FALSE, copy.data = FALSE, to.Raster = NULL, ...)

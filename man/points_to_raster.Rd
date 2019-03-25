@@ -2,7 +2,7 @@
 % Please edit documentation in R/to_raster.R
 \name{points_to_raster}
 \alias{points_to_raster}
-\title{Bin spatial points to a raster}
+\title{Bin spatial points to a raster (deprecated)}
 \usage{
 points_to_raster(shp, nrow = NA, ncol = NA, N = 250000, by = NULL,
   to.Raster = NULL)
@@ -51,7 +51,7 @@ if (require(tmap)) {
     	tm_raster() +
     tm_shape(NLD_prov) +
     	tm_borders() +
-    tm_format("NLD") + tm_style_grey()
+    tm_format("NLD") + tm_style("grey")
 }
 }
 }

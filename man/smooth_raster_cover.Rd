@@ -2,7 +2,7 @@
 % Please edit documentation in R/smooth_raster_cover.R
 \name{smooth_raster_cover}
 \alias{smooth_raster_cover}
-\title{Get a smoothed cover of a raster object}
+\title{Get a smoothed cover of a raster object (deprecated)}
 \usage{
 smooth_raster_cover(shp, var = NULL, bandwidth = NA, threshold = 0.6,
   output = "polygons")

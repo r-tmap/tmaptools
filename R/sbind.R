@@ -1,4 +1,4 @@
-#' Combine shape objects (from sp)
+#' Combine shape objects (from sp) (deprecated)
 #'
 #' Combine shape objects from sp into one shape object. It works analogous to \code{\link{rbind}}.
 #'
@@ -11,6 +11,8 @@
 #' @return shape object
 #' @import sp
 sbind <- function(...) {
+    .Deprecated("", package = "", msg = "This function is deprecated and has been migrated to github.com/mtennekes/oldtmaptools")
+
 	xlist <- list(...)
 	xlist <- xlist[!sapply(xlist, is.null)]
 

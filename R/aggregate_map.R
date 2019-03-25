@@ -35,7 +35,7 @@ weighted.modal <- function(x, w, na.rm=FALSE) {
 	} else cat
 }
 
-#' Aggregate map
+#' Aggregate map (deprecated)
 #'
 #' Aggregate spatial polygons, spatial lines or raster objects. For spatial polygons and lines, the units will be merged with the \code{by} variable. For rasters, the \code{fact} parameter determined how many rasters cells are aggregated both horizontally and vertically. Per data variable, an aggregation formula can be specified, by default mean for numeric and modal for categorical varaibles. Note that this function supports \code{sf} objects, but still uses sp-based methods (see details).
 #'
@@ -73,6 +73,9 @@ weighted.modal <- function(x, w, na.rm=FALSE) {
 #' @example ./examples/aggregate_map.R
 #' @export
 aggregate_map <- function(shp, by=NULL, fact=NULL, agg.fun=NULL, weights=NULL, na.rm=FALSE, ...) {
+
+    .Deprecated("group_by", package = "dplyr", msg = "This function is deprecated and has been migrated to github.com/mtennekes/oldtmaptools")
+
 	weighted.mean <- NULL
 
 	agg.data <- !missing(agg.fun)
