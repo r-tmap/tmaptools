@@ -1,24 +1,27 @@
-raster_colors <- function(x, use.colortable = FALSE) {
-
+raster_colors <- function(x, use.colortable = FALSE, max.value = 255) {
+	
+	x[is.na(x)] <- 0
+	
 	n <- nrow(x)
 
 	# get alpha transparency
 	if (ncol(x)==4) {
 		a <- x[,4]
 		x <- x[,1:3]
+		x[x]
 	} else {
 		a <- NULL
 	}
 
 	if (!use.colortable) {
 		if (is.null(a)) {
-			cols <- rgb(x[,1], x[,2], x[,3], maxColorValue = 255)
+			cols <- rgb(x[,1], x[,2], x[,3], maxColorValue = max.value)
 		} else {
-			cols <- rgb(x[,1], x[,2], x[,3], x[,4], maxColorValue = 255)
+			cols <- rgb(x[,1], x[,2], x[,3], a, maxColorValue = max.value)
 		}
 		return(factor(cols))
 	}
-
+	
 
 	storage.mode(x) <- "integer"
 	v <- x[, 1] * 1e6L + x[, 2] * 1e3L + x[, 3]
@@ -92,36 +95,50 @@ get_raster_layer_data <- function(rl) {
 	extract_raster_data(nm = rl@data@names, isf = rl@data@isfactor, d = rl@data@values, a = rl@data@attributes)
 }
 
+fromDisk2 <- function(x) {
+	if (inherits(x, "RasterStack")) {
+		y <- FALSE
+		for (i in 1L:nlayers(x)) {
+			if (fromDisk(x[[i]])) y <- TRUE
+		} # stackApply doens't work
+	} else {
+		y <- fromDisk(x)
+	}
+	y
+}
+
 get_raster_data <- function(shp, show.warnings = TRUE) {
 	cls <- class(shp)
-	if (fromDisk(shp)) {
+	if (fromDisk2(shp)) {
 		data <- raster::as.data.frame(shp)
 		layerID <- 1L:ncol(data)
 	} else if (inherits(shp, "RasterLayer")) {
 		data <- get_raster_layer_data(shp)
 		layerID <- rep(1L, ncol(data))
 	} else if (inherits(shp, c("RasterStack", "RasterBrick"))) {
-
+		
 		if (inherits(shp, "RasterStack")) {
 			datalayers <- lapply(shp@layers, get_raster_layer_data)
 		} else {
 			nms <- shp@data@names
 			if (nms[1]=="") nms <- colnames(shp@data@values)
-
+			if (length(nms)!= nlayers(shp)) nms <- paste0("V", 1L:nlayers(shp))
+			
+			
 			nl <- length(nms)
-
+			
 			isfactor <- shp@data@isfactor
-
+			
 			data <- as.list(as.data.frame(shp@data@values))
-
+			
 			atb <- shp@data@attributes
 			atb <- atb[vapply(atb, length, integer(1))!=0]
-
+			
 			stopifnot(sum(isfactor)==length(atb))
-
+			
 			atbList <- as.list(rep(NA, nl))
 			atbList[isfactor] <- atb
-
+			
 			datalayers <- mapply(extract_raster_data, nms, isfactor, data, atbList, SIMPLIFY=FALSE)
 		}
 
@@ -137,7 +154,7 @@ get_raster_data <- function(shp, show.warnings = TRUE) {
 	}
 	attr(data, "cls") <- cls
 	attr(data, "layerID") <- layerID
-
+	
 	mainID <- vapply(1L:max(layerID), function(i) which(layerID==i)[1], FUN.VALUE = integer(1))
 	attr(data, "mainID") <- mainID
 	data
@@ -158,78 +175,3 @@ get_data_frame_levels <- function(data) {
 	})
 }
 
-
-set_raster_levels <- function(shp, lvls) {
-    isf <- !vapply(lvls, is.null, logical(1))
-    cls <- class(shp)
-    if (any(isf)) {
-        shp@data@isfactor <- isf
-        dfs <- mapply(function(nm, lv) {
-            df <- data.frame(ID=1:length(lv), levels=factor(lv, levels=lv))
-            if (cls=="RasterBrick") names(df)[2] <- nm
-            df
-        }, names(which(isf)), lvls[isf], SIMPLIFY=FALSE)
-        shp@data@attributes <- dfs
-    }
-    shp
-}
-
-get_RasterLayer_levels <- function(r) {
-    if (r@data@isfactor) {
-        dt <- r@data@attributes[[1]]
-        levelsID <- ncol(dt)
-        as.character(dt[[levelsID]])
-    } else {
-        NULL
-    }
-}
-
-get_raster_names <- function(shp) {
-    nms <- names(shp)
-
-    # overwrite unknown first names with FILE__VALUES
-    if (inherits(shp, "RasterStack")) {
-        if (shp@layers[[1]]@data@names[1]=="") nms[1] <- "FILE__VALUES"
-    } else {
-        if (shp@data@names[1]=="") nms[1] <- "FILE__VALUES"
-    }
-    nms
-}
-
-get_raster_levels <- function(shp, layerIDs) {
-    if (missing(layerIDs)) layerIDs <- 1L:nlayers(shp)
-
-    if (inherits(shp, "Spatial")) {
-        return(lapply(attr(shp, "data")[,layerIDs], levels))
-    }
-
-    shpnames <- get_raster_names(shp)[layerIDs]
-    if (inherits(shp, "RasterLayer")) {
-        lvls <- list(get_RasterLayer_levels(shp))
-    } else if (inherits(shp, "RasterStack")) {
-        lvls <- lapply(shp@layers[layerIDs], get_RasterLayer_levels)
-    } else if (inherits(shp, "RasterBrick")) {
-        isfactor <- shp@data@isfactor
-        if (all(!isfactor)) {
-            lvls <- lapply(shpnames, function(sn) NULL)
-        } else {
-            atb <- shp@data@attributes
-            atb <- atb[vapply(atb, length, integer(1))!=0]
-            stopifnot(sum(isfactor)==length(atb))
-            isfactor2 <- isfactor[layerIDs]
-
-            lvls <- rep(list(NULL), length(layerIDs))
-            if (any(isfactor2)) {
-                atb2 <- atb[match(layerIDs[isfactor2], which(isfactor))]
-
-                lvls[isfactor2] <- lapply(atb2, function(a) {
-                    if (class(a)=="list") a <- a[[1]]
-                    levelsID <- ncol(a) # levels is always the last column of the attributes data.frame (?)
-                    as.character(a[[levelsID]])
-                })
-            }
-        }
-    }
-    names(lvls) <- shpnames
-    lvls
-}

@@ -4,7 +4,7 @@
 #'
 #' As of version 2.0, \code{read_osm} cannot be used to read vectorized OSM data anymore. The reason is that the package that was used under the hood, \code{osmar}, has some limitations and is not actively maintained anymore. Therefore, we recommend the package \code{osmdata}. Since this package is very user-friendly, there was no reason to use \code{read_osm} as a wrapper for reading vectorized OSM data.
 #'
-#' @param x object that can be coerced to a bounding box with \code{\link{bb}} (e.g. an existing bounding box or a shape), or an \code{\link[osmar:osmar]{osmar}} object. In the first case, other arguments can be passed on to \code{\link{bb}} (see \code{...}). If an existing bounding box is specified in projected coordinates, plesae specify \code{current.projection}.
+#' @param x object that can be coerced to a bounding box with \code{\link{bb}} (e.g. an existing bounding box or a shape). In the first case, other arguments can be passed on to \code{\link{bb}} (see \code{...}). If an existing bounding box is specified in projected coordinates, plesae specify \code{current.projection}.
 #' @param zoom passed on to \code{\link[OpenStreetMap:openmap]{openmap}}. Only applicable when \code{raster=TRUE}.
 #' @param type tile provider, by default \code{"osm"}, which corresponds to OpenStreetMap Mapnik. See \code{\link[OpenStreetMap:openmap]{openmap}} for options. Only applicable when \code{raster=TRUE}.
 #' @param minNumTiles passed on to \code{\link[OpenStreetMap:openmap]{openmap}} Only applicable when \code{raster=TRUE}.
@@ -33,7 +33,6 @@ read_osm <- function(x, zoom=NULL, type="osm", minNumTiles=NULL, mergeTiles=NULL
 
 	args_bb <- args[intersect(names(args), c("ext", "cx", "cy", "width", "height", "xlim", "ylim", "relative"))]
 	args_other <- args[setdiff(names(args), names(args_bb))]
-	if (!(inherits(x,  "osmar"))) x <- do.call("bb", c(list(x=x, projection = .crs_longlat), args_bb))
 
 	if (!requireNamespace("OpenStreetMap", quietly = TRUE)) {
 		stop("OpenStreetMap package needed for this function to work. Please install it.",

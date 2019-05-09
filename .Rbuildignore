@@ -9,3 +9,4 @@ README
 .travis.yml
 tic.R
 appveyor.yml
+^cran-comments\.md$
