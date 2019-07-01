@@ -6,7 +6,7 @@ are_breaks_diverging <- function(brks) {
     negb && posb
 }
 
-fancy_breaks <- function(vec, intervals=FALSE, interval.closure="left", fun=NULL, scientific=FALSE, big.num.abbr = c("mln" = 6, "bln" = 9), text.separator="to", text.less.than=c("less", "than"), text.or.more=c("or", "more"), text.align="left", text.to.columns=FALSE, digits=NA, ...) {
+fancy_breaks <- function(vec, intervals=FALSE, interval.closure="left", fun=NULL, scientific=FALSE, big.num.abbr = c("mln" = 6, "bln" = 9), prefix = "", suffix = "", text.separator="to", text.less.than=c("less", "than"), text.or.more=c("or", "more"), text.align="left", text.to.columns=FALSE, digits=NA, ...) {
     args <- list(...)
     n <- length(vec)
 
@@ -75,6 +75,7 @@ fancy_breaks <- function(vec, intervals=FALSE, interval.closure="left", fun=NULL
     			if (!("format" %in% names(args))) args$format <- "f"
     			if (!("preserve.width" %in% names(args))) args$preserve.width <- "none"
     			x <- paste(do.call("formatC", c(list(x=vec, digits=digits), args)), ext, sep="")
+    			x <- paste0(prefix, x, suffix)
     		} else {
     			if (!("format" %in% names(args))) args$format <- "g"
     			x <- do.call("formatC", c(list(x=vec, digits=digits), args))
@@ -146,6 +147,8 @@ num2breaks <- function(x, n, style, breaks, approx=FALSE, interval.closure="left
 	if (style=="fixed") {
 		q <- list(var=x,
 				  brks=breaks)
+		if (any(x < min(breaks))) warning("Values have found that are less than the lowest break", call. = FALSE)
+		if (any(x > max(breaks))) warning("Values have found that are higher than the highest break", call. = FALSE)
 		attr(q, "style") <- "fixed"
 		attr(q, "nobs") <- nobs
 		attr(q, "intervalClosure") <- interval.closure
