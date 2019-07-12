@@ -10,3 +10,4 @@ README
 tic.R
 appveyor.yml
 ^cran-comments\.md$
+^CRAN-RELEASE$
