@@ -62,7 +62,9 @@
 #' @aliases tmaptools
 #' @docType package
 #' @author Martijn Tennekes \email{mtennekes@@gmail.com}
-#' @keywords GIS, thematic maps, spatial data
+#' @concept GIS
+#' @concept thematic maps
+#' @concept spatial data
 NULL
 
 #' Deprecated functions in \code{tmaptools}

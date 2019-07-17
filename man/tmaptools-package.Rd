@@ -78,8 +78,6 @@ This page provides a brief overview of all package functions.
 \author{
 Martijn Tennekes \email{mtennekes@gmail.com}
 }
-\keyword{GIS,}
-\keyword{data}
-\keyword{maps,}
-\keyword{spatial}
-\keyword{thematic}
+\concept{GIS}
+\concept{spatial data}
+\concept{thematic maps}
