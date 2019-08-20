@@ -7,11 +7,7 @@ Description: Set of tools for reading and processing spatial data. The aim is to
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-<<<<<<< HEAD
-Date: 2019-07-12
-=======
 Date: 2019-07-13
->>>>>>> b15601da340394aea8901a7722adcaa60baff081
 Depends:
     R (>= 3.0),
     methods
