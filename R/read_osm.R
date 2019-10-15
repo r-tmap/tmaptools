@@ -34,6 +34,8 @@ read_osm <- function(x, zoom=NULL, type="osm", minNumTiles=NULL, mergeTiles=NULL
 	args_bb <- args[intersect(names(args), c("ext", "cx", "cy", "width", "height", "xlim", "ylim", "relative"))]
 	args_other <- args[setdiff(names(args), names(args_bb))]
 
+	x <- do.call("bb", c(list(x=x, projection = .crs_longlat), args_bb))
+
 	if (!requireNamespace("OpenStreetMap", quietly = TRUE)) {
 		stop("OpenStreetMap package needed for this function to work. Please install it.",
 			 call. = FALSE)
