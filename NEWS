@@ -1,3 +1,6 @@
+version 2.1 (devel)
+- added bbox geometry column to output of geocode_OSM when as.sf = TRUE
+
 version 2.0-2
 - sp-based functions marked as deprecated
 - fixed bug in rev_geocode_OSM

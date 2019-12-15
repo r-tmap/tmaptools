@@ -6,8 +6,8 @@
 #' @param projection projection in which the coordinates and bounding box are returned. Either a \code{\link[sp:CRS]{CRS}} object or a character value. If it is a character, it can either be a \code{PROJ.4} character string or a shortcut. See \code{\link{get_proj4}} for a list of shortcut values. By default latitude longitude coordinates.
 #' @param return.first.only Only return the first result
 #' @param details provide output details, other than the point coordinates and bounding box
-#' @param as.data.frame Return the output as a \code{data.frame}. If \code{FALSE}, a list is returned with at least two items: \code{"coords"}, a vector containing the coordinates, and \code{"bbox"}, the corresponding bounding box. By default false, unless \code{q} contains multiple queries
-#' @param as.sf Return the output as \code{\link[sf:sf]{sf}} object. If \code{TRUE}, \code{return.first.only} will be set to \code{TRUE}.
+#' @param as.data.frame Return the output as a \code{data.frame}. If \code{FALSE}, a list is returned with at least two items: \code{"coords"}, a vector containing the coordinates, and \code{"bbox"}, the corresponding bounding box. By default false, unless \code{q} contains multiple queries. If \code{as.sf = TRUE} (see below), \code{as.data.frame} will set to \code{TRUE}.
+#' @param as.sf Return the output as \code{\link[sf:sf]{sf}} object. If \code{TRUE}, \code{return.first.only} will be set to \code{TRUE}. Two geometry columns are added: \code{bbox} and \code{point}, where the latter is the default geometry.
 #' @param server OpenStreetMap Nominatim server name. Could also be a local OSM Nominatim server.
 #' @return If \code{as.SPDF} then a \code{\link[sp:SpatialPointsDataFrame]{SpatialPointsDataFrame}} is returned. Else, if \code{as.data.frame}, then a \code{data.frame} is returned, else a list.
 #' @export
@@ -83,6 +83,10 @@ geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, details=FALS
 				names(search_result_loc) <- c("x", "y")
 			}
 
+			if (as.sf) {
+			    bbpoly <- bb_poly(b)
+			}
+
 			res <- if (as.data.frame) {
 				c(list(query=q[k]),
 				  search_result_loc,
@@ -91,6 +95,10 @@ geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, details=FALS
 				c(list(query=q[k],
 					   coords=coords,
 					   bbox=b))
+			}
+
+			if (as.sf) {
+			    res <- c(res, list(bbox=bbpoly))
 			}
 
 			if (details) res <- c(res, search_result_id)
@@ -105,19 +113,19 @@ geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, details=FALS
 		df <- do.call(rbind, output3)
 
 		if (as.sf) {
+		    names(df)[names(df) == "geometry"] <- "bbox"
 			if (!project) {
-
 			    df$x <- df$lon
 			    df$y <- df$lat
-
 			    res <- st_as_sf(df, coords = c("x","y"), crs=.crs_longlat)
 			} else {
 			    df$x2 <- df$x
 			    df$y2 <- df$y
-
 			    res <- st_as_sf(df, coords = c("x2","y2"), crs=.crs_longlat)
 			}
-			res
+		    names(res)[names(res) == "geometry"] <- "point"
+		    res <- st_set_geometry(res, "point")
+		    st_set_crs(res, .crs_longlat)
 		} else {
 			df
 		}
