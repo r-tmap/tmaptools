@@ -161,14 +161,14 @@ st_transform2 <- function(x, crs, ...) {
 #' @export
 get_projection <- function(shp, guess.longlat=FALSE,
                            output = c("character", "crs", "epsg", "CRS")) {
-    p <- if (inherits(shp, c("sf", "sfc"))) {
+    p <- if (inherits(shp, c("sf", "sfc", "stars"))) {
         st_crs(shp)
     } else if (inherits(shp, "Spatial")) {
         st_crs(attr(attr(shp, "proj4string"), "projargs"))
     } else if (inherits(shp, "Raster")) {
         st_crs(attr(attr(shp, "crs"), "projargs"))
     } else {
-        stop("shp is neither a sf, sp, nor a raster object")
+        stop("shp is neither a sf, sp, raster, nor a stars object")
     }
 
     output <- match.arg(output)

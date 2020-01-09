@@ -1,5 +1,6 @@
 version 2.1 (devel)
 - added bbox geometry column to output of geocode_OSM when as.sf = TRUE
+- stars support for bb and get_projection
 
 version 2.0-2
 - sp-based functions marked as deprecated
