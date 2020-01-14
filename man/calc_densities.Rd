@@ -21,7 +21,7 @@ calc_densities(shp, var, target = "metric", total.area = NULL,
 \item{drop}{boolean that determines whether an one-column data-frame should be returned as a vector}
 }
 \value{
-Vector or data.frame (depending on whether \code{length(var)==1} with density values. This can be appended directly to the shape file with \code{\link{append_data}} with \code{fixed.order=TRUE}.
+Vector or data.frame (depending on whether \code{length(var)==1} with density values.
 }
 \description{
 Transpose quantitative variables to densitiy variables, which are often needed for choroplets. For example, the colors of a population density map should correspond population density counts rather than absolute population numbers.
@@ -32,7 +32,7 @@ if (require(tmap) && packageVersion("tmap") >= "2.0") {
 
     NLD_muni_pop_per_km2 <- calc_densities(NLD_muni,
         target = "km km", var = c("pop_men", "pop_women"))
-    NLD_muni <- append_data(NLD_muni, NLD_muni_pop_per_km2, fixed=TRUE)
+    NLD_muni <- sf::st_sf(data.frame(NLD_muni, NLD_muni_pop_per_km2))
 
     tm_shape(NLD_muni) +
     	tm_polygons(c("pop_women_km^2", "pop_women_km^2"),

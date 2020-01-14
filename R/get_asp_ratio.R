@@ -22,8 +22,9 @@ get_asp_ratio <- function(x, is.projected = NA, width=700, height=700, res=100) 
 		dev.off()
 	} else {
 	    if (inherits(x, c("Spatial", "Raster", "sf", "sfc"))) {
+	        x <- to_sf_stars(x)
 	        bbx <- bb(x)
-	        if (is.na(is.projected)) is.projected <- is_projected(x)
+	        if (is.na(is.projected)) is.projected <- !sf::st_is_longlat(x)
 	    } else {
 	        bbx <- bb(x)
 	        if (is.na(is.projected)) is.projected <- !maybe_longlat(bbx)

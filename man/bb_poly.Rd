@@ -17,9 +17,9 @@ bb_earth(projection = NULL, stepsize = 1, earth.datum = 4326,
 
 \item{stepsize}{stepsize in terms of coordinates (usually meters when the shape is projected and degrees of longlat coordinates are used). If specified, it overrules \code{steps}}
 
-\item{projection}{projection in which the coordinates of \code{x} are provided, see \code{\link{get_proj4}}. For \code{bb_earth}, \code{projection} is the projection in which the bounding box is returned (if possible).}
+\item{projection}{projection in which the coordinates of \code{x} are provided. For \code{bb_earth}, \code{projection} is the projection in which the bounding box is returned (if possible).}
 
-\item{earth.datum}{Geodetic datum to determine the earth boundary. By default \code{"WGS84"}, other frequently used datums are \code{"NAD83"} and \code{"NAD27"}. Any other \code{PROJ.4} character string can be used. See \code{\link{get_proj4}}.}
+\item{earth.datum}{Geodetic datum to determine the earth boundary. By default EPSG 4326.}
 
 \item{bbx}{boundig box of the earth in a vector of 4 values: min longitude, max longitude, min latitude, max latitude. By default \code{c(-180, 180, -90, 90)}. If for some \code{projection}, a feasible solution does not exist, it may be wise to choose a smaller bbx, e.g. \code{c(-180, 180, -88, 88)}. However, this is also automatically done with the next argument, \code{buffer}.}
 

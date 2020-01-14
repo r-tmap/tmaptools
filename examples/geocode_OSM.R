@@ -2,7 +2,7 @@
 if (require(tmap)) {
     geocode_OSM("India")
     geocode_OSM("CBS Weg 1, Heerlen")
-    geocode_OSM("CBS Weg 1, Heerlen", projection = "rd")
+    geocode_OSM("CBS Weg 1, Heerlen", projection = 28992)
 
     data(metro)
 
@@ -10,8 +10,7 @@ if (require(tmap)) {
     five_cities <- metro[sample(length(metro), 5), ]
 
     # obtain geocode locations from their long names
-    five_cities_geocode <- geocode_OSM(five_cities$name_long)
-    sp::coordinates(five_cities_geocode) <- ~lon+lat
+    five_cities_geocode <- geocode_OSM(five_cities$name_long, as.sf = TRUE)
 
     # change to interactive mode
     current.mode <- tmap_mode("view")

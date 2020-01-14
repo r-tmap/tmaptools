@@ -8,7 +8,7 @@ if (require(tmap)) {
 
     # obtain reverse geocode address information
     addresses <- rev_geocode_OSM(five_cities, zoom = 6)
-    five_cities <- append_data(five_cities, addresses, fixed.order = TRUE)
+    five_cities <- sf::st_sf(data.frame(five_cities, addresses))
 
     # change to interactive mode
     current.mode <- tmap_mode("view")

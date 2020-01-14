@@ -9,7 +9,7 @@
 #' @param suffix character that is appended to the variable names. The resulting names are used as column names of the returned data.frame. By default, \code{_sq_<target>}, where target corresponds to the target unit, e.g. \code{_sq_km}
 #' @param drop boolean that determines whether an one-column data-frame should be returned as a vector
 #' @keywords densities
-#' @return Vector or data.frame (depending on whether \code{length(var)==1} with density values. This can be appended directly to the shape file with \code{\link{append_data}} with \code{fixed.order=TRUE}.
+#' @return Vector or data.frame (depending on whether \code{length(var)==1} with density values.
 #' @example ./examples/calc_densities.R
 #' @export
 calc_densities <- function(shp, var, target="metric", total.area=NULL, suffix=NA, drop=TRUE) {
@@ -25,7 +25,7 @@ calc_densities <- function(shp, var, target="metric", total.area=NULL, suffix=NA
 	if (is.na(suffix)) suffix <- paste("_", sub(" ", replacement = "_", areas_unit), sep = "")
 
 	## calculate and return densities
-	shp <- st_set_geometry(shp, NULL)
+	shp <- sf::st_set_geometry(shp, NULL)
 
     if (length(var)==1 && drop) return(shp[[var]] / areas)
 

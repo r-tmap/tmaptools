@@ -19,3 +19,4 @@ if (require(tmap)) {
     tmap_arrange(tm5, tm6, tm7)
 }
 }
+

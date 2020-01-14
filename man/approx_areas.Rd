@@ -60,7 +60,7 @@ if (require(tmap) && packageVersion("tmap") >= "2.0") {
     approx_areas(NLD_muni, target = "mi mi") \%>\% summary_areas()
 
     # area of the polygons when unprojected
-    approx_areas(NLD_muni \%>\% set_projection(projection="longlat")) \%>\% summary_areas()
+    approx_areas(NLD_muni \%>\% sf::st_transform(crs = 4326)) \%>\% summary_areas()
 }
 }
 \seealso{

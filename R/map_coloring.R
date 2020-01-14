@@ -10,6 +10,7 @@
 #' @param contrast vector of two numbers that determine the range that is used for sequential and diverging palettes (applicable when \code{auto.palette.mapping=TRUE}). Both numbers should be between 0 and 1. The first number determines where the palette begins, and the second number where it ends. For sequential palettes, 0 means the brightest color, and 1 the darkest color. For diverging palettes, 0 means the middle color, and 1 both extremes. If only one number is provided, this number is interpreted as the endpoint (with 0 taken as the start).
 #' @return If \code{palette} is defined, a vector of colors is returned, otherwise a vector of color indices.
 #' @example ./examples/map_coloring.R
+#' @import RColorBrewer
 #' @export
 map_coloring <- function(x, algorithm="greedy", ncols=NA, minimize=FALSE, palette=NULL, contrast=1) {
     if (inherits(x, "Spatial")) x <- as(x, "sf")
@@ -27,8 +28,8 @@ map_coloring <- function(x, algorithm="greedy", ncols=NA, minimize=FALSE, palett
 			palette <- substr(palette, 2, nchar(palette))
 		} else revPal <- function(p)p
 
-		if (palette[1] %in% rownames(brewer.pal.info)) {
-			if (is.na(ncols)) ncols <- brewer.pal.info[palette, "maxcolors"]
+		if (palette[1] %in% rownames(RColorBrewer::brewer.pal.info)) {
+			if (is.na(ncols)) ncols <- RColorBrewer::brewer.pal.info[palette, "maxcolors"]
 			palette2 <- revPal(suppressWarnings(get_brewer_pal(palette, ncols, contrast, plot = FALSE)))
 		} else {
 			if (is.na(ncols)) ncols <- length(palette)

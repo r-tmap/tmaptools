@@ -21,27 +21,27 @@ get_brewer_pal <- function(palette, n=5, contrast=NA, stretch=TRUE, plot=TRUE) {
 
     if (reverse) palette <- substr(palette, 2, nchar(palette))
 
-	nmax <- brewer.pal.info[palette, "maxcolors"]
-	if (brewer.pal.info[palette, "category"]=="qual") {
+	nmax <- RColorBrewer::brewer.pal.info[palette, "maxcolors"]
+	if (RColorBrewer::brewer.pal.info[palette, "category"]=="qual") {
 	    if ("contrast" %in% call) warning("contrast not used in qualitative color palettes")
-		brewerpal <- brewer.pal(min(nmax, max(n, 3)), name=palette)
+		brewerpal <- RColorBrewer::brewer.pal(min(nmax, max(n, 3)), name=palette)
 		if (stretch && n > length(brewerpal)) {
 			p <- colorRampPalette(brewerpal)(n)
 		} else {
 			p <- rep(brewerpal, length.out=n)
 		}
-	} else if (brewer.pal.info[palette, "category"]=="seq") {
+	} else if (RColorBrewer::brewer.pal.info[palette, "category"]=="seq") {
 	    if ("stretch" %in% call) warning("stretch not used in sequential color palettes")
 		if (is.na(contrast[1])) contrast <- default_contrast_seq(n)
 		if (length(contrast)==1) contrast <- c(0, contrast)
-		brewerpal <- brewer.pal(nmax, name=palette)
+		brewerpal <- RColorBrewer::brewer.pal(nmax, name=palette)
 		contrastIDs <- round(seq(contrast[1]*100, contrast[2]*100, length.out=n))+1
 		p <- colorRampPalette(brewerpal)(101)[contrastIDs]
 	} else {
 	    if ("stretch" %in% call) warning("stretch not used in diverging color palettes")
 		if (is.na(contrast[1])) contrast <- default_contrast_div(n)
 		if (length(contrast)==1) contrast <- c(0, contrast)
-		brewerpal <- brewer.pal(nmax, name=palette)
+		brewerpal <- RColorBrewer::brewer.pal(nmax, name=palette)
 		contrastIDs <- map2divscaleID(breaks=seq(-10,10, length.out=n+1), contrast=contrast)
 		p <- colorRampPalette(brewerpal)(101)[contrastIDs]
 	}

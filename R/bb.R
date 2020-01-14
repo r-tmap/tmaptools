@@ -29,8 +29,8 @@
 #' @param xlim limits of the x-axis. These are either absolute or relative (depending on the argument \code{relative}).
 #' @param ylim limits of the y-axis. See \code{xlim}.
 #' @param relative boolean that determines whether relative values are used for \code{width}, \code{height}, \code{xlim} and \code{ylim} or absolute. If \code{x} is unspecified, \code{relative} is set to \code{"FALSE"}.
-#' @param current.projection projection that corresponds to the bounding box specified by \code{x}. See \code{\link{get_proj4}} for options.
-#' @param projection projection to transform the bounding box to. See \code{\link{get_proj4}} for options.
+#' @param current.projection projection that corresponds to the bounding box specified by \code{x}.
+#' @param projection projection to transform the bounding box to.
 #' @param output output format of the bounding box, one of:
 #' \itemize{
 #' \item \code{"bbox"} a \code{sf::bbox} object, which is a numeric vector of 4: xmin, ymin, xmax, ymax. This representation used by the \code{\link[sf:sf]{sf}} package.
@@ -41,11 +41,14 @@
 #' @import sp
 #' @importFrom raster extent
 #' @importFrom XML xmlTreeParse xmlChildren xmlRoot xmlAttrs
-#' @importFrom rgeos gIntersection
 #' @example ./examples/bb.R
 #' @seealso \code{\link{geocode_OSM}}
 #' @export
 bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=NULL, ylim=NULL, relative = FALSE, current.projection=NULL, projection=NULL, output = c("bbox", "matrix", "extent")) {
+
+    # check projections
+    if (!is.null(current.projection)) current.projection <- sf::st_crs(current.projection)
+    if (!is.null(projection)) projection <- sf::st_crs(projection)
 
     ## get unprocessed bounding box
     res <- get_bb(x, cx=cx, cy=cy, width=width, height=height, xlim=xlim, ylim=ylim, current.projection=current.projection)
@@ -133,8 +136,7 @@ bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=N
 			}
 			warning("Current projection unknown. Long lat coordinates (wgs84) assumed.", call. = FALSE)
 			current.projection <- .crs_longlat
-		} else current.projection <- get_proj4(current.projection, output = "crs")
-		projection <- get_proj4(projection, output = "crs")
+		}
 
 		sf_poly <- sf::st_sfc(sf::st_polygon(list(matrix(c(b[1], b[2], b[1], b[4], b[3], b[4], b[3], b[2], b[1], b[2]), byrow = TRUE, ncol = 2))), crs=current.projection)
 
@@ -174,11 +176,11 @@ bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=N
 
 
 	    b <- sf::st_bbox(sf_pnts2_prj)
-	    is_prj <- is_projected(projection)
+	    is_prj <- !sf::st_is_longlat(projection)
 	} else {
 	    is_prj <- if (is.na(current.projection)) {
 	        !maybe_longlat(b)
-	    } else is_projected(current.projection)
+	    } else !sf::st_is_longlat(current.projection)
 
 	    if (is.na(current.projection) && !is_prj) current.projection  <- .crs_longlat
 	}
@@ -196,7 +198,7 @@ bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=N
 	if (output == "bbox") {
 	    if (!inherits(b, "bbox")) {
 	        b <- unname(b)
-	        b <- st_bbox(c(xmin = b[1], ymin = b[2], xmax = b[3], ymax = b[4]), crs = st_crs(current.projection))
+	        b <- sf::st_bbox(c(xmin = b[1], ymin = b[2], xmax = b[3], ymax = b[4]), crs = sf::st_crs(current.projection))
 	    }
 	} else if (output == "matrix") {
 	    b <- matrix(b, ncol=2, dimnames = list(c("x", "y"), c("min", "max")))
@@ -214,10 +216,10 @@ get_sf_bbox <- function(shp) {
 sfbb <- function(bb) {
     if (is.matrix(bb)) {
         bb <- unname(as.vector(bb))
-        st_bbox(c(xmin = bb[1], ymin = bb[2], xmax = bb[3], ymax = bb[4]), crs = st_crs(NA))
+        sf::st_bbox(c(xmin = bb[1], ymin = bb[2], xmax = bb[3], ymax = bb[4]), crs = sf::st_crs(NA))
     } else if (inherits(bb, "Extent")) {
         bb <- unname(as.vector(bb))
-        st_bbox(c(xmin = bb[1], ymin = bb[3], xmax = bb[2], ymax = bb[4]), crs = st_crs(NA))
+        sf::st_bbox(c(xmin = bb[1], ymin = bb[3], xmax = bb[2], ymax = bb[4]), crs = sf::st_crs(NA))
     } else stop("bb not 2x2 matrix nor extent object")
 }
 
@@ -238,15 +240,15 @@ get_bb <- function(x, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=NULL, ylim
         b <- sfbb(attr(x, "bbox"))
         current.projection <- get_projection(x, output = "crs")
     } else if (inherits(x, c("sf", "sfc", "stars"))) {
-        b <- st_bbox(x)
-        current.projection <- st_crs(x)
+        b <- sf::st_bbox(x)
+        current.projection <- sf::st_crs(x)
     } else if (is.matrix(x) && length(x)==4) {
         b <- sfbb(x)
     } else if (inherits(x, "bbox")) {
         b <- x
     } else if (is.vector(x) && length(x)==4) {
         x <- unname(check_bb_order(x))
-        b <- st_bbox(c(xmin = x[1], ymin = x[2], xmax = x[3], ymax = x[4]), crs = st_crs(NA))
+        b <- sf::st_bbox(c(xmin = x[1], ymin = x[2], xmax = x[3], ymax = x[4]), crs = sf::st_crs(NA))
     } else if (!is.na(x)[1]) {
         stop("Incorrect x argument")
     } else {
@@ -255,10 +257,10 @@ get_bb <- function(x, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=NULL, ylim
         ## create new bounding box
         if (is.null(xlim)) xlim <- cx + c(-.5, .5) * width
         if (is.null(ylim)) ylim <- cy + c(-.5, .5) * height
-        b <- st_bbox(c(xmin = xlim[1], ymin = ylim[1], xmax = xlim[2], ymax = ylim[2]), crs = st_crs(NA))
+        b <- sf::st_bbox(c(xmin = xlim[1], ymin = ylim[1], xmax = xlim[2], ymax = ylim[2]), crs = sf::st_crs(NA))
 
     }
-    if (is.null(current.projection)) current.projection <- st_crs(NA)
+    if (is.null(current.projection)) current.projection <- sf::st_crs(NA)
     if (!is.na(current.projection)) {
         attr(b, "crs") <- current.projection
     } else if (!is.na(attr(b, "crs"))) {
@@ -281,3 +283,8 @@ check_bb_order <- function(x) {
         x[c(1,3,2,4)]
     } else x
 }
+
+maybe_longlat <- function(bb) {
+    (bb[1] >= -180.1 && bb[3] <= 180.1 && bb[2] >= -90.1 && bb[4] <= 90.1)
+}
+

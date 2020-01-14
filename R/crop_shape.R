@@ -19,44 +19,37 @@ crop_shape <- function(x, y, polygon = FALSE, ...) {
     xname <- deparse(substitute(x))
     yname <- deparse(substitute(y))
 
-    # check and convert x (to sf or brick)
-    is_sp <- inherits(x, "Spatial")
-    is_sp_raster <- inherits(x, c("SpatialGrid", "SpatialPixels"))
-    if (is_sp) x <- (if (is_sp_raster) brick(x) else as(x, "sf"))
-    israsterx <- inherits(x, "Raster")
+    x <- to_sf_stars(x)
+    israsterx <- inherits(x, "stars")
+	px <- sf::st_crs(x)
 
-	if (!inherits(x, c("sf", "sfc", "Raster"))) stop(xname, " is not a sf/Spatial/Raster object.", call.=FALSE)
+    if (inherits(y, c("sf", "sfc", "stars", "Spatial", "Raster"))) {
+        y <- to_sf_stars(y)
+        israstery <- inherits(y, "stars")
+        py <- sf::st_crs(y)
+        polycut <- polygon && !israstery
 
-	px <- get_projection(x)
+        # align projections
+        if (!is.na(px) && !is.na(py)) {
+            if (px!=py) {
+                y <- sf::st_transform(y, crs = px)
+            }
+        }
+        if (!polycut) {
+            y <- bb(y)
+        }
 
-	# check and convert y (to sf or brick)
-	is_sp_y <- inherits(y, "Spatial")
-	is_sp_raster_y <- inherits(y, c("SpatialGrid", "SpatialPixels"))
-	if (is_sp_y) y <- (if (is_sp_raster_y) brick(y) else as(y, "sf"))
-	israstery <- inherits(y, "Raster")
+    } else {
+        israstery <- FALSE
+        polycut <- FALSE
 
-	polycut <- polygon && !israstery # && !inherits(x, c("Raster", "SpatialGrid"))
+        y <- tryCatch({
+            bb(y)
+        }, error=function(e){
+            stop(yname, " is not a shape and cannot be coerced by bb")
+        })
 
-
-	if (inherits(y, c("Raster", "sf"))) {
-		py <- get_projection(y)
-
-		# align projections
-		if (!is.na(px) && !is.na(py)) {
-			if (px!=py) {
-				y <- set_projection(y, projection = px)
-			}
-		}
-		if (!polycut) {
-			y <- bb(y)
-		}
-	} else {
-	    y <- tryCatch({
-	        bb(y)
-	    }, error=function(e){
-	        stop(yname, " is not a shape and cannot be coerced by bb")
-	    })
-	}
+    }
 
 	if (polycut) {
 	    if (inherits(y, "bbox")) y <- create_sf_rect(y)
@@ -64,8 +57,9 @@ crop_shape <- function(x, y, polygon = FALSE, ...) {
         yunion <- st_union(y)
         ## REQUIRE SP
         if (israsterx) {
-            yunion <- as(yunion, "Spatial")
-            x2 <- raster::trim(raster::mask(x, yunion))
+            stop("Rasterized method not implemented yet")
+            #yunion <- as(yunion, "Spatial")
+            #x2 <- raster::trim(raster::mask(x, yunion))
         } else {
             x2 <-  suppressMessages(suppressWarnings(st_intersection(x, yunion)))
         }
@@ -74,13 +68,13 @@ crop_shape <- function(x, y, polygon = FALSE, ...) {
 	  # bounding box crop (suppress warnings, because projections may not be perfectly identical)
 
 	    if (israsterx) {
-	        y <- bb(y, output = "extent")
-	        x2 <- suppressWarnings(crop(x, y, ...))
+	        stop("Rasterized method not implemented yet")
+	        # y <- bb(y, output = "extent")
+	        # x2 <- suppressWarnings(crop(x, y, ...))
 	    } else {
 	        y <- create_sf_rect(y)
 	        x2 <- suppressMessages(suppressWarnings(st_intersection(x, y)))
 	    }
 	}
-
 	x2
 }

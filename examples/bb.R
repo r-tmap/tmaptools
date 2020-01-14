@@ -11,7 +11,7 @@ if (require(tmap) && packageVersion("tmap") >= "2.0") {
     bb(NLD_muni, ext=1.10)
 
     ## convert to longlat
-    bb(NLD_muni, projection="longlat")
+    bb(NLD_muni, projection=4326)
 
     ## change existing bounding box
     bb(NLD_muni, ext=1.5)

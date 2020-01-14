@@ -1,5 +1,5 @@
 tmap.pal.info <- local({
-    br <- brewer.pal.info[, 1:2]
+    br <- RColorBrewer::brewer.pal.info[, 1:2]
     br$origin <- factor("brewer", levels = c("brewer", "viridis"))
 
     vr <- data.frame(maxcolors = rep.int(0, 5), category = factor("seq", levels = c("div", "qual", "seq")), origin = factor("viridis", levels = c("brewer", "viridis")), row.names = c("viridis", "magma", "plasma", "inferno", "cividis"))
@@ -320,7 +320,7 @@ palette_explorer <- function() {
 #' @rdname palette_explorer
 #' @export
 tmap.pal.info <- local({
-    br <- brewer.pal.info
+    br <- RColorBrewer::brewer.pal.info
     br$origin <- factor("brewer", levels = c("brewer", "viridis"))
 
     vr <- data.frame(maxcolors = rep.int(Inf, 5), category = factor("seq", levels = c("div", "qual", "seq")), origin = factor("viridis", levels = c("brewer", "viridis")), colorblind = c(FALSE, FALSE, FALSE, FALSE, TRUE), row.names = c("viridis", "magma", "plasma", "inferno", "cividis"))

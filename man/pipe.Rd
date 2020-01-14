@@ -11,19 +11,3 @@
 \description{
 The pipe operator from magrittr, \code{\%>\%}, can also be used in functions from \code{tmaptools}.
 }
-\examples{
-\dontrun{
-if (require(tmap)) {
-    data(land, World)
-
-    current.mode <- tmap_mode("view")
-
-    land \%>\%
-        crop_shape(World[World$name=="China",], polygon = TRUE) \%>\%
-        tm_shape() +
-        tm_raster("cover_cls")
-
-    tmap_mode(current.mode)
-}
-}
-}

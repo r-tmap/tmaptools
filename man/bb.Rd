@@ -33,9 +33,9 @@ If \code{x} is not specified, a bounding box can be created from scratch (see de
 
 \item{relative}{boolean that determines whether relative values are used for \code{width}, \code{height}, \code{xlim} and \code{ylim} or absolute. If \code{x} is unspecified, \code{relative} is set to \code{"FALSE"}.}
 
-\item{current.projection}{projection that corresponds to the bounding box specified by \code{x}. See \code{\link{get_proj4}} for options.}
+\item{current.projection}{projection that corresponds to the bounding box specified by \code{x}.}
 
-\item{projection}{projection to transform the bounding box to. See \code{\link{get_proj4}} for options.}
+\item{projection}{projection to transform the bounding box to.}
 
 \item{output}{output format of the bounding box, one of:
 \itemize{
@@ -78,7 +78,7 @@ if (require(tmap) && packageVersion("tmap") >= "2.0") {
     bb(NLD_muni, ext=1.10)
 
     ## convert to longlat
-    bb(NLD_muni, projection="longlat")
+    bb(NLD_muni, projection=4326)
 
     ## change existing bounding box
     bb(NLD_muni, ext=1.5)

@@ -14,7 +14,6 @@
 #' @param ... arguments passed on to \code{\link{bb}}.
 #' @name read_osm
 #' @rdname read_osm
-#' @import sp
 #' @importFrom raster raster
 #' @export
 #' @example ./examples/read_osm.R
@@ -46,14 +45,100 @@ read_osm <- function(x, zoom=NULL, type="osm", minNumTiles=NULL, mergeTiles=NULL
 		optionalArgs <- list(zoom=zoom, type=type, minNumTiles=minNumTiles, mergeTiles=mergeTiles)
 		optionalArgs <- optionalArgs[!sapply(optionalArgs, is.null)]
 		om <- suppressWarnings({do.call("openmap", args = c(list(upperLeft=x[c(4,1)], lowerRight=x[c(2,3)]), optionalArgs))})
+
 		omr <- raster::raster(om)
 
-		if (use.colortable) {
-		    tab <- raster_colors(raster::values(omr), use.colortable = TRUE)
-		    omr <- raster::raster(omr)
-		    omr <- raster::setValues(omr, as.integer(tab) - 1L)
-		    raster::colortable(omr) <- levels(tab)
-		}
+# 		omr2 <- raster::raster(om)
+#
+#
+#         plot(omr2)
+#
+#
+#         all(omr2$layer.1[,] == cols[1,])
+#         all(omr2$layer.2[,] == cols[2,])
+#
+# 		cols <- col2rgb(om$tiles[[1]]$colorData)
+# 		dimy <- om$tiles[[1]]$xres
+# 		dimx <- om$tiles[[1]]$yres
+#
+# 		bbox <- unlist(om$tiles[[1]]$bbox)[c(1,3,4,2)]
+# 		names(bbox) <- c("xmin", "xmax", "ymin", "ymax")
+#
+# 		bbx <- st_bbox(bbox, crs = sf::st_crs(attr((om$tiles[[1]]$projection), "projargs")))
+#
+#
+# 		stars::st_as_stars()
+#
+# 		red <- matrix(cols[1,], ncol = dimx, byrow = FALSE)
+# 		dim(red) <- c(y = dimy, x = dimx)
+#
+# 		green <- matrix(cols[1,], ncol = dimx, byrow = FALSE)
+# 		dim(green) <- c(y = dimy, x = dimx)
+#
+# 		blue <- matrix(cols[1,], ncol = dimx, byrow = FALSE)
+# 		dim(blue) <- c(y = dimy, x = dimx)
+#
+# 		omr3 <- stars::st_as_stars(omr2)
+# 		plot(omr3)
+#
+#
+# 		a <- array(c(red, green, blue), dim = c(dim(red), 3))
+# 		dim(a) <- c(y = unname(nrow(red)), x = unname(ncol(red)), band = 3)
+#
+# 		omr4 <- stars::st_as_stars(list(a))
+# 		omr5 <- stars::st_as_stars(bbx, nx = dimx, ny = dimy)
+#
+# 		attr(omr4, "dimensions")[1:2] <- attr(omr5, "dimensions")
+#
+# 		attr(attr(omr4, "dimensions"), "raster") <- attr(attr(omr5, "dimensions"), "raster")
+#
+#
+# 		plot(omr4)
+#
+# 		, dimensions = attr(stars::st_as_stars(bbx, nx = dimx, ny = dimy), "dimensions"))
+#
+# 		plot(omr4)
+#
+# 		plot(omr3)
+#
+#
+#
+# 		omr <- st_dimensions(stars::st_as_stars(bbx, nx = dimx, ny = dimy))
+# 		#attr(omr, "dimensions")[[2]]$delta = -1
+#
+# 		plot(omr)
+#
+# 		omr <- st_as_stars(red)
+#
+# 		attr(omr, "dimensions") <- attr(omr3, "dimensions")
+#
+# 		plot(omr)
+#
+#
+#
+# 		st_dimensions(omr)
+#
+# 		stars::r
+#
+# 		str(attr(st_dimensions(omr), "raster"))
+#
+#         plot(omr)
+#
+# 		m = matrix(1:6, ncol = 2)
+# 		dim(m) = c(x = 3, y = 2)
+# 		omr <- stars::st_as_stars(bbx, nx = 3, ny = 2, values = m)
+# 		plot(omr)
+#
+#
+# 		omr <- stars::st_as_stars(bbx)
+
+
+		# if (use.colortable) {
+		#     tab <- raster_colors(raster::values(omr), use.colortable = TRUE)
+		#     omr <- raster::raster(omr)
+		#     omr <- raster::setValues(omr, as.integer(tab) - 1L)
+		#     raster::colortable(omr) <- levels(tab)
+		# }
 
 		attr(omr, "leaflet.provider") <- unname(OSM2LP[type])
 		attr(omr, "is.OSM") <- TRUE

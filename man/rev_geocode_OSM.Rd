@@ -4,7 +4,7 @@
 \alias{rev_geocode_OSM}
 \title{Reverse geocodes a location using OpenStreetMap Nominatim}
 \usage{
-rev_geocode_OSM(x, y = NULL, zoom = NULL, projection = NULL,
+rev_geocode_OSM(x, y = NULL, zoom = NULL, projection = 4326,
   as.data.frame = NA, server = "http://nominatim.openstreetmap.org")
 }
 \arguments{
@@ -14,7 +14,7 @@ rev_geocode_OSM(x, y = NULL, zoom = NULL, projection = NULL,
 
 \item{zoom}{zoom level}
 
-\item{projection}{projection in which the coordinates \code{x} and \code{y} are provided. Either a \code{\link[sp:CRS]{CRS}} object or a character value. If it is a character, it can either be a \code{PROJ.4} character string or a shortcut. See \code{\link{get_proj4}} for a list of shortcut values. By default latitude longitude coordinates.}
+\item{projection}{projection in which the coordinates \code{x} and \code{y} are provided.}
 
 \item{as.data.frame}{return as data.frame (\code{TRUE}) or list (\code{FALSE}). By default a list, unless multiple coordinates are provided.}
 
@@ -37,7 +37,7 @@ if (require(tmap)) {
 
     # obtain reverse geocode address information
     addresses <- rev_geocode_OSM(five_cities, zoom = 6)
-    five_cities <- append_data(five_cities, addresses, fixed.order = TRUE)
+    five_cities <- sf::st_sf(data.frame(five_cities, addresses))
 
     # change to interactive mode
     current.mode <- tmap_mode("view")

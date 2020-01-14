@@ -6,33 +6,25 @@
 #'
 #' @param file a GPX filename (including directory)
 #' @param layers vector of GPX layers. Possible options are \code{"waypoints"}, \code{"tracks"}, \code{"routes"}, \code{"track_points"}, \code{"route_points"}. By dedault, all those layers are read.
-#' @param as.sf should \code{\link[sf:sf]{sf}} objects be returned? By default \code{TRUE}
-#' @return for each defiend layer, a shape is returned (only if the layer has any features). If only one layer is defined, the corresponding shape is returned. If more than one layer is defined, a list of shape objects, one for each layer, is returned.
-#' @importFrom rgdal readOGR ogrInfo
+#' @param remove.empty.layers should empty layers (i.e. with 0 features) be removed from the list?
+#' @param as.sf not used anymore
+#' @return a list of sf objects, one for each layer
 #' @export
-#' @example ./examples/read_GPX.R
-read_GPX <- function(file, layers=c("waypoints", "tracks", "routes", "track_points", "route_points"), as.sf=TRUE) {
-	if (!all(layers %in% c("waypoints", "tracks", "routes", "track_points", "route_points"))) stop("Incorrect layer(s)", call. = FALSE)
+read_GPX <- function(file, layers=c("waypoints", "routes", "tracks", "route_points", "track_points"), remove.empty.layers = TRUE, as.sf = TRUE) {
+	if (!all(layers %in% c("waypoints", "routes", "tracks", "route_points", "track_points"))) stop("Incorrect layer(s)", call. = FALSE)
 
-	# check if features exist per layer
-	suppressWarnings(hasF <- sapply(layers, function(l) {
-		ogrInfo(dsn = file, layer=l)$have_features
-	}))
+    layers_data <- sf::st_layers(file)
 
-	if (!any(hasF)) stop("None of the layer(s) has any features.", call. = FALSE)
+    if (!all(layers %in% layers_data$name)) stop("layers not found in GPX file")
 
-	res <- lapply(layers[hasF], function(l) {
-		readOGR(dsn = file, layer=l, verbose=FALSE)
-	})
-	names(res) <- layers[hasF]
+    res <- lapply(layers, function(l) {
+        sf::st_read(file, layer = l, quiet = TRUE)
+    })
+    names(res) <- layers
 
-	if (as.sf) res <- lapply(res, function(r) {
-	    as(r, "sf")
-	})
+    if (remove.empty.layers) {
+        res <- res[layers_data$features[match(layers, layers_data$name)] > 0]
+    }
 
-	if (sum(hasF)==1) {
-		res[[1]]
-	} else {
-		res
-	}
+	res
 }
