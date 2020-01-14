@@ -71,11 +71,11 @@ geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, details=FALS
 				search_result_bb <- b[c(2,4,1,3)]
 				names(search_result_bb) <- c("y_min", "y_max", "x_min", "x_max")
 
-                p <- st_sf(st_sfc(st_point(search_result_loc[2:1]), crs = .crs_longlat))
+                p <- sf::st_sf(sf::st_sfc(sf::st_point(search_result_loc[2:1]), crs = .crs_longlat))
 
 				p <- sf::st_transform(p, crs=projection)
 
-				coords <- as.vector(st_coordinates(p))
+				coords <- as.vector(sf::st_coordinates(p))
 				names(coords) <- c("x", "y")
 
 				search_result_loc <- as.list(coords)
@@ -116,15 +116,15 @@ geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, details=FALS
 			if (!project) {
 			    df$x <- df$lon
 			    df$y <- df$lat
-			    res <- st_as_sf(df, coords = c("x","y"), crs=.crs_longlat)
+			    res <- sf::st_as_sf(df, coords = c("x","y"), crs=.crs_longlat)
 			} else {
 			    df$x2 <- df$x
 			    df$y2 <- df$y
-			    res <- st_as_sf(df, coords = c("x2","y2"), crs=.crs_longlat)
+			    res <- sf::st_as_sf(df, coords = c("x2","y2"), crs=.crs_longlat)
 			}
 		    names(res)[names(res) == "geometry"] <- "point"
 		    res <- st_set_geometry(res, "point")
-		    st_set_crs(res, .crs_longlat)
+		    sf::st_set_crs(res, .crs_longlat)
 		} else {
 			df
 		}

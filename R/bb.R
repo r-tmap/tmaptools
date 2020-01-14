@@ -38,7 +38,6 @@
 #' \item \code{"extent"} an \code{raster::extent} object, which is a numeric vector of 4: xmin, xmax, ymin, ymax. This representation used by the \code{raster} package.
 #' }
 #' @return bounding box (see argument \code{output})
-#' @import sp
 #' @importFrom raster extent
 #' @importFrom XML xmlTreeParse xmlChildren xmlRoot xmlAttrs
 #' @example ./examples/bb.R
@@ -235,10 +234,10 @@ get_bb <- function(x, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=NULL, ylim
         b <- sfbb(x)
     } else if (inherits(x, "Raster")) {
         b <- sfbb(attr(x, "extent"))
-        current.projection <- get_projection(x, output = "crs")
+        current.projection <- sf::st_crs(x)
     } else if (inherits(x, "Spatial")) {
         b <- sfbb(attr(x, "bbox"))
-        current.projection <- get_projection(x, output = "crs")
+        current.projection <- sf::st_crs(x)
     } else if (inherits(x, c("sf", "sfc", "stars"))) {
         b <- sf::st_bbox(x)
         current.projection <- sf::st_crs(x)

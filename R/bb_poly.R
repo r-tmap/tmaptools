@@ -20,7 +20,7 @@ bb_poly <- function(x, steps=100, stepsize=NA, projection=NULL) {
 }
 
 create_sf_rect <- function(bbx, steps=100, stepsize=NA, projection=NULL) {
-    if (is.null(projection)) projection <- st_crs(bbx)
+    if (is.null(projection)) projection <- sf::st_crs(bbx)
 
     x1 <- bbx[1]
     x2 <- bbx[3]

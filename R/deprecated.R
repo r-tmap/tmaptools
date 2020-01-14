@@ -77,11 +77,11 @@ get_projection <- function(shp, guess.longlat=FALSE,
     warning("get_projection is deprecated; for projections, please use the function st_crs from the sf package")
 
     p <- if (inherits(shp, c("sf", "sfc", "stars"))) {
-        st_crs(shp)
+        sf::st_crs(shp)
     } else if (inherits(shp, "Spatial")) {
-        st_crs(attr(attr(shp, "proj4string"), "projargs"))
+        sf::st_crs(attr(attr(shp, "proj4string"), "projargs"))
     } else if (inherits(shp, "Raster")) {
-        st_crs(attr(attr(shp, "crs"), "projargs"))
+        sf::st_crs(attr(attr(shp, "crs"), "projargs"))
     } else {
         stop("shp is neither an sf, sp, raster, nor a stars object")
     }

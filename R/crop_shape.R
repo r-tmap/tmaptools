@@ -54,14 +54,14 @@ crop_shape <- function(x, y, polygon = FALSE, ...) {
 	if (polycut) {
 	    if (inherits(y, "bbox")) y <- create_sf_rect(y)
 
-        yunion <- st_union(y)
+        yunion <- sf::st_union(y)
         ## REQUIRE SP
         if (israsterx) {
             stop("Rasterized method not implemented yet")
             #yunion <- as(yunion, "Spatial")
             #x2 <- raster::trim(raster::mask(x, yunion))
         } else {
-            x2 <-  suppressMessages(suppressWarnings(st_intersection(x, yunion)))
+            x2 <-  suppressMessages(suppressWarnings(sf::st_intersection(x, yunion)))
         }
 
 	} else {
@@ -73,7 +73,7 @@ crop_shape <- function(x, y, polygon = FALSE, ...) {
 	        # x2 <- suppressWarnings(crop(x, y, ...))
 	    } else {
 	        y <- create_sf_rect(y)
-	        x2 <- suppressMessages(suppressWarnings(st_intersection(x, y)))
+	        x2 <- suppressMessages(suppressWarnings(sf::st_intersection(x, y)))
 	    }
 	}
 	x2

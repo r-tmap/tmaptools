@@ -81,7 +81,7 @@ map_coloring <- function(x, algorithm="greedy", ncols=NA, minimize=FALSE, palett
 #' @return A list where the items correspond to the features. Each item is a vector of neighbours.
 #' @export
 get_neighbours <- function(x) {
-    y <- st_intersects(x, x)
+    y <- sf::st_intersects(x, x)
     n <- length(y)
 
     mapply(function(yi, i) {

@@ -44,27 +44,27 @@ approx_distances <- function(x, y = NULL, projection = NULL, target = NULL) {
             stop("x cannot be coerced to a bounding box with bb", call. = FALSE)
         })
 
-        pW <- st_sfc(st_point(c(bbx[1], (bbx[2]+bbx[4])/2)), crs=projection)
-        pE <- st_sfc(st_point(c(bbx[3], (bbx[2]+bbx[4])/2)), crs=projection)
-        pS <- st_sfc(st_point(c((bbx[1]+bbx[3])/2, bbx[2])), crs=projection)
-        pN <- st_sfc(st_point(c((bbx[1]+bbx[3])/2, bbx[4])), crs=projection)
+        pW <- sf::st_sfc(sf::st_point(c(bbx[1], (bbx[2]+bbx[4])/2)), crs=projection)
+        pE <- sf::st_sfc(sf::st_point(c(bbx[3], (bbx[2]+bbx[4])/2)), crs=projection)
+        pS <- sf::st_sfc(sf::st_point(c((bbx[1]+bbx[3])/2, bbx[2])), crs=projection)
+        pN <- sf::st_sfc(sf::st_point(c((bbx[1]+bbx[3])/2, bbx[4])), crs=projection)
 
         if (missing(target)) {
             list(hdist = get_distance(pW, pE),       #st_distance(pW, pE)[1,1],
                  vdist = get_distance(pS, pN))       #st_distance(pS, pN)[1,1])
         } else {
-            list(hdist = set_units(get_distance(pW, pE), target, mode = "standard"),  #st_distance(pW, pE)[1,1]
-                 vdist = set_units(get_distance(pS, pN), target, mode = "standard"))  #st_distance(pS, pN)[1,1]
+            list(hdist = units::set_units(get_distance(pW, pE), target, mode = "standard"),  #st_distance(pW, pE)[1,1]
+                 vdist = units::set_units(get_distance(pS, pN), target, mode = "standard"))  #st_distance(pS, pN)[1,1]
         }
 
     } else {
-        p1 <- st_sfc(st_point(x), crs=projection)
-        p2 <- st_sfc(st_point(y), crs=projection)
+        p1 <- sf::st_sfc(sf::st_point(x), crs=projection)
+        p2 <- sf::st_sfc(sf::st_point(y), crs=projection)
 
         if (missing(target) || is.na(projection)) {
-            st_distance(p1, p2)[1,1]
+            sf::st_distance(p1, p2)[1,1]
         } else {
-            set_units(st_distance(p1, p2), target, mode = "standard")[1,1]
+            units::set_units(sf::st_distance(p1, p2), target, mode = "standard")[1,1]
         }
 
     }
@@ -72,7 +72,7 @@ approx_distances <- function(x, y = NULL, projection = NULL, target = NULL) {
 
 
 get_distance <- function(p1, p2) {
-    tryCatch(st_distance(p1, p2)[1,1], error = function(e) {
+    tryCatch(sf::st_distance(p1, p2)[1,1], error = function(e) {
         p1ll <- lwgeom::st_transform_proj(p1, crs = 4326)
         p2ll <- lwgeom::st_transform_proj(p2, crs = 4326)
         lwgeom::st_geod_distance(p1ll, p2ll)[1,1]
