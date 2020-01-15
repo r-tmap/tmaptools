@@ -33,22 +33,74 @@ NULL
 #' @keywords internal
 #' @export
 get_proj4 <- function(x, output = c("crs", "character", "epsg", "CRS")) {
-    warning("get_proj4 is deprecated; for projections, please use the function st_crs from the sf package")
-    output <- match.arg(output)
-    crs <- sf::st_crs(x)
+    if (sys.nframe()==1L) warning("get_proj4 is deprecated; for projections, please use the function st_crs from the sf package")
 
-    if (output == "crs") {
-        crs
-    } else if (output == "character") {
-        crs$proj4string
-    } else if (output == "epsg") {
-        crs$epsg
-    } else if (output == "CRS") {
-        stop("output CRS not supported anymore")
+    output <- match.arg(output)
+    y <- if (is.null(x)) {
+        return(NULL)
+    } else if (is.na(x)) {
+        sf::st_crs()
+    } else if (inherits(x, "crs")) {
+        x
+    } else if (inherits(x, "CRS")) {
+        sf::st_crs(attr(x, "projargs"))
+    } else if (!is.numeric(x) && !is.character(x)) {
+        stop("x is not a character, crs object, CRS object, nor a number", call.=FALSE)
     } else {
-        stop("Unknown output")
+        if (x %in% names(.proj_epsg)) {
+            create_crs(unname(.proj_epsg[x]))
+        } else if (x %in% names(.proj_sc)) {
+            create_crs(unname(.proj_sc[x]))
+        } else if (is_num_string(x)) {
+            sf::st_crs(x)
+        } else if (substr(x, 1, 3)=="utm") {
+            if (!(nchar(x) %in% c(5,6))) stop("\"utm\" shortcut code should be utmXX or utmXXs where XX refers to the utm zone")
+            sf::st_crs(paste("+proj=utm +zone=", substr(x, 4, 5), ifelse(substr(x, 6, 6)=="s", " +south", ""), " +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0", sep=""))
+        } else {
+            sf::st_crs(x)
+        }
+    }
+
+    if (output == "CRS") stop("output CRS not supported anymore")
+
+    switch(output,
+           character = y$proj4string,
+           crs = y,
+           epsg = y$epsg)
+}
+
+create_crs <- function(x) {
+    if (is.numeric(x)) {
+        sf::st_crs(x)
+    } else {
+        structure(list(epsg = as.integer(NA), proj4string = x), class = "crs")
     }
 }
+
+is_num_string <- function(x) {
+    suppressWarnings(!is.na(as.numeric(x)))
+}
+
+.proj_epsg <- c(longlat = 4326,
+                latlong = 4326,
+                WGS84 = 4326,
+                NAD83 = 4269,
+                NAD27 = 4267,
+                merc = 3857,
+                laea_Eur = 3035,
+                laea_NA = 2163,
+                rd = 28992)
+
+.proj_sc <- c(wintri="+proj=wintri +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0",
+              robin="+proj=robin +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0",
+              eck4="+proj=eck4 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0",
+              hd="+proj=cea +lat_ts=37.5 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0",
+              gall="+proj=cea +lon_0=0 +lat_ts=45 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0",
+              mill="+proj=mill +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +R_A +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0",
+              eqc0="+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0",
+              eqc30="+proj=eqc +lat_ts=30 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0",
+              eqc45="+proj=eqc +lat_ts=45 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0")
+
 
 
 #' @rdname deprecated_functions
@@ -56,11 +108,15 @@ get_proj4 <- function(x, output = c("crs", "character", "epsg", "CRS")) {
 #' @keywords internal
 #' @export
 set_projection <- function(shp, projection=NA, current.projection=NA, overwrite.current.projection=FALSE) {
-    warning("set_projection is deprecated; for projections, please use the functions st_crs or st_transform from the sf package")
+    if (sys.nframe()==1L) warning("set_projection is deprecated; for projections, please use the functions st_crs or st_transform from the sf package")
+
+    if (inherits(shp, "Raster")) shp <- stars::st_as_stars(shp)
+
     if (!is.na(current.projection)) {
         if (!is.na(sf::st_crs(shp)) && !overwrite.current.projection) stop("Current projection already known. Use overwrite.current.projection = TRUE")
         sf::st_crs(shp) <- sf::st_crs(current.projection)
     }
+
 
     if (!is.na(projection)) {
         shp <- sf::st_transform(shp, crs = sf::st_crs(projection))
@@ -74,7 +130,7 @@ set_projection <- function(shp, projection=NA, current.projection=NA, overwrite.
 #' @export
 get_projection <- function(shp, guess.longlat=FALSE,
                            output = c("character", "crs", "epsg", "CRS")) {
-    warning("get_projection is deprecated; for projections, please use the function st_crs from the sf package")
+    if (sys.nframe()==1L) warning("get_projection is deprecated; for projections, please use the function st_crs from the sf package")
 
     p <- if (inherits(shp, c("sf", "sfc", "stars"))) {
         sf::st_crs(shp)
@@ -99,6 +155,6 @@ get_projection <- function(shp, guess.longlat=FALSE,
 #' @keywords internal
 #' @export
 is_projected <- function(x) {
-    warning("is_projected is deprecated; for projections, please use the function st_is_longlat from the sf package")
+    if (sys.nframe()==1L) warning("is_projected is deprecated; for projections, please use the function st_is_longlat from the sf package")
     !sf::st_is_longlat(x)
 }

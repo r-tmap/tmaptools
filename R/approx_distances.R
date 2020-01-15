@@ -24,11 +24,11 @@ approx_distances <- function(x, y = NULL, projection = NULL, target = NULL) {
 
     if (!inherits(x, c("sf", "Spatial", "raster"))) {
         if (missing(projection)) {
-            projection <- st_crs(NA)
+            projection <- sf::st_crs(NA)
             #stop("Please specify projection")
         }
     } else {
-        projection <- st_crs(x)
+        projection <- sf::st_crs(x)
     }
 
     if (is.na(projection)) {

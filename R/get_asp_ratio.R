@@ -10,6 +10,10 @@
 #' @param height See details; only applicable if \code{x} is a \code{\link[tmap:tmap-element]{tmap}} object.
 #' @param res See details; only applicable if \code{x} is a \code{\link[tmap:tmap-element]{tmap}} object.
 #' @return aspect ratio
+#' @importFrom grDevices colorRampPalette dev.off png rgb
+#' @importFrom methods as
+#' @importFrom stats aggregate na.omit
+#' @importFrom utils download.file
 #' @example ./examples/get_asp_ratio.R
 #' @export
 get_asp_ratio <- function(x, is.projected = NA, width=700, height=700, res=100) {

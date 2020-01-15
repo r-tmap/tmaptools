@@ -123,7 +123,7 @@ geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, details=FALS
 			    res <- sf::st_as_sf(df, coords = c("x2","y2"), crs=.crs_longlat)
 			}
 		    names(res)[names(res) == "geometry"] <- "point"
-		    res <- st_set_geometry(res, "point")
+		    res <- sf::st_set_geometry(res, "point")
 		    sf::st_set_crs(res, .crs_longlat)
 		} else {
 			df

@@ -19,30 +19,30 @@ fancy_breaks <- function(vec, intervals=FALSE, interval.closure="left", fun=NULL
     	} else {
     		vec_fin <- unique(vec[!is.infinite(vec)])
     		frm <- gsub(" ", "", sprintf("%20.10f", abs(vec_fin)))
-    		
+
     		# get width before decimal point
     		#if (length(frm)==0) browser()
     		mag <- max(nchar(frm)-11)
-    		
+
     		# get number of decimals (which is number of decimals in vec, which is reduced when mag is large)
     		ndec <- max(10 - nchar(frm) + nchar(sub("0+$","",frm)))
     		if (is.na(digits)) {
     			digits <- max(min(ndec, 4-mag), 0)
-    			
+
     			# add sign to frm
     			frm_sign <- paste0(ifelse(vec_fin<0, "-", "+"), frm)
-    			
+
     			# test if number of digits is sufficient for unique labels
     			if (!scientific) {
     				while (anyDuplicated(substr(frm_sign, 1, nchar(frm_sign)-10 + digits)) && (digits < 10)) {
     					digits <- digits + 1
     				}
     			}
-    			
+
     		}
-    		
+
     		if (!scientific) {
-    			
+
     			# check whether big number abbrevations should be used
     			ext <- ""
     			if (!is.na(big.num.abbr[1])) {
@@ -56,10 +56,10 @@ fancy_breaks <- function(vec, intervals=FALSE, interval.closure="left", fun=NULL
     					}
     				}
     			}
-    			
-    			
-    			
-    			
+
+
+
+
     			# if (mag>11 || (mag > 9 && all(vec - floor(vec/1e9)*1e9 < 1))) {
     			# 	vec <- vec / 1e9
     			# 	ext <- " bln"
@@ -69,7 +69,7 @@ fancy_breaks <- function(vec, intervals=FALSE, interval.closure="left", fun=NULL
     			# } else {
     			#	ext <- ""
     			# }
-    			
+
     			# set default values
     			if (!("big.mark" %in% names(args))) args$big.mark <- ","
     			if (!("format" %in% names(args))) args$format <- "f"
@@ -94,20 +94,20 @@ fancy_breaks <- function(vec, intervals=FALSE, interval.closure="left", fun=NULL
             }
         } else {
             x[vec==-Inf] <- ""
-            
+
             lbls <- paste(x[-n], x[-1], sep = paste0(" ", text.separator, " "))
             if (vec[1]==-Inf) lbls[1] <- paste(paste(text.less.than, collapse = " "), x[2], sep = " ")
             if (vec[n]==Inf) lbls[n-1] <- paste(x[n-1], paste(text.or.more, collapse = " "), sep = " ")
-            
+
             if (text.to.columns) {
             	#xtra <- as.numeric(!is.na(text.align) && text.align=="right")
-            	
-            	
+
+
             	nc1 <- nchar(paste(x[-n], " ", sep = "")) + 1
             	nc2 <- rep(nchar(paste(text.separator, " ", sep = "")), n-1)
 
             	lbls_breaks <- matrix(c(nc1, nc1+nc2), ncol=2)
-            		
+
             	if (vec[1]==-Inf) {
             		if (length(text.less.than)==1) {
             			lbls_breaks[1,] <- rep(nchar(paste(text.less.than[1], " ", sep = "")) + 1, 2)
@@ -115,13 +115,13 @@ fancy_breaks <- function(vec, intervals=FALSE, interval.closure="left", fun=NULL
             			lbls_breaks[1,] <- cumsum(c(nchar(paste(text.less.than[1], " ", sep = "")) + 1, nchar(text.less.than[2])+1))
             		}
             	}
-            	if (vec[n]==Inf) { 
+            	if (vec[n]==Inf) {
             		if (length(text.or.more)==1) {
-            			lbls_breaks[n-1,] <- rep(nchar(paste(x[n-1], " ", sep = "")) + 1, 2)	
+            			lbls_breaks[n-1,] <- rep(nchar(paste(x[n-1], " ", sep = "")) + 1, 2)
             		} else {
             			lbls_breaks[n-1,] <- cumsum(c(nchar(paste(x[n-1], " ", sep = "")) + 1, nchar(text.or.more[1])+1))
             		}
-            		
+
             	}
 
             	attr(lbls, "brks") <- lbls_breaks
@@ -136,12 +136,12 @@ fancy_breaks <- function(vec, intervals=FALSE, interval.closure="left", fun=NULL
 
 
 num2breaks <- function(x, n, style, breaks, approx=FALSE, interval.closure="left", var = NULL) {
-	
+
 	# if (style %in% c("log10", "log10_pretty")) {
 	# 	x <- log10(x)
 	# 	style <- ifelse(style == "log10", "fixed", "pretty")
 	# }
-	
+
 	nobs <- sum(!is.na(x))
 	# create intervals and assign colors
 	if (style=="fixed") {
@@ -164,7 +164,7 @@ num2breaks <- function(x, n, style, breaks, approx=FALSE, interval.closure="left
 
 		nunique <- length(na.omit(unique(x)))
 
-		
+
 		if (nunique == 1 && style!="pretty") {
 			if (!is.null(var)) {
 				warning("Single unique value found for the variable \"", var, "\", so style set to \"pretty\"", call. = FALSE)
@@ -174,15 +174,15 @@ num2breaks <- function(x, n, style, breaks, approx=FALSE, interval.closure="left
 		}
 
 		tempx <- nunique <= n
-		
+
 		if (tempx) {
 			x_orig <- x
 			if (length(na.omit(unique(x))) == 1) x <- pretty(x)
 			x <- seq(min(x, na.rm = TRUE), max(x, na.rm = TRUE), length.out = n + 1)
 		}
-		
-		q <- suppressWarnings(classIntervals(x, n, style= style, intervalClosure=interval.closure))
-		
+
+		q <- suppressWarnings(classInt::classIntervals(x, n, style= style, intervalClosure=interval.closure))
+
 		if (tempx) q$var <- x_orig
 
 	}
@@ -197,9 +197,9 @@ num2breaks <- function(x, n, style, breaks, approx=FALSE, interval.closure="left
             brks <- q$brks
 
             # to prevent ugly rounded breaks such as -.5, .5, ..., 100.5 for n=101
-            qm1 <- suppressWarnings(classIntervals(x, n-1, style= style, intervalClosure=interval.closure))
+            qm1 <- suppressWarnings(classInt::classIntervals(x, n-1, style= style, intervalClosure=interval.closure))
             brksm1 <- qm1$brks
-            qp1 <- suppressWarnings(classIntervals(x, n+1, style= style, intervalClosure=interval.closure))
+            qp1 <- suppressWarnings(classInt::classIntervals(x, n+1, style= style, intervalClosure=interval.closure))
             brksp1 <- qp1$brks
             if (min(brksm1) > min(brks) && max(brksm1) < max(brks)) {
                 q <- qm1

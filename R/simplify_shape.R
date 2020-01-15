@@ -36,7 +36,7 @@ simplify_shape <- function(shp, fact = 0.1, keep.units=FALSE, keep.subunits=FALS
         explode <- keep_shapes && keep.subunits
         x <- suppressWarnings(rmapshaper::ms_simplify(shp, keep=fact, keep_shapes=keep_shapes, explode=explode, ...))
 
-        if (explode) x <- aggregate(x, by = list(x$UNIT__NR), FUN = function(x)x[1])
+        if (explode) x <- stats::aggregate(x, by = list(x$UNIT__NR), FUN = function(x)x[1])
 
         x[, c("rmapshaperid", "UNIT__NR")] <- list()
         names(x)[match(dataNames_new, names(x))] <- dataNames
