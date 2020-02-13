@@ -140,18 +140,22 @@ bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=N
 		sf_poly <- sf::st_sfc(sf::st_polygon(list(matrix(c(b[1], b[2], b[1], b[4], b[3], b[4], b[3], b[2], b[1], b[2]), byrow = TRUE, ncol = 2))), crs=current.projection)
 
 	    # STEP 1: try to cut the bounding box, such that it is feasible (i.e. corresponding to lon between -180 and 180 and lat between -90 and 90)
-	    earth_end <- suppressWarnings(bb_earth(projection=current.projection))
 
-	    if (is.null(earth_end)) {
-	        sf_poly2 <- sf_poly
-	    } else {
-	        sf_poly2 <- tryCatch({
-	            suppressMessages(sf::st_intersection(sf_poly, earth_end))
-	        }, error=function(e){
-	            sf_poly
-	        })
-	        if (is.null(sf_poly2) || !inherits(sf_poly2, c("sf", "sfc")) || length(sf_poly2) == 0) sf_poly2 <- sf_poly
-	    }
+		sf_poly2 <- sf_poly
+
+
+	    # earth_end <- suppressWarnings(bb_earth(projection=current.projection))
+	    #
+	    # if (is.null(earth_end)) {
+	    #     sf_poly2 <- sf_poly
+	    # } else {
+	    #     sf_poly2 <- tryCatch({
+	    #         suppressMessages(sf::st_intersection(sf_poly, earth_end))
+	    #     }, error=function(e){
+	    #         sf_poly
+	    #     })
+	    #     if (is.null(sf_poly2) || !inherits(sf_poly2, c("sf", "sfc")) || length(sf_poly2) == 0) sf_poly2 <- sf_poly
+	    # }
 
 	    # STEP 2: Extract the bounding box corner points and add intermediate points, which can be needed since the exterme values may not be corner points once they are projected. Create a SpatialPoints objects from these points.
 	    co <- sf::st_coordinates(sf_poly2)[,1:2]
@@ -170,11 +174,26 @@ bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=N
 	        stop("Something went wrong with the bounding box. Please check the projection.", call.=FALSE)
 	    })
 
+
+	    # STEP 3b: check dateline crossings
+	    longs <- st_coordinates(sf_pnts2_prj)[,1]
+	    if (any(longs < -150) && any(longs > 150) && !any(longs > -150 & longs < 150)) {
+	            longs[longs < -150] <- longs[longs < -150] + 360
+	        sf_pnts2_prj[[1]][,1] <- longs
+	    }
+
+        sf_poly2_prj <- st_polygon(list(st_coordinates(sf_pnts2_prj)[,1:2]))
+
+
 	    # STEP 4: Get bounding box of reprojected object
 
+        #st_bbox((st_wrap_dateline(st_polygon(list(st_coordinates(sf_pnts2_prj)[,1:2])))))
 
 
-	    b <- sf::st_bbox(sf_pnts2_prj)
+
+
+
+	    b <- sf::st_bbox(sf_poly2_prj)
 	    is_prj <- !sf::st_is_longlat(projection)
 	} else {
 	    is_prj <- if (is.na(current.projection)) {
@@ -186,10 +205,13 @@ bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=N
 
 
 
-	## check if long lat coordinates are valid
+	## check if lat coordinates are valid (long values may exceed the datetime boundary)
 	if (!is_prj) {
-	    b[1:2] <- pmax(b[1:2], c(-180, -90))
-	    b[3:4] <- pmin(b[3:4], c(180, 90))
+	    b[2] <- pmax(b[2], -90)
+	    b[4] <- pmin(b[4], 90)
+
+	    # b[1:2] <- pmax(b[1:2], c(-180, -90))
+	    # b[3:4] <- pmin(b[3:4], c(180, 90))
 	}
 
 	output <- match.arg(output)
