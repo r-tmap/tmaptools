@@ -176,13 +176,17 @@ bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=N
 
 
 	    # STEP 3b: check dateline crossings
-	    longs <- st_coordinates(sf_pnts2_prj)[,1]
+	    longs <- sf::st_coordinates(sf_pnts2_prj)[,1]
 	    if (any(longs < -150) && any(longs > 150) && !any(longs > -150 & longs < 150)) {
 	            longs[longs < -150] <- longs[longs < -150] + 360
 	        sf_pnts2_prj[[1]][,1] <- longs
 	    }
 
-        sf_poly2_prj <- st_polygon(list(st_coordinates(sf_pnts2_prj)[,1:2]))
+	    # close polygon (rounding errors may cause open polygons otherwise)
+	    coords <- sf::st_coordinates(sf_pnts2_prj)[,1:2]
+	    coords[nrow(coords), ] <- coords[1, ]
+
+        sf_poly2_prj <- sf::st_polygon(list(coords))
 
 
 	    # STEP 4: Get bounding box of reprojected object

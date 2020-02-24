@@ -1,7 +1,7 @@
-version 3 (devel)
-- added bbox geometry column to output of geocode_OSM when as.sf = TRUE
+version 3
+- geocode_OSM also returns a bounding box if as.sf=TRUE
 - removed hardcoded proj4 shortcuts
-- stars support (being implemented)
+- stars support
 
 version 2.0-2
 - sp-based functions marked as deprecated

@@ -4,8 +4,14 @@
 \alias{map_coloring}
 \title{Map coloring}
 \usage{
-map_coloring(x, algorithm = "greedy", ncols = NA, minimize = FALSE,
-  palette = NULL, contrast = 1)
+map_coloring(
+  x,
+  algorithm = "greedy",
+  ncols = NA,
+  minimize = FALSE,
+  palette = NULL,
+  contrast = 1
+)
 }
 \arguments{
 \item{x}{Either a shape (i.e. a \code{\link[sf:sf]{sf}} or \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}} object), or an adjacency list.}
@@ -43,7 +49,7 @@ if (require(tmap) && packageVersion("tmap") >= "2.0") {
     tm_shape(NLD_prov) +
     	tm_borders(lwd=2) +
     	tm_text("name", shadow=TRUE) +
-    tm_format("NLD", title="Dutch provinces and\\nmunicipalities", bg.color="white")
+    tm_format("NLD", title="Dutch provinces and\nmunicipalities", bg.color="white")
 }
 
 }

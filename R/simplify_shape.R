@@ -49,7 +49,7 @@ simplify_shape <- function(shp, fact = 0.1, keep.units=FALSE, keep.subunits=FALS
             if (!requireNamespace("lwgeom", quietly = TRUE)) {
                 stop("simplified shape is not valid and needs to be fixed; please install the lwgeom package and rerun this function", call. = FALSE)
             }
-            lwgeom::st_make_valid(x)
+            sf::st_make_valid(x)
         } else {
             x
         }

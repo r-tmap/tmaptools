@@ -4,10 +4,20 @@
 \alias{bb}
 \title{Bounding box generator}
 \usage{
-bb(x = NA, ext = NULL, cx = NULL, cy = NULL, width = NULL,
-  height = NULL, xlim = NULL, ylim = NULL, relative = FALSE,
-  current.projection = NULL, projection = NULL, output = c("bbox",
-  "matrix", "extent"))
+bb(
+  x = NA,
+  ext = NULL,
+  cx = NULL,
+  cy = NULL,
+  width = NULL,
+  height = NULL,
+  xlim = NULL,
+  ylim = NULL,
+  relative = FALSE,
+  current.projection = NULL,
+  projection = NULL,
+  output = c("bbox", "matrix", "extent")
+)
 }
 \arguments{
 \item{x}{One of the following:

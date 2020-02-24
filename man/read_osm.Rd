@@ -4,8 +4,16 @@
 \alias{read_osm}
 \title{Read Open Street Map data}
 \usage{
-read_osm(x, zoom = NULL, type = "osm", minNumTiles = NULL,
-  mergeTiles = NULL, use.colortable = FALSE, raster, ...)
+read_osm(
+  x,
+  zoom = NULL,
+  type = "osm",
+  minNumTiles = NULL,
+  mergeTiles = NULL,
+  use.colortable = FALSE,
+  raster,
+  ...
+)
 }
 \arguments{
 \item{x}{object that can be coerced to a bounding box with \code{\link{bb}} (e.g. an existing bounding box or a shape). In the first case, other arguments can be passed on to \code{\link{bb}} (see \code{...}). If an existing bounding box is specified in projected coordinates, plesae specify \code{current.projection}.}

@@ -7,8 +7,13 @@
 \usage{
 bb_poly(x, steps = 100, stepsize = NA, projection = NULL)
 
-bb_earth(projection = NULL, stepsize = 1, earth.datum = 4326,
-  bbx = c(-180, -90, 180, 90), buffer = 1e-06)
+bb_earth(
+  projection = NULL,
+  stepsize = 1,
+  earth.datum = 4326,
+  bbx = c(-180, -90, 180, 90),
+  buffer = 1e-06
+)
 }
 \arguments{
 \item{x}{object that can be coerced to a bounding box with \code{\link{bb}}}

@@ -10,11 +10,18 @@
 \usage{
 get_proj4(x, output = c("crs", "character", "epsg", "CRS"))
 
-set_projection(shp, projection = NA, current.projection = NA,
-  overwrite.current.projection = FALSE)
+set_projection(
+  shp,
+  projection = NA,
+  current.projection = NA,
+  overwrite.current.projection = FALSE
+)
 
-get_projection(shp, guess.longlat = FALSE, output = c("character",
-  "crs", "epsg", "CRS"))
+get_projection(
+  shp,
+  guess.longlat = FALSE,
+  output = c("character", "crs", "epsg", "CRS")
+)
 
 is_projected(x)
 }

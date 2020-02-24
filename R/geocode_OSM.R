@@ -7,17 +7,20 @@
 #' @param return.first.only Only return the first result
 #' @param details provide output details, other than the point coordinates and bounding box
 #' @param as.data.frame Return the output as a \code{data.frame}. If \code{FALSE}, a list is returned with at least two items: \code{"coords"}, a vector containing the coordinates, and \code{"bbox"}, the corresponding bounding box. By default false, unless \code{q} contains multiple queries. If \code{as.sf = TRUE} (see below), \code{as.data.frame} will set to \code{TRUE}.
-#' @param as.sf Return the output as \code{\link[sf:sf]{sf}} object. If \code{TRUE}, \code{return.first.only} will be set to \code{TRUE}. Two geometry columns are added: \code{bbox} and \code{point}, where the latter is the default geometry.
+#' @param as.sf Return the output as \code{\link[sf:sf]{sf}} object. If \code{TRUE}, \code{return.first.only} will be set to \code{TRUE}. Two geometry columns are added: \code{bbox} and \code{point}. The argument \code{geometry} determines which of them is set to the default geometry.
+#' @param geometry When \code{as.sf}, this arugment determines which column (\code{bbox} or \code{point}) is set as geometry column. Note that the geometry can be changed afterwards with \code{\link[sf:st_set_geometry]{st_set_geometry}}.
 #' @param server OpenStreetMap Nominatim server name. Could also be a local OSM Nominatim server.
 #' @return If \code{as.SPDF} then a \code{\link[sp:SpatialPointsDataFrame]{SpatialPointsDataFrame}} is returned. Else, if \code{as.data.frame}, then a \code{data.frame} is returned, else a list.
 #' @export
 #' @importFrom XML xmlChildren xmlRoot xmlAttrs xmlTreeParse xmlValue
 #' @example ./examples/geocode_OSM.R
 #' @seealso \code{\link{rev_geocode_OSM}}, \code{\link{bb}}
-geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, details=FALSE, as.data.frame=NA, as.sf=FALSE, server="http://nominatim.openstreetmap.org") {
-	n <- length(q)
+geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, details=FALSE, as.data.frame=NA, as.sf=FALSE, geometry=c("point", "bbox"), server="http://nominatim.openstreetmap.org") {
+    n <- length(q)
 	q2 <- gsub(" ", "+", enc2utf8(q), fixed = TRUE)
 	addr <- paste0(server, "/search?q=", q2, "&format=xml&polygon=0&addressdetails=0")
+
+	geometry <- match.arg(geometry)
 
 	project <- !missing(projection)
 
@@ -123,7 +126,8 @@ geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, details=FALS
 			    res <- sf::st_as_sf(df, coords = c("x2","y2"), crs=.crs_longlat)
 			}
 		    names(res)[names(res) == "geometry"] <- "point"
-		    res <- sf::st_set_geometry(res, "point")
+
+            if (geometry == "point") res <- sf::st_set_geometry(res, "point")
 		    sf::st_set_crs(res, .crs_longlat)
 		} else {
 			df

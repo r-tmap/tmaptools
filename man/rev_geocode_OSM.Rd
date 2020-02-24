@@ -4,8 +4,14 @@
 \alias{rev_geocode_OSM}
 \title{Reverse geocodes a location using OpenStreetMap Nominatim}
 \usage{
-rev_geocode_OSM(x, y = NULL, zoom = NULL, projection = 4326,
-  as.data.frame = NA, server = "http://nominatim.openstreetmap.org")
+rev_geocode_OSM(
+  x,
+  y = NULL,
+  zoom = NULL,
+  projection = 4326,
+  as.data.frame = NA,
+  server = "http://nominatim.openstreetmap.org"
+)
 }
 \arguments{
 \item{x}{x coordinate(s), or a spatial points object (\code{\link[sf:sf]{sf}} or \code{\link[sp:SpatialPoints]{SpatialPoints}})}

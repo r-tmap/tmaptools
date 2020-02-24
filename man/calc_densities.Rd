@@ -4,8 +4,14 @@
 \alias{calc_densities}
 \title{Calculate densities}
 \usage{
-calc_densities(shp, var, target = "metric", total.area = NULL,
-  suffix = NA, drop = TRUE)
+calc_densities(
+  shp,
+  var,
+  target = "metric",
+  total.area = NULL,
+  suffix = NA,
+  drop = TRUE
+)
 }
 \arguments{
 \item{shp}{a shape object, i.e., an \code{\link[sf:sf]{sf}} object or a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}}

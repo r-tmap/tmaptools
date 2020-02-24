@@ -4,8 +4,7 @@
 \alias{get_brewer_pal}
 \title{Get and plot a (modified) Color Brewer palette}
 \usage{
-get_brewer_pal(palette, n = 5, contrast = NA, stretch = TRUE,
-  plot = TRUE)
+get_brewer_pal(palette, n = 5, contrast = NA, stretch = TRUE, plot = TRUE)
 }
 \arguments{
 \item{palette}{name of the color brewer palette. Run \code{\link{palette_explorer}} (or \code{\link[RColorBrewer:display.brewer.pal]{display.brewer.pal}}) for options.}

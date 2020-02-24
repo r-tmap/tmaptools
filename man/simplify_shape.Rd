@@ -4,8 +4,7 @@
 \alias{simplify_shape}
 \title{Simplify shape}
 \usage{
-simplify_shape(shp, fact = 0.1, keep.units = FALSE,
-  keep.subunits = FALSE, ...)
+simplify_shape(shp, fact = 0.1, keep.units = FALSE, keep.subunits = FALSE, ...)
 }
 \arguments{
 \item{shp}{an \code{\link[sf:sf]{sf}} object.}

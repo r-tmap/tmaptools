@@ -4,8 +4,7 @@
 \alias{get_asp_ratio}
 \title{Get aspect ratio}
 \usage{
-get_asp_ratio(x, is.projected = NA, width = 700, height = 700,
-  res = 100)
+get_asp_ratio(x, is.projected = NA, width = 700, height = 700, res = 100)
 }
 \arguments{
 \item{x}{shape object (either \code{\link[sp:Spatial]{Spatial}}, a \code{\link[raster:Raster-class]{Raster}}, or an \code{\link[sf:sf]{sf}}), a bounding box (that can be coerced by \code{\link{bb}}), or a \code{\link[tmap:tmap-element]{tmap}} object.}

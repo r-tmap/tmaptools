@@ -12,7 +12,11 @@
 #' @seealso \code{\link{approx_areas}}
 #' @export
 approx_distances <- function(x, y = NULL, projection = NULL, target = NULL) {
-        ## set metric and imperial to defaults: km and mi
+
+    if (identical(projection, "longlat")) projection <- sf::st_crs(4326) # shortcut needed for tnap 2.x
+
+
+    ## set metric and imperial to defaults: km and mi
     if (!missing(target)) {
         is_metric <- target=="metric"
         is_imperial <- target=="imperial"

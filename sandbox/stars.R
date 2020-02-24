@@ -23,11 +23,31 @@ bbx <- st_bbox(bbx_coor, crs = crs)
 x2 <- raster::raster(x)
 x3 <- st_as_stars(x2)
 
+st_dimensions(x3)
+
 plot(x3)
 
 
 # methode 2: array method
 x4 <- st_as_stars(a)
+
+plot(x4)
+
+st_dimensions(x4)
+
+x5 <- x4 %>%
+    st_set_crs(crs) %>%
+    st_set_dimensions("x",
+                      offset = bbx["xmin"],
+                      delta = (bbx["xmax"] - bbx["xmin"]) / ncols) %>%
+    st_set_dimensions("y",
+                      offset = bbx["ymin"],
+                      delta = (bbx["ymin"] - bbx["ymax"]) / nrows)
+
+
+
+
+
 attr(x4, "dimensions")[[2]]$delta <- -1
 
 plot(x4)
