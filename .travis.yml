@@ -10,6 +10,9 @@ cache:
   - ccache
 latex: false
 
+r_github_packages:
+  - r-spatial/sf
+
 addons:
   postgresql: "9.6"
   apt:
