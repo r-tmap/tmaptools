@@ -139,9 +139,25 @@ bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=N
 
 		sf_poly <- sf::st_sfc(sf::st_polygon(list(matrix(c(b[1], b[2], b[1], b[4], b[3], b[4], b[3], b[2], b[1], b[2]), byrow = TRUE, ncol = 2))), crs=current.projection)
 
-	    # STEP 1: try to cut the bounding box, such that it is feasible (i.e. corresponding to lon between -180 and 180 and lat between -90 and 90)
+	    # STEP 1: check if poly can be reprojected, and if not, cut the bounding box such that lon between -180 and 180 and lat between -90 and 90
 
-		sf_poly2 <- sf_poly
+		#sf_poly2 <- sf_poly
+		sf_poly_prj <- sf::st_transform(sf_poly, crs = projection)
+		if (!inherits(sf_poly_prj, "sfc_POLYGON") || sf::st_is_empty(sf_poly_prj)) {
+		    earth_end <- suppressWarnings(bb_earth(projection=current.projection))
+		    if (is.null(earth_end)) {
+	            sf_poly2 <- sf_poly
+	        } else {
+	            sf_poly2 <- tryCatch({
+	                suppressMessages(sf::st_intersection(sf_poly, earth_end))
+	            }, error=function(e){
+	                sf_poly
+	            })
+	            if (is.null(sf_poly2) || !inherits(sf_poly2, c("sf", "sfc")) || length(sf_poly2) == 0) sf_poly2 <- sf_poly
+	        }
+		} else {
+		    sf_poly2 <- sf_poly
+		}
 
 
 	    # earth_end <- suppressWarnings(bb_earth(projection=current.projection))
