@@ -304,8 +304,8 @@ get_bb <- function(x, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=NULL, ylim
     if (is.null(current.projection)) current.projection <- sf::st_crs(NA)
     if (!is.na(current.projection)) {
         attr(b, "crs") <- current.projection
-    } else if (!is.na(attr(b, "crs"))) {
-        current.projection <- attr(b, "crs")
+    } else if (!is.na(sf::st_crs(b))) {
+        current.projection <- sf::st_crs(b)
     }
 
     list(b=b,
