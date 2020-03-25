@@ -18,7 +18,7 @@
 #' @example ./examples/approx_areas.R
 #' @seealso \code{\link{approx_distances}}
 #' @importFrom units set_units as_units
-#' @importFrom lwgeom st_transform_proj st_geod_area st_make_valid
+#' @importFrom lwgeom st_transform_proj st_geod_area
 #' @export
 approx_areas <- function(shp, target="metric", total.area=NULL) {
     is_metric <- target=="metric"

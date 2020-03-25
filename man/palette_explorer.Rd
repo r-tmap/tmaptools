@@ -5,7 +5,9 @@
 \alias{palette_explorer}
 \alias{tmap.pal.info}
 \title{Explore color palettes}
-\format{An object of class \code{data.frame} with 40 rows and 4 columns.}
+\format{
+An object of class \code{data.frame} with 40 rows and 4 columns.
+}
 \usage{
 palette_explorer()
 

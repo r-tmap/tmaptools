@@ -7,12 +7,12 @@ Description: Set of tools for reading and processing spatial data. The aim is to
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Date: 2020-02-24
+Date: 2020-03-25
 Depends:
     R (>= 3.0),
     methods
 Imports:
-    sf (>= 0.8-1),
+    sf (>= 0.9),
     lwgeom (>= 0.1-4),
     stars (>= 0.4-0),
     units (>= 0.6-1),
@@ -36,4 +36,4 @@ Suggests:
     shinyjs
 URL: https://github.com/mtennekes/tmaptools
 BugReports: https://github.com/mtennekes/tmaptools/issues
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
