@@ -1,3 +1,6 @@
+version 3.0-1
+- bb takes asp.limit argumentm which controls the maximum aspect ratio
+
 version 3.0
 - stars support
 - removed hardcoded proj4 shortcuts

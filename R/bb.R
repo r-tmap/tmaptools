@@ -29,6 +29,7 @@
 #' @param xlim limits of the x-axis. These are either absolute or relative (depending on the argument \code{relative}).
 #' @param ylim limits of the y-axis. See \code{xlim}.
 #' @param relative boolean that determines whether relative values are used for \code{width}, \code{height}, \code{xlim} and \code{ylim} or absolute. If \code{x} is unspecified, \code{relative} is set to \code{"FALSE"}.
+#' @param asp.limit maximum aspect ratio, which is width/height. Number greater than or equal to 1. For landscape bounding boxes, \code{1/asp.limit} will be used. The returned bounding box will have an aspect ratio between \code{1/asp.limit} and \code{asp.limit}.
 #' @param current.projection projection that corresponds to the bounding box specified by \code{x}.
 #' @param projection projection to transform the bounding box to.
 #' @param output output format of the bounding box, one of:
@@ -43,7 +44,7 @@
 #' @example ./examples/bb.R
 #' @seealso \code{\link{geocode_OSM}}
 #' @export
-bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=NULL, ylim=NULL, relative = FALSE, current.projection=NULL, projection=NULL, output = c("bbox", "matrix", "extent")) {
+bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=NULL, ylim=NULL, relative = FALSE, asp.limit = NULL, current.projection=NULL, projection=NULL, output = c("bbox", "matrix", "extent")) {
 
     # check projections
     if (!is.null(current.projection)) current.projection <- sf::st_crs(current.projection)
@@ -232,6 +233,25 @@ bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=N
 
 	    # b[1:2] <- pmax(b[1:2], c(-180, -90))
 	    # b[3:4] <- pmin(b[3:4], c(180, 90))
+	}
+
+
+	## limit aspect ratio
+	if (!is.null(asp.limit)) {
+	    bbh <- unname(b[4] - b[2])
+	    bbw <- unname(b[3] - b[1])
+	    if (bbh < 1e-8 || bbh < (bbw / asp.limit)) {
+	        # increase height such that aspect ratio is at most 10. Use lowerbound of 1 for height.
+	        cy <- (b[2] + b[4]) / 2
+	        b[2] <- cy - max(bbw / (asp.limit * 2), .5)
+	        b[4] <- cy + max(bbw / (asp.limit * 2), .5)
+	    }
+	    if (bbw < 1e-8 || bbw < (bbh / asp.limit)) {
+	        # increase width such that aspect ratio is at least 1/10. Use lowerbound of 1 for width.
+	        cx <- (b[1] + b[3]) / 2
+	        b[1] <- cx - max(bbh / (asp.limit * 2), .5)
+	        b[3] <- cx + max(bbh / (asp.limit * 2), .5)
+	    }
 	}
 
 	output <- match.arg(output)
