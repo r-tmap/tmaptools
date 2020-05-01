@@ -144,7 +144,7 @@ bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=N
 
 		#sf_poly2 <- sf_poly
 		sf_poly_prj <- sf::st_transform(sf_poly, crs = projection)
-		if (!inherits(sf_poly_prj, "sfc_POLYGON") || (nrow(st_coordinates(sf_poly_prj)) < 4L) || sf::st_is_empty(sf_poly_prj)) {
+		if (!inherits(sf_poly_prj, "sfc_POLYGON") || (nrow(sf::st_coordinates(sf_poly_prj)) < 4L) || sf::st_is_empty(sf_poly_prj)) {
 		    earth_end <- suppressWarnings(bb_earth(projection=current.projection))
 		    if (is.null(earth_end)) {
 	            sf_poly2 <- sf_poly
