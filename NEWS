@@ -1,5 +1,6 @@
 version 3.0-1
-- bb takes asp.limit argumentm which controls the maximum aspect ratio
+- bb takes asp.limit argument which controls the maximum aspect ratio
+- improved geocode_OSM when no results are found
 
 version 3.0
 - stars support

@@ -42,7 +42,7 @@ geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, details=FALS
 		res <- xmlChildren(xmlRoot(doc))
 
 		if (length(res)==0) {
-			warning(paste("No results found for \"", q[k], "\".", sep="")) #if (n==1)
+			message(paste("No results found for \"", q[k], "\".", sep="")) #if (n==1)
 			return(NULL)
 		}
 
@@ -110,6 +110,8 @@ geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, details=FALS
 	})
 
 	output3 <- do.call(c, output2)
+
+	if (is.null(output3)) return(NULL)
 
 	if (as.data.frame) {
 		df <- do.call(rbind, output3)
