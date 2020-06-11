@@ -2,7 +2,7 @@
 #'
 #' Approximate distances between two points or across the horizontal and vertical centerlines of a bounding box.
 #'
-#' @param x object that can be coerced to a bounding box with \code{\link{bb}}, or a pair of coordintes (vector of two). In the former case, the distance across the horizontal and vertical centerlines of the bounding box are approximated. In the latter case, \code{y} is also required; the distance between points \code{x} amd \code{y} is approximated.
+#' @param x object that can be coerced to a bounding box with \code{\link{bb}}, or a pair of coordintes (vector of two). In the former case, the distance across the horizontal and vertical centerlines of the bounding box are approximated. In the latter case, \code{y} is also required; the distance between points \code{x} and \code{y} is approximated.
 #' @param y a pair of coordintes, vector of two. Only required when \code{x} is also a pair of coordintes.
 #' @param projection projection code, needed in case \code{x} is a bounding box or when \code{x} and \code{y} are pairs of coordinates. See \code{\link{get_proj4}}
 #' @param target target unit, one of:  \code{"m"}, \code{"km"}, \code{"mi"}, and \code{"ft"}.

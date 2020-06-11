@@ -4,7 +4,7 @@
 #'
 #' This function is a wrapper of \code{\link[rmapshaper:ms_simplify]{ms_simplify}}. In addition, the data is preserved. Also \code{\link[sf:sf]{sf}} objects are supported.
 #'
-#' @param shp an \code{\link[sf:sf]{sf}} object.
+#' @param shp an \code{\link[sf:sf]{sf}} or \code{\link[sf:sfc]{sfc}}  object.
 #' @param fact simplification factor, number between 0 and 1 (default is 0.1)
 #' @param keep.units d
 #' @param keep.subunits d
@@ -16,13 +16,17 @@ simplify_shape <- function(shp, fact = 0.1, keep.units=FALSE, keep.subunits=FALS
     if (!requireNamespace("rmapshaper", quietly = TRUE)) {
         stop("rmapshaper package is needed for simplify_shape", call. = FALSE)
     } else {
+        is_sfc = inherits(shp, "sfc")
+        if (is_sfc) shp = sf::st_sf(geometry = shp)
+
         sfcol <- attr(shp, "sf_column")
 
         dataNames <- setdiff(names(shp), sfcol)
 
-        dataNames_new <- paste(dataNames, 1L:length(dataNames), sep ="__")
-
-        names(shp)[match(dataNames, names(shp))] <- dataNames_new
+        if (length(dataNames)) {
+            dataNames_new <- paste(dataNames, 1L:length(dataNames), sep ="__")
+            names(shp)[match(dataNames, names(shp))] <- dataNames_new
+        }
 
         unitCols <- which(sapply(shp, inherits, "units"))
         if (length(unitCols) > 0) {
@@ -39,16 +43,20 @@ simplify_shape <- function(shp, fact = 0.1, keep.units=FALSE, keep.subunits=FALS
         if (explode) x <- stats::aggregate(x, by = list(x$UNIT__NR), FUN = function(x)x[1])
 
         x[, c("rmapshaperid", "UNIT__NR")] <- list()
-        names(x)[match(dataNames_new, names(x))] <- dataNames
+
+        if (length(dataNames)) {
+            names(x)[match(dataNames_new, names(x))] <- dataNames
+        }
 
         if (length(unitCols) > 0) {
             shp[, unitCols] <- mapply(units::as_units, sf::st_drop_geometry(shp[, unitCols]), units, SIMPLIFY = FALSE)
         }
 
-        if (!all(sf::st_is_valid(x))) {
+        x = if (!all(sf::st_is_valid(x))) {
             sf::st_make_valid(x)
         } else {
             x
         }
+        if (is_sfc) sf::st_geometry(x) else x
     }
 }

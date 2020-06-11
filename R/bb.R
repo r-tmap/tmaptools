@@ -141,15 +141,15 @@ bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=N
 	    mx = mean(b[c(1,3)])
 	    my = mean(b[c(2,4)])
 
-	    ls1 = st_linestring(rbind(c(b[1], b[2]), c(b[3], b[2]),
+	    ls1 = sf::st_linestring(rbind(c(b[1], b[2]), c(b[3], b[2]),
 	                              c(b[3], b[4]), c(b[1], b[4]), c(b[1], b[2])))
-	    ls2 = st_linestring(rbind(c(b[1], b[2]), c(b[3], b[4]),
+	    ls2 = sf::st_linestring(rbind(c(b[1], b[2]), c(b[3], b[4]),
 	                              c(b[1], b[4]), c(b[3], b[2]), c(b[1], b[2])))
-	    ls3 = st_linestring(rbind(c(mx, b[2]), c(mx, b[4]),
+	    ls3 = sf::st_linestring(rbind(c(mx, b[2]), c(mx, b[4]),
 	                              c(b[1], my), c(b[3], my), c(mx, b[4]), c(b[3], my), c(mx, b[2]), c(b[1], my)))
-	    sf_lns = st_sfc(ls1, ls2,ls3)
-	    sf_lns = st_segmentize(sf_lns, st_length(sf_lns)[1]/100)
-	    st_crs(sf_lns) = current.projection
+	    sf_lns = sf::st_sfc(ls1, ls2,ls3)
+	    sf_lns = sf::st_segmentize(sf_lns, sf::st_length(sf_lns)[1]/100)
+	    sf::st_crs(sf_lns) = current.projection
 
 
 		#sf_poly <- sf::st_sfc(sf::st_polygon(list(matrix(c(b[1], b[2], b[1], b[4], b[3], b[4], b[3], b[2], b[1], b[2]), byrow = TRUE, ncol = 2))), crs=current.projection)
@@ -159,8 +159,14 @@ bb <- function(x=NA, ext=NULL, cx=NULL, cy=NULL, width=NULL, height=NULL, xlim=N
 		#sf_poly2 <- sf_poly
 		sf_lns_prj <- sf::st_transform(sf_lns, crs = projection, partial = TRUE)
 
-	    b <- sf::st_bbox(sf_lns_prj[!sf::st_is_empty(sf_lns_prj),])
-	    is_prj <- !sf::st_is_longlat(projection)
+		is_prj <- !sf::st_is_longlat(projection)
+
+		#b <- sf::st_bbox(sf_lns_prj[!sf::st_is_empty(sf_lns_prj),])
+		b <- sf::st_bbox(sf_lns_prj)
+		if (any(!is.finite(b))) {
+		    if (is_prj) stop("Unable to determine bounding for projected crs.", call. = FALSE)
+		    b[1:4] <- c(-180, -90, 180, 90)
+		}
 	} else {
 	    is_prj <- if (is.na(current.projection)) {
 	        !maybe_longlat(b)

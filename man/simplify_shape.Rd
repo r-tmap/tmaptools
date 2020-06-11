@@ -7,7 +7,7 @@
 simplify_shape(shp, fact = 0.1, keep.units = FALSE, keep.subunits = FALSE, ...)
 }
 \arguments{
-\item{shp}{an \code{\link[sf:sf]{sf}} object.}
+\item{shp}{an \code{\link[sf:sf]{sf}} or \code{\link[sf:sfc]{sfc}}  object.}
 
 \item{fact}{simplification factor, number between 0 and 1 (default is 0.1)}
 
