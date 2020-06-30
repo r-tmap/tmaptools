@@ -5,6 +5,7 @@
 #' @param q a character (vector) that specifies a search query. For instance \code{"India"} or \code{"CBS Weg 11, Heerlen, Netherlands"}.
 #' @param projection projection in which the coordinates and bounding box are returned. Either a \code{\link[sp:CRS]{CRS}} object or a character value. If it is a character, it can either be a \code{PROJ.4} character string or a shortcut. See \code{\link{get_proj4}} for a list of shortcut values. By default latitude longitude coordinates.
 #' @param return.first.only Only return the first result
+#' @param keep.unfound Keep list items / data.frame rows with \code{NA}s for unfound search terms. By default \code{FALSE}
 #' @param details provide output details, other than the point coordinates and bounding box
 #' @param as.data.frame Return the output as a \code{data.frame}. If \code{FALSE}, a list is returned with at least two items: \code{"coords"}, a vector containing the coordinates, and \code{"bbox"}, the corresponding bounding box. By default false, unless \code{q} contains multiple queries. If \code{as.sf = TRUE} (see below), \code{as.data.frame} will set to \code{TRUE}.
 #' @param as.sf Return the output as \code{\link[sf:sf]{sf}} object. If \code{TRUE}, \code{return.first.only} will be set to \code{TRUE}. Two geometry columns are added: \code{bbox} and \code{point}. The argument \code{geometry} determines which of them is set to the default geometry.
@@ -15,7 +16,7 @@
 #' @importFrom XML xmlChildren xmlRoot xmlAttrs xmlTreeParse xmlValue
 #' @example ./examples/geocode_OSM.R
 #' @seealso \code{\link{rev_geocode_OSM}}, \code{\link{bb}}
-geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, details=FALSE, as.data.frame=NA, as.sf=FALSE, geometry=c("point", "bbox"), server="http://nominatim.openstreetmap.org") {
+geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, keep.unfound = FALSE, details=FALSE, as.data.frame=NA, as.sf=FALSE, geometry=c("point", "bbox"), server="http://nominatim.openstreetmap.org") {
     n <- length(q)
 	q2 <- gsub(" ", "+", enc2utf8(q), fixed = TRUE)
 	addr <- paste0(server, "/search?q=", q2, "&format=xml&polygon=0&addressdetails=0")
@@ -30,6 +31,8 @@ geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, details=FALS
 		as.data.frame <- TRUE
 		return.first.only <- TRUE
 	}
+	sn_names <- c("place_id", "osm_type", "osm_id", "place_rank", "display_name", "class", "type", "importance", "icon")
+
 
 
 	output2 <- lapply(1:n, function(k) {
@@ -43,12 +46,28 @@ geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, details=FALS
 
 		if (length(res)==0) {
 			message(paste("No results found for \"", q[k], "\".", sep="")) #if (n==1)
-			return(NULL)
+		    if (keep.unfound) {
+		        if (as.data.frame) {
+		            res = if (project) {
+		                list(query = q[k], x = as.numeric(as.numeric(NA)), y = as.numeric(NA), y_min = as.numeric(NA),
+		                     y_max = as.numeric(NA), x_min = as.numeric(NA), x_max = as.numeric(NA))
+		            } else {
+		                list(query = q[k], lat = as.numeric(NA), lon = as.numeric(NA), lat_min = as.numeric(NA),
+		                     lat_max = as.numeric(NA), lon_min = as.numeric(NA), lon_max = as.numeric(NA))
+		            }
+		        } else {
+		            res = list(queue = q[k], coords = c(x=NA, y = NA), bbox = sf::st_bbox())
+		        }
+		        if (details) res[sn_names] = as.character(NA)
+		        if (as.sf) res$bbox = sf::st_sfc(sf::st_polygon())
+
+		        if (as.data.frame) res <- as.data.frame(res, stringsAsFactors=FALSE)
+		        return(list(res))
+		    } else return(NULL)
 		}
 
 		idx <- if (return.first.only) 1 else 1:length(res)
 
-		sn_names <- c("place_id", "osm_type", "osm_id", "place_rank", "display_name", "class", "type", "importance", "icon")
 		output <- lapply(idx, function(i) {
 			search_result <- xmlAttrs(res[[i]])
 
@@ -121,11 +140,11 @@ geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, details=FALS
 			if (!project) {
 			    df$x <- df$lon
 			    df$y <- df$lat
-			    res <- sf::st_as_sf(df, coords = c("x","y"), crs=.crs_longlat)
+			    res <- suppressWarnings(sf::st_as_sf(df, coords = c("x","y"), crs=.crs_longlat, na.fail = FALSE))
 			} else {
 			    df$x2 <- df$x
 			    df$y2 <- df$y
-			    res <- sf::st_as_sf(df, coords = c("x2","y2"), crs=.crs_longlat)
+			    res <- suppressWarnings(sf::st_as_sf(df, coords = c("x2","y2"), crs=.crs_longlat, na.fail = FALSE))
 			}
 		    names(res)[names(res) == "geometry"] <- "point"
 

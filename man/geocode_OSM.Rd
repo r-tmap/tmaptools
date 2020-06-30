@@ -8,6 +8,7 @@ geocode_OSM(
   q,
   projection = NULL,
   return.first.only = TRUE,
+  keep.unfound = FALSE,
   details = FALSE,
   as.data.frame = NA,
   as.sf = FALSE,
@@ -21,6 +22,8 @@ geocode_OSM(
 \item{projection}{projection in which the coordinates and bounding box are returned. Either a \code{\link[sp:CRS]{CRS}} object or a character value. If it is a character, it can either be a \code{PROJ.4} character string or a shortcut. See \code{\link{get_proj4}} for a list of shortcut values. By default latitude longitude coordinates.}
 
 \item{return.first.only}{Only return the first result}
+
+\item{keep.unfound}{Keep list items / data.frame rows with \code{NA}s for unfound search terms. By default \code{FALSE}}
 
 \item{details}{provide output details, other than the point coordinates and bounding box}
 

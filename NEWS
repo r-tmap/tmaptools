@@ -1,6 +1,6 @@
 version 3.0-1
 - bb takes asp.limit argument which controls the maximum aspect ratio
-- improved geocode_OSM when no results are found
+- improved geocode_OSM when no results are found; also added argument keep.unfound
 - simplify_shape now works on sfc objects and sf objects with only a geometry column
 
 version 3.0
