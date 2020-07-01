@@ -31,10 +31,10 @@ bb_earth(
 \item{buffer}{In order to determine feasible earth bounding boxes in other projections, a buffer is used to decrease the bounding box by a small margin (default \code{1e-06}). This value is subtracted from each the bounding box coordinates. If it still does not result in a feasible bounding box, this procedure is repeated 5 times, where each time the buffer is multiplied by 10. Set \code{buffer=0} to disable this procedure.}
 }
 \value{
-\code{\link[sf:st_sfc]{sfc}} object
+\code{\link[sf:sfc]{sfc}} object
 }
 \description{
-Convert bounding box to a spatial (\code{\link[sf:st_sfc]{sfc}}) object . Useful for plotting (see example). The function \code{bb_earth} returns a spatial polygon of the 'boundaries' of the earth, which can also be done in other projections (if a feasible solution exists).
+Convert bounding box to a spatial (\code{\link[sf:sfc]{sfc}}) object . Useful for plotting (see example). The function \code{bb_earth} returns a spatial polygon of the 'boundaries' of the earth, which can also be done in other projections (if a feasible solution exists).
 }
 \examples{
 if (require(tmap) && packageVersion("tmap") >= "2.0") {

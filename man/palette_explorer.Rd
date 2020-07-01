@@ -14,7 +14,7 @@ palette_explorer()
 tmap.pal.info
 }
 \description{
-\code{palette_explorer()} starts an interactive tool shows all Color Brewer and viridis palettes, where the number of colors can be adjusted as well as the constrast range. Categorical (qualitative) palettes can be stretched when the number of colors exceeds the number of palette colors. Output code needed to get the desired color values is generated. Finally, all colors can be tested for color blindness. The data.frame \code{tmap.pal.info} is similar to \code{\link[RColorBrewer:brewer.pal.info]{brewer.pal.info}}, but extended with the color palettes from viridis.
+\code{palette_explorer()} starts an interactive tool shows all Color Brewer and viridis palettes, where the number of colors can be adjusted as well as the constrast range. Categorical (qualitative) palettes can be stretched when the number of colors exceeds the number of palette colors. Output code needed to get the desired color values is generated. Finally, all colors can be tested for color blindness. The data.frame \code{tmap.pal.info} is similar to \code{\link[RColorBrewer:RColorBrewer]{brewer.pal.info}}, but extended with the color palettes from viridis.
 }
 \examples{
 \dontrun{
@@ -27,6 +27,6 @@ if (require(shiny) && require(shinyjs)) {
 \url{http://www.color-blindness.com/types-of-color-blindness/}
 }
 \seealso{
-\code{\link{get_brewer_pal}}, \code{\link[dichromat:dichromat]{dichromat}}, \code{\link[RColorBrewer:brewer.pal]{RColorBrewer}}
+\code{\link{get_brewer_pal}}, \code{\link[dichromat:dichromat]{dichromat}}, \code{\link[RColorBrewer:RColorBrewer]{RColorBrewer}}
 }
 \keyword{datasets}

@@ -97,7 +97,7 @@ is_light <- function(col) {
 
 #' Explore color palettes
 #'
-#' \code{palette_explorer()} starts an interactive tool shows all Color Brewer and viridis palettes, where the number of colors can be adjusted as well as the constrast range. Categorical (qualitative) palettes can be stretched when the number of colors exceeds the number of palette colors. Output code needed to get the desired color values is generated. Finally, all colors can be tested for color blindness. The data.frame \code{tmap.pal.info} is similar to \code{\link[RColorBrewer:brewer.pal.info]{brewer.pal.info}}, but extended with the color palettes from viridis.
+#' \code{palette_explorer()} starts an interactive tool shows all Color Brewer and viridis palettes, where the number of colors can be adjusted as well as the constrast range. Categorical (qualitative) palettes can be stretched when the number of colors exceeds the number of palette colors. Output code needed to get the desired color values is generated. Finally, all colors can be tested for color blindness. The data.frame \code{tmap.pal.info} is similar to \code{\link[RColorBrewer:RColorBrewer]{brewer.pal.info}}, but extended with the color palettes from viridis.
 #' @export
 #' @importFrom grDevices col2rgb
 #' @importFrom dichromat dichromat
@@ -105,7 +105,7 @@ is_light <- function(col) {
 #' @name palette_explorer
 #' @rdname palette_explorer
 #' @example ./examples/palette_explorer.R
-#' @seealso \code{\link{get_brewer_pal}}, \code{\link[dichromat:dichromat]{dichromat}}, \code{\link[RColorBrewer:brewer.pal]{RColorBrewer}}
+#' @seealso \code{\link{get_brewer_pal}}, \code{\link[dichromat:dichromat]{dichromat}}, \code{\link[RColorBrewer:RColorBrewer]{RColorBrewer}}
 #' @references \url{http://www.color-blindness.com/types-of-color-blindness/}
 palette_explorer <- function() {
     if (!requireNamespace("shiny")) stop("shiny package needed for this function to work. Please install it.", call. = FALSE)

@@ -9,7 +9,7 @@
 #' @param details provide output details, other than the point coordinates and bounding box
 #' @param as.data.frame Return the output as a \code{data.frame}. If \code{FALSE}, a list is returned with at least two items: \code{"coords"}, a vector containing the coordinates, and \code{"bbox"}, the corresponding bounding box. By default false, unless \code{q} contains multiple queries. If \code{as.sf = TRUE} (see below), \code{as.data.frame} will set to \code{TRUE}.
 #' @param as.sf Return the output as \code{\link[sf:sf]{sf}} object. If \code{TRUE}, \code{return.first.only} will be set to \code{TRUE}. Two geometry columns are added: \code{bbox} and \code{point}. The argument \code{geometry} determines which of them is set to the default geometry.
-#' @param geometry When \code{as.sf}, this arugment determines which column (\code{bbox} or \code{point}) is set as geometry column. Note that the geometry can be changed afterwards with \code{\link[sf:st_set_geometry]{st_set_geometry}}.
+#' @param geometry When \code{as.sf}, this arugment determines which column (\code{bbox} or \code{point}) is set as geometry column. Note that the geometry can be changed afterwards with \code{\link[sf:st_geometry]{st_set_geometry}}.
 #' @param server OpenStreetMap Nominatim server name. Could also be a local OSM Nominatim server.
 #' @return If \code{as.sf} then a \code{\link[sf:sf]{sf}} object is returned. Else, if \code{as.data.frame}, then a \code{data.frame} is returned, else a list.
 #' @export

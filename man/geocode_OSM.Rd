@@ -31,7 +31,7 @@ geocode_OSM(
 
 \item{as.sf}{Return the output as \code{\link[sf:sf]{sf}} object. If \code{TRUE}, \code{return.first.only} will be set to \code{TRUE}. Two geometry columns are added: \code{bbox} and \code{point}. The argument \code{geometry} determines which of them is set to the default geometry.}
 
-\item{geometry}{When \code{as.sf}, this arugment determines which column (\code{bbox} or \code{point}) is set as geometry column. Note that the geometry can be changed afterwards with \code{\link[sf:st_set_geometry]{st_set_geometry}}.}
+\item{geometry}{When \code{as.sf}, this arugment determines which column (\code{bbox} or \code{point}) is set as geometry column. Note that the geometry can be changed afterwards with \code{\link[sf:st_geometry]{st_set_geometry}}.}
 
 \item{server}{OpenStreetMap Nominatim server name. Could also be a local OSM Nominatim server.}
 }
