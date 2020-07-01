@@ -27,6 +27,6 @@ if (require(shiny) && require(shinyjs)) {
 \url{http://www.color-blindness.com/types-of-color-blindness/}
 }
 \seealso{
-\code{\link{get_brewer_pal}}, \code{\link[dichromat:dichromat]{dichromat}}, \code{\link[RColorBrewer:RColorBrewer]{RColorBrewer}}
+\code{\link{get_brewer_pal}}, \code{\link[dichromat:dichromat]{dichromat}}, \code{\link[RColorBrewer:brewer.pal]{RColorBrewer}}
 }
 \keyword{datasets}

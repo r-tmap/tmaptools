@@ -14,7 +14,7 @@ map_coloring(
 )
 }
 \arguments{
-\item{x}{Either a shape (i.e. a \code{\link[sf:sf]{sf}} or \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}} object), or an adjacency list.}
+\item{x}{Either a shape (i.e. a \code{\link[sf:sf]{sf}} or \code{SpatialPolygons(DataFrame)} (\code{sp} package) object), or an adjacency list.}
 
 \item{algorithm}{currently, only "greedy" is implemented.}
 

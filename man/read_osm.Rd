@@ -11,7 +11,6 @@ read_osm(
   minNumTiles = NULL,
   mergeTiles = NULL,
   use.colortable = FALSE,
-  raster,
   ...
 )
 }
@@ -27,8 +26,6 @@ read_osm(
 \item{mergeTiles}{passed on to \code{\link[OpenStreetMap:openmap]{openmap}} Only applicable when \code{raster=TRUE}.}
 
 \item{use.colortable}{should the colors of the returned raster object be stored in a \code{\link[raster:colortable]{colortable}}? If \code{FALSE}, a RasterStack is returned with three layers that correspond to the red, green and blue values betweeen 0 and 255.}
-
-\item{raster}{deprecated}
 
 \item{...}{arguments passed on to \code{\link{bb}}.}
 }

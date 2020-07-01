@@ -10,21 +10,14 @@
 #' @param minNumTiles passed on to \code{\link[OpenStreetMap:openmap]{openmap}} Only applicable when \code{raster=TRUE}.
 #' @param mergeTiles passed on to \code{\link[OpenStreetMap:openmap]{openmap}} Only applicable when \code{raster=TRUE}.
 #' @param use.colortable should the colors of the returned raster object be stored in a \code{\link[raster:colortable]{colortable}}? If \code{FALSE}, a RasterStack is returned with three layers that correspond to the red, green and blue values betweeen 0 and 255.
-#' @param raster deprecated
 #' @param ... arguments passed on to \code{\link{bb}}.
 #' @name read_osm
 #' @rdname read_osm
-#' @importFrom raster raster
 #' @export
 #' @example ./examples/read_osm.R
 #' @return The output of \code{read_osm} is a \code{\link[raster:raster]{raster}} object.
-read_osm <- function(x, zoom=NULL, type="osm", minNumTiles=NULL, mergeTiles=NULL, use.colortable = FALSE, raster, ...) {
+read_osm <- function(x, zoom=NULL, type="osm", minNumTiles=NULL, mergeTiles=NULL, use.colortable = FALSE, ...) {
 	if (!get(".internet", envir = .TMAPTOOLS_CACHE)) stop("No internet connection found.")
-
-    if (!missing(raster)) {
-        warning("The argument raster is deprecated, since read_osm only returns raster as of tmaptools version 2.0 (see details section in the documentation)")
-        if (!raster) stop("Reading vectorized OSM data is not implemented anymore. Please use the osmdata package.")
-    }
 
 	# @importFrom OpenStreetMap openmap
 	k <- v <- NULL

@@ -7,13 +7,13 @@
 get_brewer_pal(palette, n = 5, contrast = NA, stretch = TRUE, plot = TRUE)
 }
 \arguments{
-\item{palette}{name of the color brewer palette. Run \code{\link{palette_explorer}} (or \code{\link[RColorBrewer:display.brewer.pal]{display.brewer.pal}}) for options.}
+\item{palette}{name of the color brewer palette. Run \code{\link{palette_explorer}} or see \code{\link[RColorBrewer:brewer.pal]{brewer.pal}} for options.}
 
 \item{n}{number of colors}
 
 \item{contrast}{a vector of two numbers between 0 and 1 that defines the contrast range of the palette. Applicable to sequential and diverging palettes. For sequential palettes, 0 stands for the leftmost color and 1 the rightmost color. For instance, when \code{contrast=c(.25, .75)}, then the palette ranges from 1/4 to 3/4 of the available color range. For diverging palettes, 0 stands for the middle color and 1 for both outer colors. If only one number is provided, the other number is set to 0. The default value depends on \code{n}. See details.}
 
-\item{stretch}{logical that determines whether intermediate colors are used for a cateogorical palette when \code{n} is greater than the number of available colors.}
+\item{stretch}{logical that determines whether intermediate colors are used for a categorical palette when \code{n} is greater than the number of available colors.}
 
 \item{plot}{should the palette be plot, or only returned? If \code{TRUE} the palette is silently returned.}
 }

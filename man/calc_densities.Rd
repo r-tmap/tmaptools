@@ -14,7 +14,7 @@ calc_densities(
 )
 }
 \arguments{
-\item{shp}{a shape object, i.e., an \code{\link[sf:sf]{sf}} object or a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}}
+\item{shp}{a shape object, i.e., an \code{\link[sf:sf]{sf}} object or a \code{SpatialPolygons(DataFrame)} from the \code{sp} package.}
 
 \item{var}{name(s) of a qualtity variable name contained in the \code{shp} data}
 

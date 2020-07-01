@@ -7,7 +7,7 @@
 get_neighbours(x)
 }
 \arguments{
-\item{x}{a shape object, i.e., a \code{\link[sf:sf]{sf}} object or a \code{\link[sp:SpatialPolygonsDataFrame]{SpatialPolygons(DataFrame)}}.}
+\item{x}{a shape object, i.e., a \code{\link[sf:sf]{sf}} object or a \code{SpatialPolygons(DataFrame)} (\code{sp} package).}
 }
 \value{
 A list where the items correspond to the features. Each item is a vector of neighbours.

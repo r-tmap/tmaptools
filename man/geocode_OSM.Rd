@@ -19,7 +19,7 @@ geocode_OSM(
 \arguments{
 \item{q}{a character (vector) that specifies a search query. For instance \code{"India"} or \code{"CBS Weg 11, Heerlen, Netherlands"}.}
 
-\item{projection}{projection in which the coordinates and bounding box are returned. Either a \code{\link[sp:CRS]{CRS}} object or a character value. If it is a character, it can either be a \code{PROJ.4} character string or a shortcut. See \code{\link{get_proj4}} for a list of shortcut values. By default latitude longitude coordinates.}
+\item{projection}{projection in which the coordinates and bounding box are returned. See \code{\link[sf:st_crs]{st_crs}} for details. By default latitude longitude coordinates (EPSG 4326).}
 
 \item{return.first.only}{Only return the first result}
 
@@ -36,7 +36,7 @@ geocode_OSM(
 \item{server}{OpenStreetMap Nominatim server name. Could also be a local OSM Nominatim server.}
 }
 \value{
-If \code{as.SPDF} then a \code{\link[sp:SpatialPointsDataFrame]{SpatialPointsDataFrame}} is returned. Else, if \code{as.data.frame}, then a \code{data.frame} is returned, else a list.
+If \code{as.sf} then a \code{\link[sf:sf]{sf}} object is returned. Else, if \code{as.data.frame}, then a \code{data.frame} is returned, else a list.
 }
 \description{
 Geocodes a location (based on a search query) to coordinates and a bounding box. Similar to geocode from the ggmap package. It uses OpenStreetMap Nominatim. For processing large amount of queries, please read the usage policy (\url{http://wiki.openstreetmap.org/wiki/Nominatim_usage_policy}).

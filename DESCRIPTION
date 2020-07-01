@@ -1,13 +1,13 @@
 Package: tmaptools
 Type: Package
 Title: Thematic Map Tools
-Version: 3.0-1
+Version: 3.1
 Authors@R: person("Martijn", "Tennekes", email = "mtennekes@gmail.com", role = c("aut", "cre"))
 Description: Set of tools for reading and processing spatial data. The aim is to supply the workflow to create thematic maps. This package also facilitates 'tmap', the package for visualizing thematic maps.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Date: 2020-06-30
+Date: 2020-07-01
 Depends:
     R (>= 3.5),
     methods
@@ -17,9 +17,7 @@ Imports:
     stars (>= 0.4-1),
     units (>= 0.6-1),
     grid,
-    raster (>= 2.7-15),
     classInt,
-    KernSmooth,
     magrittr,
     RColorBrewer,
     viridisLite,
@@ -31,6 +29,7 @@ Suggests:
     rmapshaper,
     osmdata,
     OpenStreetMap,
+    raster,
     png,
     shiny,
     shinyjs

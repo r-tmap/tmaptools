@@ -105,7 +105,7 @@ is_light <- function(col) {
 #' @name palette_explorer
 #' @rdname palette_explorer
 #' @example ./examples/palette_explorer.R
-#' @seealso \code{\link{get_brewer_pal}}, \code{\link[dichromat:dichromat]{dichromat}}, \code{\link[RColorBrewer:RColorBrewer]{RColorBrewer}}
+#' @seealso \code{\link{get_brewer_pal}}, \code{\link[dichromat:dichromat]{dichromat}}, \code{\link[RColorBrewer:brewer.pal]{RColorBrewer}}
 #' @references \url{http://www.color-blindness.com/types-of-color-blindness/}
 palette_explorer <- function() {
     if (!requireNamespace("shiny")) stop("shiny package needed for this function to work. Please install it.", call. = FALSE)
