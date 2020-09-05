@@ -77,8 +77,8 @@ approx_distances <- function(x, y = NULL, projection = NULL, target = NULL) {
 
 get_distance <- function(p1, p2) {
     tryCatch(sf::st_distance(p1, p2)[1,1], error = function(e) {
-        p1ll <- lwgeom::st_transform_proj(p1, crs = 4326)
-        p2ll <- lwgeom::st_transform_proj(p2, crs = 4326)
+        p1ll <- lwgeom::st_transform_proj(p1, crs = st_crs(4326))
+        p2ll <- lwgeom::st_transform_proj(p2, crs = st_crs(4326))
         lwgeom::st_geod_distance(p1ll, p2ll)[1,1]
     })
 }

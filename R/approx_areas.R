@@ -34,7 +34,7 @@ approx_areas <- function(shp, target="metric", total.area=NULL) {
 
     areas <- tryCatch(sf::st_area(shp),
                   error = function(e) {
-                      lwgeom::st_geod_area(lwgeom::st_transform_proj(shp, crs = 4326))
+                      lwgeom::st_geod_area(lwgeom::st_transform_proj(shp, crs = st_crs(4326)))
                   })
 
     if (target == "prop") {
