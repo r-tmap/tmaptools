@@ -35,4 +35,4 @@ Suggests:
     shinyjs
 URL: https://github.com/mtennekes/tmaptools
 BugReports: https://github.com/mtennekes/tmaptools/issues
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
