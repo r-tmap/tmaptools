@@ -1,6 +1,6 @@
 #' Geocodes a location using OpenStreetMap Nominatim
 #'
-#' Geocodes a location (based on a search query) to coordinates and a bounding box. Similar to geocode from the ggmap package. It uses OpenStreetMap Nominatim. For processing large amount of queries, please read the usage policy (\url{http://wiki.openstreetmap.org/wiki/Nominatim_usage_policy}).
+#' Geocodes a location (based on a search query) to coordinates and a bounding box. Similar to geocode from the ggmap package. It uses OpenStreetMap Nominatim. For processing large amount of queries, please read the usage policy (\url{https://operations.osmfoundation.org/policies/nominatim/}).
 #'
 #' @param q a character (vector) that specifies a search query. For instance \code{"India"} or \code{"CBS Weg 11, Heerlen, Netherlands"}.
 #' @param projection projection in which the coordinates and bounding box are returned. See \code{\link[sf:st_crs]{st_crs}} for details. By default latitude longitude coordinates (EPSG 4326).
@@ -9,7 +9,7 @@
 #' @param details provide output details, other than the point coordinates and bounding box
 #' @param as.data.frame Return the output as a \code{data.frame}. If \code{FALSE}, a list is returned with at least two items: \code{"coords"}, a vector containing the coordinates, and \code{"bbox"}, the corresponding bounding box. By default false, unless \code{q} contains multiple queries. If \code{as.sf = TRUE} (see below), \code{as.data.frame} will set to \code{TRUE}.
 #' @param as.sf Return the output as \code{\link[sf:sf]{sf}} object. If \code{TRUE}, \code{return.first.only} will be set to \code{TRUE}. Two geometry columns are added: \code{bbox} and \code{point}. The argument \code{geometry} determines which of them is set to the default geometry.
-#' @param geometry When \code{as.sf}, this arugment determines which column (\code{bbox} or \code{point}) is set as geometry column. Note that the geometry can be changed afterwards with \code{\link[sf:st_geometry]{st_set_geometry}}.
+#' @param geometry When \code{as.sf}, this argument determines which column (\code{bbox} or \code{point}) is set as geometry column. Note that the geometry can be changed afterwards with \code{\link[sf:st_geometry]{st_set_geometry}}.
 #' @param server OpenStreetMap Nominatim server name. Could also be a local OSM Nominatim server.
 #' @return If \code{as.sf} then a \code{\link[sf:sf]{sf}} object is returned. Else, if \code{as.data.frame}, then a \code{data.frame} is returned, else a list.
 #' @export
@@ -164,7 +164,7 @@ geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, keep.unfound
 
 #' Reverse geocodes a location using OpenStreetMap Nominatim
 #'
-#' Reverse geocodes a location (based on spatial coordinates) to an address. It uses OpenStreetMap Nominatim. For processing large amount of queries, please read the usage policy (\url{http://wiki.openstreetmap.org/wiki/Nominatim_usage_policy}).
+#' Reverse geocodes a location (based on spatial coordinates) to an address. It uses OpenStreetMap Nominatim. For processing large amount of queries, please read the usage policy (\url{https://operations.osmfoundation.org/policies/nominatim/}).
 #'
 #' @param x x coordinate(s), or a spatial points object (\code{\link[sf:sf]{sf}} or \code{\link[sp:SpatialPoints]{SpatialPoints}})
 #' @param y y coordinate(s)
@@ -174,7 +174,7 @@ geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, keep.unfound
 #' @param server OpenStreetMap Nominatim server name. Could also be a local OSM Nominatim server.
 #' @export
 #' @importFrom XML xmlChildren xmlRoot xmlAttrs xmlTreeParse xmlValue
-#' @return A data frmame or a list with all atributes that are contained in the search result
+#' @return A data frame or a list with all attributes that are contained in the search result
 #' @example ./examples/rev_geocode_OSM.R
 #' @seealso \code{\link{geocode_OSM}}
 rev_geocode_OSM <- function(x, y=NULL, zoom=NULL, projection=4326, as.data.frame=NA, server="http://nominatim.openstreetmap.org") {

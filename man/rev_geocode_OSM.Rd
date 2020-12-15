@@ -27,10 +27,10 @@ rev_geocode_OSM(
 \item{server}{OpenStreetMap Nominatim server name. Could also be a local OSM Nominatim server.}
 }
 \value{
-A data frmame or a list with all atributes that are contained in the search result
+A data frame or a list with all attributes that are contained in the search result
 }
 \description{
-Reverse geocodes a location (based on spatial coordinates) to an address. It uses OpenStreetMap Nominatim. For processing large amount of queries, please read the usage policy (\url{http://wiki.openstreetmap.org/wiki/Nominatim_usage_policy}).
+Reverse geocodes a location (based on spatial coordinates) to an address. It uses OpenStreetMap Nominatim. For processing large amount of queries, please read the usage policy (\url{https://operations.osmfoundation.org/policies/nominatim/}).
 }
 \examples{
 \dontrun{
