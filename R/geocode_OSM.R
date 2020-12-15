@@ -17,7 +17,7 @@
 #' @importFrom stars st_as_stars
 #' @example ./examples/geocode_OSM.R
 #' @seealso \code{\link{rev_geocode_OSM}}, \code{\link{bb}}
-geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, keep.unfound = FALSE, details=FALSE, as.data.frame=NA, as.sf=FALSE, geometry=c("point", "bbox"), server="http://nominatim.openstreetmap.org") {
+geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, keep.unfound = FALSE, details=FALSE, as.data.frame=NA, as.sf=FALSE, geometry=c("point", "bbox"), server="https://nominatim.openstreetmap.org") {
     n <- length(q)
 	q2 <- gsub(" ", "+", enc2utf8(q), fixed = TRUE)
 	addr <- paste0(server, "/search?q=", q2, "&format=xml&polygon=0&addressdetails=0")
@@ -177,7 +177,7 @@ geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, keep.unfound
 #' @return A data frame or a list with all attributes that are contained in the search result
 #' @example ./examples/rev_geocode_OSM.R
 #' @seealso \code{\link{geocode_OSM}}
-rev_geocode_OSM <- function(x, y=NULL, zoom=NULL, projection=4326, as.data.frame=NA, server="http://nominatim.openstreetmap.org") {
+rev_geocode_OSM <- function(x, y=NULL, zoom=NULL, projection=4326, as.data.frame=NA, server="https://nominatim.openstreetmap.org") {
 
 	project <- !missing(projection)
 

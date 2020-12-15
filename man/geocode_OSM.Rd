@@ -13,7 +13,7 @@ geocode_OSM(
   as.data.frame = NA,
   as.sf = FALSE,
   geometry = c("point", "bbox"),
-  server = "http://nominatim.openstreetmap.org"
+  server = "https://nominatim.openstreetmap.org"
 )
 }
 \arguments{

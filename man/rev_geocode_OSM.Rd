@@ -10,7 +10,7 @@ rev_geocode_OSM(
   zoom = NULL,
   projection = 4326,
   as.data.frame = NA,
-  server = "http://nominatim.openstreetmap.org"
+  server = "https://nominatim.openstreetmap.org"
 )
 }
 \arguments{
