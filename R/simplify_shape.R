@@ -6,8 +6,8 @@
 #'
 #' @param shp an \code{\link[sf:sf]{sf}} or \code{\link[sf:sfc]{sfc}}  object.
 #' @param fact simplification factor, number between 0 and 1 (default is 0.1)
-#' @param keep.units d
-#' @param keep.subunits d
+#' @param keep.units prevent small polygon features from disappearing at high simplification (default FALSE)
+#' @param keep.subunits should multipart polygons be converted to singlepart polygons? This prevents small shapes from disappearing during simplification if keep.units = TRUE. Default FALSE
 #' @param ... other arguments passed on to the underlying function \code{\link[rmapshaper:ms_simplify]{ms_simplify}} (except for the arguments \code{input}, \code{keep}, \code{keep_shapes} and \code{explode})
 #' @example ./examples/simplify_shape.R
 #' @return \code{\link[sf:sf]{sf}} object

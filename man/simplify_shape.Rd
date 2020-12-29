@@ -11,9 +11,9 @@ simplify_shape(shp, fact = 0.1, keep.units = FALSE, keep.subunits = FALSE, ...)
 
 \item{fact}{simplification factor, number between 0 and 1 (default is 0.1)}
 
-\item{keep.units}{d}
+\item{keep.units}{prevent small polygon features from disappearing at high simplification (default FALSE)}
 
-\item{keep.subunits}{d}
+\item{keep.subunits}{should multipart polygons be converted to singlepart polygons? This prevents small shapes from disappearing during simplification if keep.units = TRUE. Default FALSE}
 
 \item{...}{other arguments passed on to the underlying function \code{\link[rmapshaper:ms_simplify]{ms_simplify}} (except for the arguments \code{input}, \code{keep}, \code{keep_shapes} and \code{explode})}
 }
