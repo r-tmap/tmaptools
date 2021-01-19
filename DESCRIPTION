@@ -1,13 +1,13 @@
 Package: tmaptools
 Type: Package
 Title: Thematic Map Tools
-Version: 3.1
+Version: 3.1-1
 Authors@R: person("Martijn", "Tennekes", email = "mtennekes@gmail.com", role = c("aut", "cre"))
 Description: Set of tools for reading and processing spatial data. The aim is to supply the workflow to create thematic maps. This package also facilitates 'tmap', the package for visualizing thematic maps.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Date: 2020-07-01
+Date: 2021-01-19
 Depends:
     R (>= 3.5),
     methods
