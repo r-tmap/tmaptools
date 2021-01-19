@@ -17,7 +17,6 @@ Imports:
     stars (>= 0.4-1),
     units (>= 0.6-1),
     grid,
-    classInt,
     magrittr,
     RColorBrewer,
     viridisLite,

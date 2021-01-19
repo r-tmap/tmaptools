@@ -10,7 +10,7 @@
 #' @param height See details; only applicable if \code{x} is a \code{\link[tmap:tmap-element]{tmap}} object.
 #' @param res See details; only applicable if \code{x} is a \code{\link[tmap:tmap-element]{tmap}} object.
 #' @return aspect ratio
-#' @importFrom grDevices colorRampPalette dev.off png rgb
+#' @importFrom grDevices colorRampPalette dev.off png rgb col2rgb
 #' @importFrom methods as
 #' @importFrom stats aggregate na.omit
 #' @importFrom utils download.file

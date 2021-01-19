@@ -24,7 +24,7 @@ if (require(shiny) && require(shinyjs)) {
 }
 }
 \references{
-\url{http://www.color-blindness.com/types-of-color-blindness/}
+\url{https://www.color-blindness.com/types-of-color-blindness/}
 }
 \seealso{
 \code{\link{get_brewer_pal}}, \code{\link[dichromat:dichromat]{dichromat}}, \code{\link[RColorBrewer:ColorBrewer]{RColorBrewer}}
