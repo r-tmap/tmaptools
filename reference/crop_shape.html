@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">tmaptools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.1-1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,7 +77,7 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://r-tmap.github.io/tmap/" class="external-link">tmap</a></span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span><span class="op">(</span><span class="st">"tmap"</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="st">"2.0"</span><span class="op">)</span> <span class="op">{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://r-tmap.github.io/tmap/" class="external-link">tmap</a></span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span><span class="op">(</span><span class="st">"tmap"</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="st">"3.99"</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">World</span>, <span class="va">NLD_muni</span>, <span class="va">land</span>, <span class="va">metro</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co">#land_NLD &lt;- crop_shape(land, NLD_muni)</span></span></span>
@@ -88,11 +88,11 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/qtm.html" class="external-link">qtm</a></span><span class="op">(</span><span class="va">World</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">metro_Europe</span><span class="op">)</span> <span class="op">+</span></span></span>
-<span class="r-in"><span>      <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_symbols.html" class="external-link">tm_bubbles</a></span><span class="op">(</span><span class="st">"pop2010"</span>, col<span class="op">=</span><span class="st">"red"</span>, title.size<span class="op">=</span><span class="st">"European cities"</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_symbols.html" class="external-link">tm_bubbles</a></span><span class="op">(</span><span class="st">"pop2010"</span>,</span></span>
+<span class="r-in"><span>                 col<span class="op">=</span><span class="st">"red"</span>,</span></span>
+<span class="r-in"><span>                 size.legend <span class="op">=</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_layout.html" class="external-link">tm_legend</a></span><span class="op">(</span><span class="st">"European cities"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>      <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_layout.html" class="external-link">tm_legend</a></span><span class="op">(</span>frame<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> old-style crs object detected; please recreate object with a recent sf::st_crs()</span>
-<span class="r-plt img"><img src="crop_shape-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
