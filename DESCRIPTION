@@ -32,6 +32,6 @@ Suggests:
     png,
     shiny,
     shinyjs
-URL: https://github.com/r-tmap/tmaptools
+URL: https://github.com/r-tmap/tmaptools, https://r-tmap.github.io/tmaptools/
 BugReports: https://github.com/r-tmap/tmaptools/issues
-RoxygenNote: 7.1.1
+RoxygenNote: 7.3.2

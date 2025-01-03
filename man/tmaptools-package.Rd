@@ -2,8 +2,8 @@
 % Please edit documentation in R/pkg.R
 \docType{package}
 \name{tmaptools-package}
-\alias{tmaptools-package}
 \alias{tmaptools}
+\alias{tmaptools-package}
 \title{Thematic Map Tools}
 \description{
 This package offers a set of handy tool functions for reading and processing spatial data. The aim of these functions is to supply the workflow to create thematic maps, e.g. read shape files, set map projections, append data, calculate areas and distances, and query OpenStreetMap. The visualization of thematic maps can be done with the tmap package.
@@ -53,8 +53,18 @@ This page provides a brief overview of all package functions.
 }
 }
 
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/r-tmap/tmaptools}
+  \item \url{https://r-tmap.github.io/tmaptools/}
+  \item Report bugs at \url{https://github.com/r-tmap/tmaptools/issues}
+}
+
+}
 \author{
-Martijn Tennekes \email{mtennekes@gmail.com}
+\strong{Maintainer}: Martijn Tennekes \email{mtennekes@gmail.com}
+
 }
 \concept{GIS}
 \concept{spatial data}

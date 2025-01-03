@@ -38,3 +38,4 @@ vignettes/*.pdf
 
 # R Profile
 .Rprofile
+docs

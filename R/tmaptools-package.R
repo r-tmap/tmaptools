@@ -38,14 +38,10 @@
 #' --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
 #' }
 #'
-#' @name tmaptools-package
-#' @aliases tmaptools
-#' @docType package
-#' @author Martijn Tennekes \email{mtennekes@@gmail.com}
 #' @concept GIS
 #' @concept thematic maps
 #' @concept spatial data
-NULL
+"_PACKAGE"
 
 #' Pipe operator
 #'
