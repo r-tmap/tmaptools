@@ -20,7 +20,7 @@ calc_densities <- function(shp, var, target="metric", total.area=NULL, suffix=NA
 
 	areas <- approx_areas(shp, target = target, total.area=total.area)
 
-	areas_unit <- attr(areas, "unit")
+	areas_unit <- attr(areas, "units")
 
 	if (is.na(suffix)) suffix <- paste("_", sub(" ", replacement = "_", areas_unit), sep = "")
 
