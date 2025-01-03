@@ -102,8 +102,8 @@ if (require(tmap) && packageVersion("tmap") >= "2.0") {
 
 \dontrun{
 if (require(tmap)) {
-    bb("Limburg", projection = "rd")
-    bb_italy <- bb("Italy", projection = "eck4")
+    bb("Limburg", projection = 28992)
+    bb_italy <- bb("Italy", projection = "+proj=eck4")
 
     tm_shape(World, bbox=bb_italy) + tm_polygons()
     # shorter alternative: tm_shape(World, bbox="Italy") + tm_polygons()

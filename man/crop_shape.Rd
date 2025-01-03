@@ -25,7 +25,7 @@ Crop a shape object (from class \code{\link[sf:sf]{sf}}, \code{\link[stars:st_as
 This function is similar to \code{crop} from the \code{raster} package. The main difference is that \code{crop_shape} also allows to crop using a polygon instead of a rectangle.
 }
 \examples{
-if (require(tmap) && packageVersion("tmap") >= "2.0") {
+if (require(tmap) && packageVersion("tmap") >= "3.99") {
     data(World, NLD_muni, land, metro)
 
     #land_NLD <- crop_shape(land, NLD_muni)
@@ -36,7 +36,9 @@ if (require(tmap) && packageVersion("tmap") >= "2.0") {
 
     qtm(World) +
     tm_shape(metro_Europe) +
-    	tm_bubbles("pop2010", col="red", title.size="European cities") +
+    	tm_bubbles("pop2010",
+    	           col="red",
+    	           size.legend = tm_legend("European cities")) +
     	tm_legend(frame=TRUE)
 }
 }

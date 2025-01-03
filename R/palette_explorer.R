@@ -95,7 +95,9 @@ is_light <- function(col) {
 
 
 
-#' Explore color palettes
+#' Explore color palettes (deprecated)
+#'
+#' This interactive tool has become deprecated and will not be maintained anymore. Please use \code{\link[cols4all:c4a_gui]{c4a_gui}} instead.
 #'
 #' \code{palette_explorer()} starts an interactive tool shows all Color Brewer and viridis palettes, where the number of colors can be adjusted as well as the constrast range. Categorical (qualitative) palettes can be stretched when the number of colors exceeds the number of palette colors. Output code needed to get the desired color values is generated. Finally, all colors can be tested for color blindness. The data.frame \code{tmap.pal.info} is similar to \code{\link[RColorBrewer:ColorBrewer]{brewer.pal.info}}, but extended with the color palettes from viridis.
 #' @export
@@ -110,6 +112,8 @@ is_light <- function(col) {
 palette_explorer <- function() {
     if (!requireNamespace("shiny")) stop("shiny package needed for this function to work. Please install it.", call. = FALSE)
     if (!requireNamespace("shinyjs")) stop("shinyjs package needed for this function to work. Please install it.", call. = FALSE)
+
+    message("This tool is deprecated; please use cols4all::c4a_gui() instead")
 
     shiny::shinyApp(ui = shiny::fluidPage(
             shinyjs::useShinyjs(),

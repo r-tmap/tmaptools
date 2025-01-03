@@ -4,7 +4,7 @@
 \name{palette_explorer}
 \alias{palette_explorer}
 \alias{tmap.pal.info}
-\title{Explore color palettes}
+\title{Explore color palettes (deprecated)}
 \format{
 An object of class \code{data.frame} with 40 rows and 4 columns.
 }
@@ -14,6 +14,9 @@ palette_explorer()
 tmap.pal.info
 }
 \description{
+This interactive tool has become deprecated and will not be maintained anymore. Please use \code{\link[cols4all:c4a_gui]{c4a_gui}} instead.
+}
+\details{
 \code{palette_explorer()} starts an interactive tool shows all Color Brewer and viridis palettes, where the number of colors can be adjusted as well as the constrast range. Categorical (qualitative) palettes can be stretched when the number of colors exceeds the number of palette colors. Output code needed to get the desired color values is generated. Finally, all colors can be tested for color blindness. The data.frame \code{tmap.pal.info} is similar to \code{\link[RColorBrewer:ColorBrewer]{brewer.pal.info}}, but extended with the color palettes from viridis.
 }
 \examples{
