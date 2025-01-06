@@ -24,7 +24,7 @@ Imports:
     dichromat,
     XML
 Suggests:
-    tmap (>= 3.0),
+    tmap (>= 3.99),
     cols4all,
     rmapshaper,
     osmdata,
@@ -36,3 +36,4 @@ Suggests:
 URL: https://github.com/r-tmap/tmaptools, https://r-tmap.github.io/tmaptools/
 BugReports: https://github.com/r-tmap/tmaptools/issues
 RoxygenNote: 7.3.2
+Remotes: r-tmap/tmap
