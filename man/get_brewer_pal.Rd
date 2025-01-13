@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_brewer_pal.R
 \name{get_brewer_pal}
 \alias{get_brewer_pal}
-\title{Get and plot a (modified) Color Brewer palette}
+\title{Get and plot a (modified) Color Brewer palette (deprecated)}
 \usage{
 get_brewer_pal(palette, n = 5, contrast = NA, stretch = TRUE, plot = TRUE)
 }
@@ -21,7 +21,7 @@ get_brewer_pal(palette, n = 5, contrast = NA, stretch = TRUE, plot = TRUE)
 vector of color values. It is silently returned when \code{plot=TRUE}.
 }
 \description{
-Get and plot a (modified) palette from Color Brewer. In addition to the base function \code{\link[RColorBrewer:ColorBrewer]{brewer.pal}}, a palette can be created for any number of classes. The contrast of the palette can be adjusted for sequential and diverging palettes. For categorical palettes, intermediate colors can be generated. An interactive tool that uses this function is \code{\link{palette_explorer}}.
+Get and plot a (modified) palette from Color Brewer. This function is deprecated. Please use \code{\link[cols4all:c4a]{c4a}} instead.
 }
 \details{
 The default contrast of the palette depends on the number of colors, \code{n}, in the following way. The default contrast is maximal, so \code{(0, 1)}, when \code{n = 9} for sequential palettes and \code{n = 11} for diverging palettes. The default contrast values for smaller values of \code{n} can be extracted with some R magic: \code{sapply(1:9, tmaptools:::default_contrast_seq)} for sequential palettes and \code{sapply(1:11, tmaptools:::default_contrast_div)} for diverging palettes.

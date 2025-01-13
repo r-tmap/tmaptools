@@ -1,6 +1,6 @@
-#' Get and plot a (modified) Color Brewer palette
+#' Get and plot a (modified) Color Brewer palette (deprecated)
 #'
-#' Get and plot a (modified) palette from Color Brewer. In addition to the base function \code{\link[RColorBrewer:ColorBrewer]{brewer.pal}}, a palette can be created for any number of classes. The contrast of the palette can be adjusted for sequential and diverging palettes. For categorical palettes, intermediate colors can be generated. An interactive tool that uses this function is \code{\link{palette_explorer}}.
+#' Get and plot a (modified) palette from Color Brewer. This function is deprecated. Please use \code{\link[cols4all:c4a]{c4a}} instead.
 #'
 #' The default contrast of the palette depends on the number of colors, \code{n}, in the following way. The default contrast is maximal, so \code{(0, 1)}, when \code{n = 9} for sequential palettes and \code{n = 11} for diverging palettes. The default contrast values for smaller values of \code{n} can be extracted with some R magic: \code{sapply(1:9, tmaptools:::default_contrast_seq)} for sequential palettes and \code{sapply(1:11, tmaptools:::default_contrast_div)} for diverging palettes.
 #'
@@ -16,6 +16,9 @@
 #' @importFrom RColorBrewer brewer.pal brewer.pal.info
 #' @export
 get_brewer_pal <- function(palette, n=5, contrast=NA, stretch=TRUE, plot=TRUE) {
+
+    message("This function is deprecated; please use cols4all::c4a() instead")
+
     call <- names(match.call(expand.dots = TRUE)[-1])
 
     reverse <- (substr(palette, 1, 1) == "-")

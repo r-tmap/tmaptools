@@ -1,3 +1,7 @@
+# version 3.2
+- examples updated with tmap4
+- deprecated some functions
+
 # version 3.1-1
 - fixed minor bugs (see github)
 
