@@ -172,12 +172,13 @@ geocode_OSM <- function(q, projection=NULL, return.first.only=TRUE, keep.unfound
 #' @param projection projection in which the coordinates \code{x} and \code{y} are provided.
 #' @param as.data.frame return as data.frame (\code{TRUE}) or list (\code{FALSE}). By default a list, unless multiple coordinates are provided.
 #' @param server OpenStreetMap Nominatim server name. Could also be a local OSM Nominatim server.
+#' @param params Additional parameters to pass to server.  (must start with &), ex: "&accept-language=en" to return english rather than local language results.
 #' @export
 #' @importFrom XML xmlChildren xmlRoot xmlAttrs xmlTreeParse xmlValue
 #' @return A data frame or a list with all attributes that are contained in the search result
 #' @example ./examples/rev_geocode_OSM.R
 #' @seealso \code{\link{geocode_OSM}}
-rev_geocode_OSM <- function(x, y=NULL, zoom=NULL, projection=4326, as.data.frame=NA, server="https://nominatim.openstreetmap.org") {
+rev_geocode_OSM <- function(x, y=NULL, zoom=NULL, projection=4326, as.data.frame=NA, server="https://nominatim.openstreetmap.org",params=NULL) {
 
 	project <- !missing(projection)
 
@@ -224,7 +225,7 @@ rev_geocode_OSM <- function(x, y=NULL, zoom=NULL, projection=4326, as.data.frame
 		strzoom <- paste0(", zoom = ", zoom)
 	}
 
-	addr <- paste0(server, "/reverse?format=xml&lat=", lat, "&lon=", lon, qzoom, "&addressdetails=1")
+	addr <- paste0(server, "/reverse?format=xml&lat=", lat, "&lon=", lon, qzoom, "&addressdetails=1",params)
 
 
 	dfs <- lapply(1:n, function(i) {
