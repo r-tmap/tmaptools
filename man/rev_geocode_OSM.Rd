@@ -10,7 +10,8 @@ rev_geocode_OSM(
   zoom = NULL,
   projection = 4326,
   as.data.frame = NA,
-  server = "https://nominatim.openstreetmap.org"
+  server = "https://nominatim.openstreetmap.org",
+  params = NULL
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ rev_geocode_OSM(
 \item{as.data.frame}{return as data.frame (\code{TRUE}) or list (\code{FALSE}). By default a list, unless multiple coordinates are provided.}
 
 \item{server}{OpenStreetMap Nominatim server name. Could also be a local OSM Nominatim server.}
+
+\item{params}{Additional parameters to pass to server.  (must start with &), ex: "&accept-language=en" to return english rather than local language results.}
 }
 \value{
 A data frame or a list with all attributes that are contained in the search result
