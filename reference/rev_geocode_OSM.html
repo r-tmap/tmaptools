@@ -45,7 +45,8 @@
 <span>  zoom <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  projection <span class="op">=</span> <span class="fl">4326</span>,</span>
 <span>  as.data.frame <span class="op">=</span> <span class="cn">NA</span>,</span>
-<span>  server <span class="op">=</span> <span class="st">"https://nominatim.openstreetmap.org"</span></span>
+<span>  server <span class="op">=</span> <span class="st">"https://nominatim.openstreetmap.org"</span>,</span>
+<span>  params <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -75,6 +76,10 @@
 
 <dt id="arg-server">server<a class="anchor" aria-label="anchor" href="#arg-server"></a></dt>
 <dd><p>OpenStreetMap Nominatim server name. Could also be a local OSM Nominatim server.</p></dd>
+
+
+<dt id="arg-params">params<a class="anchor" aria-label="anchor" href="#arg-params"></a></dt>
+<dd><p>Additional parameters to pass to server.  (must start with &amp;), ex: "&amp;accept-language=en" to return english rather than local language results.</p></dd>
 
 </dl></div>
     <div class="section level2">
