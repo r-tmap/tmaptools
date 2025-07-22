@@ -4,14 +4,7 @@
 \alias{map_coloring}
 \title{Map coloring}
 \usage{
-map_coloring(
-  x,
-  algorithm = "greedy",
-  ncols = NA,
-  minimize = FALSE,
-  palette = NULL,
-  contrast = 1
-)
+map_coloring(x, algorithm = "greedy", ncols = NA, minimize = FALSE, ...)
 }
 \arguments{
 \item{x}{Either a shape (i.e. a \code{\link[sf:sf]{sf}} or \code{SpatialPolygons(DataFrame)} (\code{sp} package) object), or an adjacency list.}
@@ -22,25 +15,35 @@ map_coloring(
 
 \item{minimize}{logical that determines whether \code{algorithm} will search for a minimal number of colors. If \code{FALSE}, the \code{ncols} colors will be picked by a random procedure.}
 
-\item{palette}{color palette.}
-
-\item{contrast}{vector of two numbers that determine the range that is used for sequential and diverging palettes (applicable when \code{auto.palette.mapping=TRUE}). Both numbers should be between 0 and 1. The first number determines where the palette begins, and the second number where it ends. For sequential palettes, 0 means the brightest color, and 1 the darkest color. For diverging palettes, 0 means the middle color, and 1 both extremes. If only one number is provided, this number is interpreted as the endpoint (with 0 taken as the start).}
+\item{...}{to catch deprecated arguments \code{palette} and \code{contrast}. See details.}
 }
 \value{
-If \code{palette} is defined, a vector of colors is returned, otherwise a vector of color indices.
+A vector of color indices.
 }
 \description{
-Color the polygons of a map such that adjacent polygons have different colors
+Color the polygons of a map such that adjacent polygons have different colors. This function returns the color indices
+}
+\details{
+As of tmaptools 3.3, the deprecated color functions \code{get_brewer_pal} and \code{palette_explorer}, have been removed. These have been replaced \code{c4a} and \code{c4a_gui} respectively from the package cols4all. Therefore, \code{map_coloring} will return color indices and will ignore the input arguments \code{palette} and \code{contrast}. See example.
 }
 \examples{
-if (require(tmap) && packageVersion("tmap") >= "3.99") {
-    data(World, metro)
+if (require(tmap) && require(cols4all)) {
+    data(World)
 
-    World$color <- map_coloring(World, palette="Pastel2")
-    qtm(World, fill = "color")
+    ## using cols4all directly
+    indices <- map_coloring(World)
+    pal <- c4a("brewer.set2", n = max(indices))
+    World$color = pal[indices]
+    tm_shape(World) +
+        tm_polygons("color", fill.scale = tm_scale_asis()) +
+        tm_crs("auto")
 
-    # map_coloring used indirectly: qtm(World, fill = "MAP_COLORS")
+    # using map_coloring via "MAP_COLORS" in tmap
+    tm_shape(World) +
+        tm_polygons("MAP_COLORS", tm_scale(values = "brewer.set2")) +
+        tm_crs("auto")
 
+    # other example
     data(NLD_prov, NLD_muni)
     tm_shape(NLD_prov) +
     	tm_fill("name",

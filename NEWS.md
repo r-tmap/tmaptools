@@ -1,3 +1,7 @@
+# version 3.3
+- deprecated functions removed
+- bb target aspect ration added
+
 # version 3.2
 - examples updated with tmap4
 - deprecated some functions

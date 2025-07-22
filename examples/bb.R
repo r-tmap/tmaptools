@@ -1,4 +1,4 @@
-if (require(tmap) && packageVersion("tmap") >= "2.0") {
+if (require(tmap)) {
 
     ## load shapes
     data(NLD_muni)
@@ -10,14 +10,17 @@ if (require(tmap) && packageVersion("tmap") >= "2.0") {
     ## extent it by factor 1.10
     bb(NLD_muni, ext=1.10)
 
-    ## convert to longlat
-    bb(NLD_muni, projection=4326)
-
-    ## change existing bounding box
-    bb(NLD_muni, ext=1.5)
+    ## double the width
     bb(NLD_muni, width=2, relative = TRUE)
+
+    ## crop both dimensions from 0.25 to 0.75
     bb(NLD_muni, xlim=c(.25, .75), ylim=c(.25, .75), relative = TRUE)
 
+    ## extent it such that aspect ratio is 1
+    bb(NLD_muni, asp.target = 1)
+
+    ## convert to longlat (EPSG 4326)
+    bb(NLD_muni, projection=4326)
 }
 
 \dontrun{

@@ -1,11 +1,20 @@
-if (require(tmap) && packageVersion("tmap") >= "3.99") {
-    data(World, metro)
+if (require(tmap) && require(cols4all)) {
+    data(World)
 
-    World$color <- map_coloring(World, palette="Pastel2")
-    qtm(World, fill = "color")
+    ## using cols4all directly
+    indices <- map_coloring(World)
+    pal <- c4a("brewer.set2", n = max(indices))
+    World$color = pal[indices]
+    tm_shape(World) +
+        tm_polygons("color", fill.scale = tm_scale_asis()) +
+        tm_crs("auto")
 
-    # map_coloring used indirectly: qtm(World, fill = "MAP_COLORS")
+    # using map_coloring via "MAP_COLORS" in tmap
+    tm_shape(World) +
+        tm_polygons("MAP_COLORS", tm_scale(values = "brewer.set2")) +
+        tm_crs("auto")
 
+    # other example
     data(NLD_prov, NLD_muni)
     tm_shape(NLD_prov) +
     	tm_fill("name",

@@ -26,9 +26,7 @@ This page provides a brief overview of all package functions.
 \section{Tool functions (colors)}{
 
 \tabular{ll}{
-\code{\link{get_brewer_pal}}\tab Get and plot a (modified) Color Brewer palette \cr
 \code{\link{map_coloring}}\tab Find different colors for adjacent polygons \cr
-\code{\link{palette_explorer}}\tab Explore Color Brewer palettes \cr
 --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
 }
 }

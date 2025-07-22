@@ -11,7 +11,7 @@ approx_distances(x, y = NULL, projection = NULL, target = NULL)
 
 \item{y}{a pair of coordintes, vector of two. Only required when \code{x} is also a pair of coordintes.}
 
-\item{projection}{projection code, needed in case \code{x} is a bounding box or when \code{x} and \code{y} are pairs of coordinates. See \code{\link{get_proj4}}}
+\item{projection}{projection code, needed in case \code{x} is a bounding box or when \code{x} and \code{y} are pairs of coordinates.}
 
 \item{target}{target unit, one of:  \code{"m"}, \code{"km"}, \code{"mi"}, and \code{"ft"}.}
 }

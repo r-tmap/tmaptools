@@ -1,18 +1,19 @@
 #' Map coloring
 #'
-#' Color the polygons of a map such that adjacent polygons have different colors
+#' Color the polygons of a map such that adjacent polygons have different colors. This function returns the color indices
+#'
+#' As of tmaptools 3.3, the deprecated color functions \code{get_brewer_pal} and \code{palette_explorer}, have been removed. These have been replaced \code{c4a} and \code{c4a_gui} respectively from the package cols4all. Therefore, \code{map_coloring} will return color indices and will ignore the input arguments \code{palette} and \code{contrast}. See example.
 #'
 #' @param x Either a shape (i.e. a \code{\link[sf:sf]{sf}} or \code{SpatialPolygons(DataFrame)} (\code{sp} package) object), or an adjacency list.
 #' @param algorithm currently, only "greedy" is implemented.
 #' @param ncols number of colors. By default it is 8 when \code{palette} is undefined. Else, it is set to the length of \code{palette}
 #' @param minimize logical that determines whether \code{algorithm} will search for a minimal number of colors. If \code{FALSE}, the \code{ncols} colors will be picked by a random procedure.
-#' @param palette color palette.
-#' @param contrast vector of two numbers that determine the range that is used for sequential and diverging palettes (applicable when \code{auto.palette.mapping=TRUE}). Both numbers should be between 0 and 1. The first number determines where the palette begins, and the second number where it ends. For sequential palettes, 0 means the brightest color, and 1 the darkest color. For diverging palettes, 0 means the middle color, and 1 both extremes. If only one number is provided, this number is interpreted as the endpoint (with 0 taken as the start).
-#' @return If \code{palette} is defined, a vector of colors is returned, otherwise a vector of color indices.
+#' @param ... to catch deprecated arguments \code{palette} and \code{contrast}. See details.
+#' @return A vector of color indices.
 #' @example ./examples/map_coloring.R
 #' @import RColorBrewer
 #' @export
-map_coloring <- function(x, algorithm="greedy", ncols=NA, minimize=FALSE, palette=NULL, contrast=1) {
+map_coloring <- function(x, algorithm="greedy", ncols=NA, minimize=FALSE, ...) {
     if (inherits(x, "Spatial")) x <- as(x, "sf")
 	if (inherits(x, "sf")) {
 		# get adjacency list
@@ -21,21 +22,10 @@ map_coloring <- function(x, algorithm="greedy", ncols=NA, minimize=FALSE, palett
 		adj <- x
 	} else stop("Unknown x argument")
 
-	if (!is.null(palette)) {
-		# reverse palette
-		if (length(palette)==1 && substr(palette[1], 1, 1)=="-") {
-			revPal <- function(p)rev(p)
-			palette <- substr(palette, 2, nchar(palette))
-		} else revPal <- function(p)p
+    args= list(...)
+    if (any(c("palette", "contrast") %in% names(args))) warning("palette and contrast are not used anymore as of tmaptools 3.3. Please use cols4all: see manual")
 
-		if (palette[1] %in% rownames(RColorBrewer::brewer.pal.info)) {
-			if (is.na(ncols)) ncols <- RColorBrewer::brewer.pal.info[palette, "maxcolors"]
-			palette2 <- revPal(suppressWarnings(get_brewer_pal(palette, ncols, contrast, plot = FALSE)))
-		} else {
-			if (is.na(ncols)) ncols <- length(palette)
-			palette2 <- rep(palette, length.out=ncols)
-		}
-	} else if (is.na(ncols)) ncols <- 8
+	if (is.na(ncols)) ncols <- 8
 
 	k <- length(adj)
 

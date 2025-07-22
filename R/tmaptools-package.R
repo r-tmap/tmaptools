@@ -16,9 +16,7 @@
 #'
 #' @section Tool functions (colors):
 #' \tabular{ll}{
-#' \code{\link{get_brewer_pal}}\tab Get and plot a (modified) Color Brewer palette \cr
 #' \code{\link{map_coloring}}\tab Find different colors for adjacent polygons \cr
-#' \code{\link{palette_explorer}}\tab Explore Color Brewer palettes \cr
 #' --------------------------- \tab --------------------------------------------------------------------------------------------------- \cr
 #' }
 #'
@@ -42,15 +40,3 @@
 #' @concept thematic maps
 #' @concept spatial data
 "_PACKAGE"
-
-#' Pipe operator
-#'
-#' The pipe operator from magrittr, \code{\%>\%}, can also be used in functions from \code{tmaptools}.
-#'
-#' @importFrom magrittr %>%
-#' @name %>%
-#' @rdname pipe
-#' @export
-#' @param lhs Left-hand side
-#' @param rhs Right-hand side
-NULL
