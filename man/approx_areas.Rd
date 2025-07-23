@@ -61,7 +61,7 @@ if (require(tmap)) {
     summary_areas(approx_areas(NLD_muni, target = "mi mi"))
 
     # area of the polygons when unprojected
-    summary_areas(approx_areas(NLD_muni \%>\% sf::st_transform(crs = 4326)))
+    summary_areas(approx_areas(sf::st_transform(NLD_muni, crs = 4326)))
 }
 }
 \seealso{

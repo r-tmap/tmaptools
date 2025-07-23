@@ -4,14 +4,14 @@
 \alias{map_coloring}
 \title{Map coloring}
 \usage{
-map_coloring(x, algorithm = "greedy", ncols = NA, minimize = FALSE, ...)
+map_coloring(x, algorithm = "greedy", ncols = 8, minimize = FALSE, ...)
 }
 \arguments{
 \item{x}{Either a shape (i.e. a \code{\link[sf:sf]{sf}} or \code{SpatialPolygons(DataFrame)} (\code{sp} package) object), or an adjacency list.}
 
 \item{algorithm}{currently, only "greedy" is implemented.}
 
-\item{ncols}{number of colors. By default it is 8 when \code{palette} is undefined. Else, it is set to the length of \code{palette}}
+\item{ncols}{number of colors. By default 8.}
 
 \item{minimize}{logical that determines whether \code{algorithm} will search for a minimal number of colors. If \code{FALSE}, the \code{ncols} colors will be picked by a random procedure.}
 

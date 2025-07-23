@@ -15,12 +15,7 @@ Imports:
     lwgeom (>= 0.1-4),
     stars (>= 0.4-1),
     units (>= 0.6-1),
-    grid,
-    magrittr,
-    RColorBrewer,
-    viridisLite,
     stats,
-    dichromat,
     XML
 Suggests:
     tmap,
@@ -28,10 +23,7 @@ Suggests:
     rmapshaper,
     osmdata,
     OpenStreetMap,
-    raster,
-    png,
-    shiny,
-    shinyjs
+    raster
 URL: https://github.com/r-tmap/tmaptools, https://r-tmap.github.io/tmaptools/
 BugReports: https://github.com/r-tmap/tmaptools/issues
 RoxygenNote: 7.3.2

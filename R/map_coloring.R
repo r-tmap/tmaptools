@@ -6,14 +6,13 @@
 #'
 #' @param x Either a shape (i.e. a \code{\link[sf:sf]{sf}} or \code{SpatialPolygons(DataFrame)} (\code{sp} package) object), or an adjacency list.
 #' @param algorithm currently, only "greedy" is implemented.
-#' @param ncols number of colors. By default it is 8 when \code{palette} is undefined. Else, it is set to the length of \code{palette}
+#' @param ncols number of colors. By default 8.
 #' @param minimize logical that determines whether \code{algorithm} will search for a minimal number of colors. If \code{FALSE}, the \code{ncols} colors will be picked by a random procedure.
 #' @param ... to catch deprecated arguments \code{palette} and \code{contrast}. See details.
 #' @return A vector of color indices.
 #' @example ./examples/map_coloring.R
-#' @import RColorBrewer
 #' @export
-map_coloring <- function(x, algorithm="greedy", ncols=NA, minimize=FALSE, ...) {
+map_coloring <- function(x, algorithm="greedy", ncols=8, minimize=FALSE, ...) {
     if (inherits(x, "Spatial")) x <- as(x, "sf")
 	if (inherits(x, "sf")) {
 		# get adjacency list
@@ -24,8 +23,6 @@ map_coloring <- function(x, algorithm="greedy", ncols=NA, minimize=FALSE, ...) {
 
     args= list(...)
     if (any(c("palette", "contrast") %in% names(args))) warning("palette and contrast are not used anymore as of tmaptools 3.3. Please use cols4all: see manual")
-
-	if (is.na(ncols)) ncols <- 8
 
 	k <- length(adj)
 
@@ -56,11 +53,7 @@ map_coloring <- function(x, algorithm="greedy", ncols=NA, minimize=FALSE, ...) {
 
 	if (showWarn) warning("Unable to color with ", ncols, " colors. Adjacent polygons may have the same color.", call. = FALSE)
 
-	if (!is.null(palette)) {
-		palette2[cols]
-	} else {
-		cols
-	}
+	cols
 }
 
 #' Get neighbours list from spatial objects
