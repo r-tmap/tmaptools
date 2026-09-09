@@ -1,3 +1,6 @@
+# version 3.4
+- `map_coloring()` has been rebuilt from scratch. It gets by on fewer colors (a map that can be done in 4 no longer ends up with 5), counts polygons as adjacent only when they share a stretch of border rather than a single corner, treats `ncols` as a target that is used evenly instead of an upper bound, and always returns the same coloring for the same map. The new argument `permutation` picks between the many colorings a map has; `minimize` has been removed
+
 # version 3.3
 - deprecated functions removed
 - bb target aspect ration added

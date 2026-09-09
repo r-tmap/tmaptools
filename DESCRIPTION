@@ -1,7 +1,7 @@
 Package: tmaptools
 Type: Package
 Title: Thematic Map Tools
-Version: 3.3
+Version: 3.3-0.9000
 Authors@R: person("Martijn", "Tennekes", email = "mtennekes@gmail.com", role = c("aut", "cre"))
 Description: Set of tools for reading and processing spatial data. The aim is to supply the workflow to create thematic maps. This package also facilitates 'tmap', the package for visualizing thematic maps.
 License: GPL-3
@@ -12,6 +12,7 @@ Depends:
 Imports:
     sf (>= 0.9.2),
     lwgeom (>= 0.1-4),
+    cli,
     stars (>= 0.4-1),
     units (>= 0.6-1),
     stats,
@@ -25,4 +26,4 @@ Suggests:
     raster
 URL: https://github.com/r-tmap/tmaptools, https://r-tmap.github.io/tmaptools/
 BugReports: https://github.com/r-tmap/tmaptools/issues
-RoxygenNote: 7.3.2
+Config/roxygen2/version: 8.0.0

@@ -13,5 +13,5 @@ get_neighbours(x)
 A list where the items correspond to the features. Each item is a vector of neighbours.
 }
 \description{
-Get neighbours list from spatial objects. The output is similar to the function \code{poly2nb} of the \code{spdep} package, but uses \code{sf} instead of \code{sp}.
+Get neighbours list from spatial objects. The output is similar to the function \code{poly2nb} of the \code{spdep} package with \code{queen = FALSE}, but uses \code{sf} instead of \code{sp}. Two polygons are considered neighbours only when their boundaries share a line segment (an edge), not merely a point.
 }

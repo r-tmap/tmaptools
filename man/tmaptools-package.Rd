@@ -63,6 +63,11 @@ Useful links:
 \author{
 \strong{Maintainer}: Martijn Tennekes \email{mtennekes@gmail.com}
 
+Authors:
+\itemize{
+  \item Martijn Tennekes \email{mtennekes@gmail.com}
+}
+
 }
 \concept{GIS}
 \concept{spatial data}
