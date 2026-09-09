@@ -1,0 +1,70 @@
+# tmaptools: tools for thematic maps in R
+
+This package offers a set of handy tool functions for reading and
+processing spatial data. The aim of these functions is to supply the
+workflow to create thematic maps, e.g. read shape files, set map
+projections, append data, calculate areas and distances, and query
+OpenStreetMap. The visualization of thematic maps can be done with the
+[tmap](https://github.com/r-tmap/tmap) package.
+
+## Installation
+
+`tmaptools` is available on CRAN (version 2.0). The development version
+can be installed as follows:
+
+``` r
+
+library(devtools)
+install_github("r-tmap/tmaptools")
+```
+
+See [installation
+procedure](https://github.com/r-tmap/tmap#installation)
+
+## Development
+
+The latest development version can be installed using `devtools`.
+
+``` r
+
+library(devtools)
+install_github("r-tmap/tmaptools")
+```
+
+# Package index
+
+## All functions
+
+- [`approx_areas()`](https://r-tmap.github.io/tmaptools/reference/approx_areas.md)
+  : Approximate area sizes of the shapes
+- [`approx_distances()`](https://r-tmap.github.io/tmaptools/reference/approx_distances.md)
+  : Approximate distances
+- [`bb()`](https://r-tmap.github.io/tmaptools/reference/bb.md) :
+  Bounding box generator
+- [`bb_poly()`](https://r-tmap.github.io/tmaptools/reference/bb_poly.md)
+  [`bb_earth()`](https://r-tmap.github.io/tmaptools/reference/bb_poly.md)
+  : Convert bounding box to a spatial polygon
+- [`calc_densities()`](https://r-tmap.github.io/tmaptools/reference/calc_densities.md)
+  : Calculate densities
+- [`crop_shape()`](https://r-tmap.github.io/tmaptools/reference/crop_shape.md)
+  : Crop shape object
+- [`geocode_OSM()`](https://r-tmap.github.io/tmaptools/reference/geocode_OSM.md)
+  : Geocodes a location using OpenStreetMap Nominatim
+- [`get_asp_ratio()`](https://r-tmap.github.io/tmaptools/reference/get_asp_ratio.md)
+  : Get aspect ratio
+- [`get_neighbours()`](https://r-tmap.github.io/tmaptools/reference/get_neighbours.md)
+  : Get neighbours list from spatial objects
+- [`map_coloring()`](https://r-tmap.github.io/tmaptools/reference/map_coloring.md)
+  : Map coloring
+- [`read_GPX()`](https://r-tmap.github.io/tmaptools/reference/read_GPX.md)
+  : Read GPX file
+- [`read_osm()`](https://r-tmap.github.io/tmaptools/reference/read_osm.md)
+  : Read Open Street Map data
+- [`rev_geocode_OSM()`](https://r-tmap.github.io/tmaptools/reference/rev_geocode_OSM.md)
+  : Reverse geocodes a location using OpenStreetMap Nominatim
+- [`simplify_shape()`](https://r-tmap.github.io/tmaptools/reference/simplify_shape.md)
+  : Simplify shape
+- [`tmaptools`](https://r-tmap.github.io/tmaptools/reference/tmaptools-package.md)
+  [`tmaptools-package`](https://r-tmap.github.io/tmaptools/reference/tmaptools-package.md)
+  : Thematic Map Tools
+
